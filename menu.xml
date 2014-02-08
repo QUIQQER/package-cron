@@ -2,7 +2,7 @@
 <menu>
     <item parent="/extras/"
           name="crons"
-          require="package/quiqqer/cron/Panel"
+          require="packages/cron/bin/Manager"
           icon="icon-time"
     >
         Cron-Manager

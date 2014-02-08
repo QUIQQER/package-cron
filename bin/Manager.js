@@ -5,7 +5,7 @@
  * @author www.pcsg.de (Henning Leutz)
  */
 
-define('packages/cron/Manager', [
+define('packages/cron/bin/Manager', [
 
     'qui/controls/desktop/Panel'
 
@@ -13,7 +13,7 @@ define('packages/cron/Manager', [
 {
     "use static";
 
-    new Class({
+    return new Class({
 
         Extends : QUIPanel,
         Type    : 'packages/cron/Manager',
