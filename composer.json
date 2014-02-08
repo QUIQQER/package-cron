@@ -1,5 +1,5 @@
 {
-    "name" : "quiqqer/currency",
+    "name" : "quiqqer/cron",
     "type" : "quiqqer-library",
     "description" : "Provided currency calculation and a automtatic cron to get the Euro foreign exchange reference rates.",
     "version" : "dev-master",
