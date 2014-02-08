@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menu>
+    <item parent="/extras/"
+          name="crons"
+          require="package/quiqqer/cron/Panel"
+          icon="icon-time"
+    >
+        Cron-Manager
+    </item>
+</menu>
