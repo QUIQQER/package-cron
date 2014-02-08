@@ -29,7 +29,7 @@
     "extra": {
         "component": {
             "files": ["bin/**"],
-            "name": "quiqqer/ckeditor4"
+            "name": "quiqqer/cron"
         }
     }
 }
