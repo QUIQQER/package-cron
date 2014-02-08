@@ -5,7 +5,7 @@
  * @author www.pcsg.de (Henning Leutz)
  */
 
-define('packages/cron/bin/Manager', [
+define('package/cron/bin/Manager', [
 
     'qui/controls/desktop/Panel'
 
@@ -16,7 +16,7 @@ define('packages/cron/bin/Manager', [
     return new Class({
 
         Extends : QUIPanel,
-        Type    : 'packages/cron/Manager',
+        Type    : 'package/cron/bin/Manager',
 
         Binds : [
             '$onCreate'
