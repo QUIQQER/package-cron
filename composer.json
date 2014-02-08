@@ -1,0 +1,28 @@
+{
+    "name" : "quiqqer/currency",
+    "type" : "quiqqer-library",
+    "description" : "Provided currency calculation and a automtatic cron to get the Euro foreign exchange reference rates.",
+    "version" : "dev-master",
+    "license" : "GPL-2.0+",
+
+    "authors" : [{
+        "name": "Henning Leutz",
+        "email": "leutz@pcsg.de",
+        "homepage": "http://www.pcsg.de",
+        "role": "Developer"
+    }],
+
+    "support" : {
+        "email" : "support@pcsg.de"
+    },
+
+    "require": {
+        "quiqqer/quiqqer" : "*"
+    },
+
+    "autoload": {
+        "psr-0" : {
+            "QUI" : "lib/"
+        }
+    }
+}
