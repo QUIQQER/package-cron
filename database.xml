@@ -12,6 +12,8 @@
             <field type="TEXT NOT NULL">exec</field>
             <field type="TEXT NOT NULL">params</field>
             <field type="datetime NULL">lastexec</field>
+
+            <primary>id</primary>
         </table>
 
         <table name="cron_history">
