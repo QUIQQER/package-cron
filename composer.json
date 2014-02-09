@@ -17,7 +17,8 @@
     },
 
     "require": {
-        "quiqqer/quiqqer" : "*"
+        "quiqqer/quiqqer" : "*",
+        "mtdowling/cron-expression": "1.0.*"
     },
 
     "autoload": {

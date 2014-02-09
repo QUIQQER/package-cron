@@ -3,9 +3,20 @@
 
     <global>
         <table name="cron">
+            <field type="INT( 3 ) NOT NULL AUTO_INCREMENT">id</field>
+            <field type="VARCHAR( 60 ) NOT NULL">name</field>
+            <field type="VARCHAR( 2 ) NOT NULL">min</field>
+            <field type="VARCHAR( 2 ) NOT NULL">hour</field>
+            <field type="VARCHAR( 2 ) NOT NULL">day</field>
+            <field type="VARCHAR( 2 ) NOT NULL">month</field>
+            <field type="TEXT NOT NULL">exec</field>
+            <field type="TEXT NOT NULL">params</field>
+            <field type="datetime NULL">lastexec</field>
+        </table>
 
-
-
+        <table name="cron_history">
+            <field type="INT( 3 ) NOT NULL">cronid</field>
+            <field type="datetime NULL">lastexec</field>
         </table>
     </global>
 

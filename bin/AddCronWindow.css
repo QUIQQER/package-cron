@@ -1,0 +1,54 @@
+@CHARSET "UTF-8";
+
+.control-cron-add {
+
+}
+
+.control-cron-add label {
+    float: left;
+    line-height: 30px;
+    margin-right: 10px;
+    width: 80px;
+}
+
+.control-cron-add-list {
+    float: left;
+    margin: 0;
+    width: 230px;
+}
+
+.control-cron-add-intervall {
+    clear: both;
+    float: left;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.control-cron-add-intervall-title {
+    float: left;
+    line-height: 30px;
+    margin-right: 10px;
+    width: 80px;
+}
+
+.control-cron-add-intervall-entries {
+    float: left;
+}
+
+.control-cron-add-intervall-entry {
+    float: left;
+    margin-right: 10px;
+    width: 50px;
+}
+
+.control-cron-add-intervall-entry input {
+    float: left;
+    margin: 0;
+    width: 50px;
+}
+
+.control-cron-add-intervall-entry label {
+    clear: both;
+    margin: 0 0 0 2px;
+    width: 50px;
+}
