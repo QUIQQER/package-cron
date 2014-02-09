@@ -139,9 +139,7 @@ define('package/quiqqer/cron/bin/AddCronWindow', [
 
             Ajax.post('package_quiqqer_cron_ajax_add', function(result)
             {
-
-                console.log( result );
-
+                self.close();
             }, {
                 'package' : 'quiqqer/cron',
                 cron  : this.$List.value,
