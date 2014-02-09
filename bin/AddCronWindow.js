@@ -107,7 +107,8 @@ define('package/quiqqer/cron/bin/AddCronWindow', [
                 for ( i = 0, len = result.length; i < len; i++ )
                 {
                     new Element('option', {
-                        html : result[ i ].title
+                        value : result[ i ].title,
+                        html  : result[ i ].description
                     }).inject( self.$List );
                 }
 
@@ -142,6 +143,7 @@ define('package/quiqqer/cron/bin/AddCronWindow', [
                 console.log( result );
 
             }, {
+                'package' : 'quiqqer/cron',
                 cron  : this.$List.value,
                 min   : this.$Min.value,
                 hour  : this.$Hour.value,

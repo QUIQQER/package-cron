@@ -15,12 +15,13 @@ namespace QUI\Cron;
 class Manager
 {
     /**
+     * Add a cron
      *
-     * @param unknown $cron
-     * @param unknown $min
-     * @param unknown $hour
-     * @param unknown $day
-     * @param unknown $month
+     * @param unknown $cron - Name of the Cron
+     * @param unknown $min - On which minute should it start
+     * @param unknown $hour - On which hour should it start
+     * @param unknown $day - On which day should it start
+     * @param unknown $month - On which month should it start
      */
     public function add($cron, $min, $hour, $day, $month)
     {
@@ -31,11 +32,15 @@ class Manager
         $cronData = $this->getCronData( $cron );
 
         \QUI::getDataBase()->insert($this->Table(), array(
-            'exec' => $cronData['exec'],
-            'exec' => $cronData['exec']
+            'exec'   => $cronData['exec'],
+            'title'  => $cronData['title'],
+            'min'    => $min,
+            'hour'   => $hour,
+            'day'    => $day,
+            'month'  => $month
         ));
 
-        QUI::getMessagesHandler()->addSuccess(
+        \QUI::getMessagesHandler()->addSuccess(
             'Cron erfolgreich hinzugefügt'
         );
     }
@@ -80,7 +85,7 @@ class Manager
         // check if cron is available
         foreach ( $availableCrons as $entry )
         {
-            if ( $entry['name'] == $cron ) {
+            if ( $entry['title'] == $cron ) {
                 return $entry;
             }
         }

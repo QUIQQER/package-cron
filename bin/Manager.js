@@ -51,7 +51,13 @@ define('package/quiqqer/cron/bin/Manager', [
 
             Ajax.get('package_quiqqer_cron_ajax_getList', function(result)
             {
-                console.log( result );
+                if ( !self.$Grid ) {
+                    return;
+                }
+
+                self.$Grid.setData({
+                    data : result
+                });
 
             }, {
                 'package' : 'quiqqer/cron'
@@ -106,7 +112,7 @@ define('package/quiqqer/cron/bin/Manager', [
                     width     : 50
                 }, {
                     header    : 'Cron-Name',
-                    dataIndex : 'name',
+                    dataIndex : 'title',
                     dataType  : 'string',
                     width     : 150
                 }, {
@@ -159,9 +165,7 @@ define('package/quiqqer/cron/bin/Manager', [
 
             this.$Grid.setHeight( size.y - 40 );
             this.$Grid.setWidth( size.x - 40 );
-
         }
-
     });
 
 });

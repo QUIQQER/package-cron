@@ -4,7 +4,7 @@
     <global>
         <table name="cron">
             <field type="INT( 3 ) NOT NULL AUTO_INCREMENT PRIMARY KEY">id</field>
-            <field type="VARCHAR( 60 ) NOT NULL">name</field>
+            <field type="VARCHAR( 60 ) NOT NULL">title</field>
             <field type="VARCHAR( 2 ) NOT NULL">min</field>
             <field type="VARCHAR( 2 ) NOT NULL">hour</field>
             <field type="VARCHAR( 2 ) NOT NULL">day</field>
