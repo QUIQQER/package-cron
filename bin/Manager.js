@@ -55,6 +55,26 @@ define('package/quiqqer/cron/bin/Manager', [
                     return;
                 }
 
+                var i, len, Btn;
+
+                for ( i = 0, len = result.length; i < len; i++ )
+                {
+                    result[ i ].status = {
+                        title  : 'Cron aktivieren / deaktivieren',
+                        icon   : result[ i ].active ? 'icon-ok' : 'icon-remove',
+                        cronId : result[ i ].id,
+                        events :
+                        {
+                            onClick : function(Btn)
+                            {
+                                self.toggleStatusOfCron(
+                                    Btn.getAttribute( 'cronId' )
+                                );
+                            }
+                        }
+                    };
+                }
+
                 self.$Grid.setData({
                     data : result
                 });
@@ -71,26 +91,34 @@ define('package/quiqqer/cron/bin/Manager', [
          */
         $onCreate : function()
         {
+            var self = this;
+
             this.addButton(
                 new QUIButton({
                     text : 'Cron hinzufügen',
                     textimage : 'icon-plus',
                     events :
                     {
-                        onClick : function()
-                        {
-                            require([
-                                'package/quiqqer/cron/bin/AddCronWindow'
-                            ], function(Window)
-                            {
-                                new Window({
-
-                                }).open();
-                            });
+                        onClick : function() {
+                            self.openAddCronWindow();
                         }
                     }
                 })
             );
+
+            this.addButton(
+                new QUIButton({
+                    text : 'Markierte Cron löschen',
+                    textimage : 'icon-trash',
+                    events :
+                    {
+                        onClick : function() {
+                            self.deleteMarkedCrons();
+                        }
+                    }
+                })
+            );
+
 
             var Content   = this.getContent(),
                 size      = Content.getSize(),
@@ -107,8 +135,13 @@ define('package/quiqqer/cron/bin/Manager', [
             this.$Grid = new Grid(Container, {
                 columnModel : [{
                     header    : 'Status',
-                    dataIndex : 'activebtn',
+                    dataIndex : 'status',
                     dataType  : 'button',
+                    width     : 50
+                }, {
+                    header    : 'ID',
+                    dataIndex : 'id',
+                    dataType  : 'string',
                     width     : 50
                 }, {
                     header    : 'Cron-Name',
@@ -136,15 +169,15 @@ define('package/quiqqer/cron/bin/Manager', [
                     dataType  : 'string',
                     width     : 50
                 }, {
-                    header    : 'Cron-Beschreibung',
-                    dataIndex : 'desc',
-                    dataType  : 'string',
-                    width     : 150
-                }, {
                     header    : 'Parameter',
                     dataIndex : 'params',
                     dataType  : 'string',
                     width     : 150
+                }, {
+                    header    : 'Cron-Beschreibung',
+                    dataIndex : 'desc',
+                    dataType  : 'string',
+                    width     : 200
                 }]
             });
 
@@ -165,7 +198,54 @@ define('package/quiqqer/cron/bin/Manager', [
 
             this.$Grid.setHeight( size.y - 40 );
             this.$Grid.setWidth( size.x - 40 );
+        },
+
+        /**
+         * Open the delete marked cron windows and delete all marked crons
+         *
+         * @return {self}
+         */
+        deleteMarkedCrons : function()
+        {
+
+            return this;
+        },
+
+        /**
+         * Open the addCronWindow
+         *
+         * @return {self}
+         */
+        openAddCronWindow : function()
+        {
+            require(['package/quiqqer/cron/bin/AddCronWindow'], function(Window) {
+                 new Window({}).open();
+            });
+
+            return this;
+        },
+
+        /**
+         * Change the cron status
+         * If the cron is active to deactive
+         * If the cron is deactive to active
+         *
+         * @return {self}
+         */
+        toggleStatusOfCron : function(cronId)
+        {
+            Ajax.post('package_quiqqer_cron_ajax_cron_toggle', function(result)
+            {
+
+            }, {
+                'package' : 'quiqqer/cron',
+                cronId    : cronId
+            });
+
+            return this;
         }
+
+
     });
 
 });

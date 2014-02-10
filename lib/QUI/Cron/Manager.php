@@ -32,6 +32,7 @@ class Manager
         $cronData = $this->getCronData( $cron );
 
         \QUI::getDataBase()->insert($this->Table(), array(
+            'active' => 1,
             'exec'   => $cronData['exec'],
             'title'  => $cronData['title'],
             'min'    => $min,
@@ -42,6 +43,32 @@ class Manager
 
         \QUI::getMessagesHandler()->addSuccess(
             'Cron erfolgreich hinzugefügt'
+        );
+    }
+
+    /**
+     * activate a cron in the cron list
+     * @param Integer $cronId - ID of the cron
+     */
+    public function activateCron($cronId)
+    {
+        \QUI::getDataBase()->update(
+            $this->Table(),
+            array('active' => 1),
+            array('id' => (int)$cronId)
+        );
+    }
+
+    /**
+     * deactivate a cron in the cron list
+     * @param Integer $cronId - ID of the cron
+     */
+    public function deactivateCron($cronId)
+    {
+        \QUI::getDataBase()->update(
+            $this->Table(),
+            array('active' => 0),
+            array('id' => (int)$cronId)
         );
     }
 
@@ -76,7 +103,34 @@ class Manager
     }
 
     /**
-     * Return the data of a specific cron
+     * Return the data of a inserted cron
+     *
+     * @param Integer $cronId - ID of the Cron
+     * @return Array|false - Cron Data
+     */
+    public function getCronById($cronId)
+    {
+        $result = \QUI::getDataBase()->fetch(array(
+            'from'  => $this->Table(),
+            'where' => array(
+                'id' => (int)$cronId
+            ),
+            'limit' => 1
+        ));
+
+        if ( !isset( $result[ 0 ] ) ) {
+            return false;
+        }
+
+        return $result[ 0 ];
+    }
+
+    /**
+     * Return the data of a specific cron from the available cron list
+     * This cron is not in the cron list
+     *
+     * @param String $cron - Name of the Cron
+     * @return Array|false - Cron Data
      */
     public function getCronData($cron)
     {

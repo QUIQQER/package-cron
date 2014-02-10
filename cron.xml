@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <crons>
     <cron exec="\QUI\Cron\">
-        <title>sss</title>
-        <description>desc</description>
+        <title>system:deleteTemp</title>
+        <description>Temporäre Daten löschen</description>
     </cron>
 </crons>
