@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<locales>
+    <groups name="quiqqer/cron" datatype="js">
+
+    </groups>
+
+    <groups name="quiqqer/cron" datatype="php">
+        <locale name="message.cron.succesful.executed">
+            <de><![CDATA[Der Cron wurde erfolgreich ausgeführt]]></de>
+            <en><![CDATA[The Cron ran successfully]]></en>
+        </locale>
+    </groups>
+</locales>

@@ -7,12 +7,15 @@
 
 define('package/quiqqer/cron/bin/Manager', [
 
+    'qui/QUI',
     'qui/controls/desktop/Panel',
+    'qui/controls/windows/Confirm',
     'qui/controls/buttons/Button',
     'controls/grid/Grid',
-    'Ajax'
+    'Ajax',
+    'Locale'
 
-],function(QUIPanel, QUIButton, Grid, Ajax)
+],function(QUI, QUIPanel, QUIConfirm, QUIButton, Grid, Ajax, Locale)
 {
     "use strict";
 
@@ -61,13 +64,29 @@ define('package/quiqqer/cron/bin/Manager', [
                 {
                     result[ i ].status = {
                         title  : 'Cron aktivieren / deaktivieren',
-                        icon   : result[ i ].active ? 'icon-ok' : 'icon-remove',
+                        icon   : result[ i ].active == 1 ? 'icon-ok' : 'icon-remove',
                         cronId : result[ i ].id,
                         events :
                         {
                             onClick : function(Btn)
                             {
                                 self.toggleStatusOfCron(
+                                    Btn.getAttribute( 'cronId' )
+                                );
+                            }
+                        }
+                    };
+
+                    result[ i ].play = {
+                        name   : 'cron-play-button-'+ result[ i ].id,
+                        title  : 'Cron ausführen',
+                        icon   : 'icon-play',
+                        cronId : result[ i ].id,
+                        events :
+                        {
+                            onClick : function(Btn)
+                            {
+                                self.execCron(
                                     Btn.getAttribute( 'cronId' )
                                 );
                             }
@@ -95,6 +114,7 @@ define('package/quiqqer/cron/bin/Manager', [
 
             this.addButton(
                 new QUIButton({
+                    name : 'add',
                     text : 'Cron hinzufügen',
                     textimage : 'icon-plus',
                     events :
@@ -108,6 +128,7 @@ define('package/quiqqer/cron/bin/Manager', [
 
             this.addButton(
                 new QUIButton({
+                    name : 'delete',
                     text : 'Markierte Cron löschen',
                     textimage : 'icon-trash',
                     events :
@@ -118,6 +139,8 @@ define('package/quiqqer/cron/bin/Manager', [
                     }
                 })
             );
+
+            this.getButtons( 'delete' ).disable();
 
 
             var Content   = this.getContent(),
@@ -136,6 +159,11 @@ define('package/quiqqer/cron/bin/Manager', [
                 columnModel : [{
                     header    : 'Status',
                     dataIndex : 'status',
+                    dataType  : 'button',
+                    width     : 50
+                }, {
+                    header    : '&nbsp;',
+                    dataIndex : 'play',
                     dataType  : 'button',
                     width     : 50
                 }, {
@@ -169,6 +197,11 @@ define('package/quiqqer/cron/bin/Manager', [
                     dataType  : 'string',
                     width     : 50
                 }, {
+                    header    : 'Exec',
+                    dataIndex : 'exec',
+                    dataType  : 'string',
+                    width     : 150
+                }, {
                     header    : 'Parameter',
                     dataIndex : 'params',
                     dataType  : 'string',
@@ -178,7 +211,27 @@ define('package/quiqqer/cron/bin/Manager', [
                     dataIndex : 'desc',
                     dataType  : 'string',
                     width     : 200
-                }]
+                }],
+                multipleSelection : true,
+                pagination : true
+            });
+
+            this.$Grid.addEvents({
+                onRefresh : function() {
+                    self.loadCrons();
+                },
+                onClick : function()
+                {
+                    var delButton = self.getButtons( 'delete' );
+
+                    if ( self.$Grid.getSelectedIndices().length )
+                    {
+                        delButton.enable();
+                    } else
+                    {
+                        delButton.disable()
+                    }
+                }
             });
 
             this.loadCrons();
@@ -207,6 +260,44 @@ define('package/quiqqer/cron/bin/Manager', [
          */
         deleteMarkedCrons : function()
         {
+            if ( !this.$Grid ) {
+                return this;
+            }
+
+            var self = this,
+                data = this.$Grid.getSelectedData();
+
+            if ( !data.length ) {
+                return this;
+            }
+
+            var ids = data.map(function(o) {
+                return o.id;
+            });
+
+            new QUIConfirm({
+                icon : 'icon-remove',
+                title : 'Cron Einträge löschen',
+                text : '<p>Möchten Sie folgende Cron Einträge wirklich löschen?</p>',
+                information : '<p>Zu löschende Cron-Einträge: <b>'+ ids.join(',') +'</b></p>' +
+                              '<p>Beachten Sie, die Cron-Einträge sind nicht wieder herstellbar</p>',
+                events :
+                {
+                    onSubmit : function(Win)
+                    {
+                        Win.Loader.show();
+
+                        Ajax.post('package_quiqqer_cron_ajax_delete', function()
+                        {
+                            Win.close();
+                            self.loadCrons();
+                        }, {
+                            'package' : 'quiqqer/cron',
+                            ids : JSON.encode( ids )
+                        });
+                    }
+                }
+            }).open();
 
             return this;
         },
@@ -218,8 +309,18 @@ define('package/quiqqer/cron/bin/Manager', [
          */
         openAddCronWindow : function()
         {
-            require(['package/quiqqer/cron/bin/AddCronWindow'], function(Window) {
-                 new Window({}).open();
+            var self = this;
+
+            require(['package/quiqqer/cron/bin/AddCronWindow'], function(Window)
+            {
+                 new Window({
+                     events :
+                     {
+                         onSubmit : function() {
+                             self.loadCrons();
+                         }
+                     }
+                 }).open();
             });
 
             return this;
@@ -230,22 +331,54 @@ define('package/quiqqer/cron/bin/Manager', [
          * If the cron is active to deactive
          * If the cron is deactive to active
          *
+         * @param {Integer} cronId - ID of the Cron
          * @return {self}
          */
         toggleStatusOfCron : function(cronId)
         {
+            var self = this;
+
             Ajax.post('package_quiqqer_cron_ajax_cron_toggle', function(result)
             {
-
+                self.loadCrons();
             }, {
                 'package' : 'quiqqer/cron',
                 cronId    : cronId
             });
 
             return this;
+        },
+
+        /**
+         * Execute the cron
+         *
+         * @param {Integer} cronId - ID of the Cron
+         * @return {self}
+         */
+        execCron : function(cronId)
+        {
+            var i, len;
+            var buttons = [];
+
+            if ( this.$Grid ) {
+                buttons = QUI.Controls.get( 'cron-play-button-'+ cronId );
+            }
+
+            for ( i = 0, len = buttons.length; i < len; i++ ) {
+                buttons[ i ].setAttribute('icon', 'icon-refresh icon-spin');
+            }
+
+            Ajax.post('package_quiqqer_cron_ajax_cron_executeCron', function(result)
+            {
+                for ( i = 0, len = buttons.length; i < len; i++ ) {
+                    buttons[ i ].setAttribute('icon', 'icon-play');
+                }
+
+            }, {
+                'package' : 'quiqqer/cron',
+                cronId    : cronId
+            });
         }
-
-
     });
 
 });

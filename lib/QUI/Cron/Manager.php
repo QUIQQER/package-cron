@@ -73,6 +73,93 @@ class Manager
     }
 
     /**
+     * Delete the crons
+     * @param Array $ids - Array of the Cron-Ids
+     */
+    public function deleteCronIds($ids)
+    {
+        $DataBase = \QUI::getDataBase();
+
+        foreach ( $ids as $id )
+        {
+            $id = (int)$id;
+
+            if ( $this->getCronById( $id ) === false ) {
+                return;
+            }
+
+            $DataBase->delete($this->Table(), array(
+                'id' => $id
+            ));
+        }
+    }
+
+    /**
+     * Execute all upcoming crons
+     */
+    public function execute()
+    {
+        $list = $this->getList();
+        $time = time();
+
+
+        foreach ( $list as $entry )
+        {
+            if ( $entry['active'] != 1 ) {
+                continue;
+            }
+
+            $lastexec = $entry['lastexec'];
+
+            $min   = $entry['min'];
+            $hour  = $entry['hour'];
+            $day   = $entry['day'];
+            $month = $entry['month'];
+            $year  = '*';
+
+            $Cron = \Cron\CronExpression::factory(
+                "$min $hour $day $month $year"
+            );
+
+            $next = $Cron->getNextRunDate( $lastexec )->getTimestamp();
+
+            // no execute
+            if ( $next > $time ) {
+                continue;
+            }
+
+            // execute cron
+            $this->executeCron( $entry['id'] );
+        }
+    }
+
+    /**
+     * Execute a cron
+     *
+     * @param Integer $cronId - ID of the cron
+     * @return \QUI\Cron\Manager
+     */
+    public function executeCron($cronId)
+    {
+        $cronData = $this->getCronById( $cronId );
+
+        if ( !$cronData ) {
+            throw new \QUI\Exception( 'Cron ID not exist' );
+        }
+
+        call_user_func_array( $cronData['exec'], array($this) );
+
+        \QUI::getMessagesHandler()->addSuccess(
+            \QUI::getLocale()->get(
+                'quiqqer/cron',
+                'message.cron.succesful.executed'
+            )
+        );
+
+        return $this;
+    }
+
+    /**
      * Return the Crons which are available and from other Plugins provided
      *
      * @return Array

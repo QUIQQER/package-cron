@@ -129,6 +129,8 @@ define('package/quiqqer/cron/bin/AddCronWindow', [
          */
         submit : function()
         {
+            var self = this;
+
             if ( !this.$List ) {
                 return this;
             }
@@ -139,6 +141,7 @@ define('package/quiqqer/cron/bin/AddCronWindow', [
 
             Ajax.post('package_quiqqer_cron_ajax_add', function(result)
             {
+                self.fireEvent( 'submit' );
                 self.close();
             }, {
                 'package' : 'quiqqer/cron',
