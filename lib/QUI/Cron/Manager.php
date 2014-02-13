@@ -156,6 +156,12 @@ class Manager
             )
         );
 
+        \QUI::getDataBase()->insert(self::TableHistory(), array(
+            'cronid'   => $cronId,
+            'lastexec' => date( 'Y-m-d H:i:s' ),
+            'uid'      => \QUI::getUserBySession()->getId()
+        ));
+
         return $this;
     }
 
@@ -235,6 +241,16 @@ class Manager
     }
 
     /**
+     * Return the history list
+     */
+    public function getHistoryList()
+    {
+        return \QUI::getDataBase()->fetch(array(
+            'from' => self::TableHistory()
+        ));
+    }
+
+    /**
      * Return the cron list
      *
      * @return Array
@@ -268,6 +284,16 @@ class Manager
     static function Table()
     {
         return QUI_DB_PRFX .'cron';
+    }
+
+    /**
+     * Return the cron tabe
+     *
+     * @return String
+     */
+    static function TableHistory()
+    {
+        return QUI_DB_PRFX .'cron_history';
     }
 
     /**

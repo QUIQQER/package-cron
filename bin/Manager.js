@@ -11,11 +11,12 @@ define('package/quiqqer/cron/bin/Manager', [
     'qui/controls/desktop/Panel',
     'qui/controls/windows/Confirm',
     'qui/controls/buttons/Button',
+    'qui/controls/buttons/Seperator',
     'controls/grid/Grid',
     'Ajax',
     'Locale'
 
-],function(QUI, QUIPanel, QUIConfirm, QUIButton, Grid, Ajax, Locale)
+],function(QUI, QUIPanel, QUIConfirm, QUIButton, QUIButtonSeperator, Grid, Ajax, Locale)
 {
     "use strict";
 
@@ -25,7 +26,8 @@ define('package/quiqqer/cron/bin/Manager', [
         Type    : 'package/cron/bin/Manager',
 
         Binds : [
-            '$onCreate'
+            '$onCreate',
+            '$onResize'
         ],
 
         options : {
@@ -135,6 +137,22 @@ define('package/quiqqer/cron/bin/Manager', [
                     {
                         onClick : function() {
                             self.deleteMarkedCrons();
+                        }
+                    }
+                })
+            );
+
+            this.addButton( new QUIButtonSeperator() );
+
+            this.addButton(
+                new QUIButton({
+                    name : 'history',
+                    text : 'Cron History',
+                    textimage : 'icon-long-arrow-right',
+                    events :
+                    {
+                        onClick : function() {
+                            self.showHistory();
                         }
                     }
                 })
@@ -377,6 +395,18 @@ define('package/quiqqer/cron/bin/Manager', [
             }, {
                 'package' : 'quiqqer/cron',
                 cronId    : cronId
+            });
+        },
+
+        /**
+         * Show the Cron-History Panel
+         */
+        showHistory : function()
+        {
+            var self = this;
+
+            require(['package/quiqqer/cron/bin/History'], function(Panel) {
+                new Panel().inject( self.getParent() );
             });
         }
     });
