@@ -53,7 +53,10 @@ define('package/quiqqer/cron/bin/History', [
 
             Ajax.get('package_quiqqer_cron_ajax_history_get', function(result)
             {
-                console.log( result );
+                self.$Grid.setData({
+                    data : result
+                });
+
             }, {
                 'package' : 'quiqqer/cron'
             });
@@ -64,7 +67,8 @@ define('package/quiqqer/cron/bin/History', [
          */
         $onCreate : function()
         {
-            var Content   = this.getContent(),
+            var self      = this,
+                Content   = this.getContent(),
                 size      = Content.getSize(),
 
                 Container = new Element('div', {
@@ -96,7 +100,13 @@ define('package/quiqqer/cron/bin/History', [
                 pagination : true
             });
 
-            this.loadData();
+            this.$Grid.addEvents({
+                onRefresh : function() {
+                    self.loadData();
+                }
+            });
+
+            this.$Grid.refresh();
         },
 
         /**

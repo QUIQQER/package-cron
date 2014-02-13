@@ -2,9 +2,24 @@
 <menu>
     <item parent="/extras/"
           name="crons"
+          icon="icon-time"
+    >
+        Crons
+    </item>
+
+    <item parent="/extras/crons/"
+          name="manager"
           require="package/quiqqer/cron/bin/Manager"
           icon="icon-time"
     >
         Cron-Manager
+    </item>
+
+    <item parent="/extras/crons/"
+          name="history"
+          require="package/quiqqer/cron/bin/History"
+          icon="icon-long-arrow-right"
+    >
+        Cron-History
     </item>
 </menu>

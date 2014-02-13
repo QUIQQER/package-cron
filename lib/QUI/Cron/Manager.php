@@ -17,19 +17,24 @@ class Manager
     /**
      * Add a cron
      *
-     * @param unknown $cron - Name of the Cron
-     * @param unknown $min - On which minute should it start
-     * @param unknown $hour - On which hour should it start
-     * @param unknown $day - On which day should it start
-     * @param unknown $month - On which month should it start
+     * @param String $cron - Name of the Cron
+     * @param String $min - On which minute should it start
+     * @param String $hour - On which hour should it start
+     * @param String $day - On which day should it start
+     * @param String $month - On which month should it start
+     * @param Array $params - Cron Parameter
      */
-    public function add($cron, $min, $hour, $day, $month)
+    public function add($cron, $min, $hour, $day, $month, $params=array())
     {
         if ( !$this->_cronExists( $cron ) ) {
             throw new \QUI\Exception( 'Cannot add Cron. Cron not exists', 404 );
         }
 
         $cronData = $this->getCronData( $cron );
+
+        if ( !is_array( $params ) ) {
+            $params = array();
+        }
 
         \QUI::getDataBase()->insert($this->Table(), array(
             'active' => 1,
@@ -38,11 +43,40 @@ class Manager
             'min'    => $min,
             'hour'   => $hour,
             'day'    => $day,
-            'month'  => $month
+            'month'  => $month,
+            'params' => json_encode( $params )
         ));
 
         \QUI::getMessagesHandler()->addSuccess(
             'Cron erfolgreich hinzugefügt'
+        );
+    }
+
+    /**
+     * Edit the cron
+     *
+     * @param unknown $cronId
+     * @param unknown $min
+     * @param unknown $hour
+     * @param unknown $day
+     * @param unknown $month
+     * @param unknown $params
+     */
+    public function edit($cronId, $min, $hour, $day, $month, $params=array())
+    {
+        \QUI::getDataBase()->update($this->Table(), array(
+            'min'    => $min,
+            'hour'   => $hour,
+            'day'    => $day,
+            'month'  => $month,
+            'params' => json_encode( $params )
+        ), array(
+            'id' => $cronId
+        ));
+
+
+        \QUI::getMessagesHandler()->addSuccess(
+            'Cron erfolgreich editiert'
         );
     }
 
@@ -161,6 +195,13 @@ class Manager
             'lastexec' => date( 'Y-m-d H:i:s' ),
             'uid'      => \QUI::getUserBySession()->getId()
         ));
+
+
+        \QUI::getDataBase()->update(
+            self::Table(),
+            array('lastexec' => date( 'Y-m-d H:i:s' )),
+            array('id' => $cronId)
+        );
 
         return $this;
     }

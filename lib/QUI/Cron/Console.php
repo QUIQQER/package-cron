@@ -42,7 +42,9 @@ class Console extends \QUI\System\Console\Tool
     public function commandRead()
     {
         $this->writeLn( 'Available Commands: ' );
-        $this->writeLn( '- run' );
+        $this->writeLn( "- run\t\trun all active crons" );
+        $this->writeLn( "- list\t\tlist all active crons" );
+        $this->writeLn( "- list-all\tlist all crons" );
 
         $this->writeLn( '' );
 
@@ -51,8 +53,21 @@ class Console extends \QUI\System\Console\Tool
 
         switch ( $command )
         {
+            // run all crons
             case 'run':
                 $this->run();
+                $this->commandRead();
+            break;
+
+            // list all inserted crons
+            case 'list':
+                $this->listCrons();
+                $this->commandRead();
+            break;
+
+            // list all inserted crons
+            case 'list-all':
+                $this->listAllCrons();
                 $this->commandRead();
             break;
 
@@ -73,5 +88,65 @@ class Console extends \QUI\System\Console\Tool
         $Manager->execute();
 
         $this->write('finish');
+    }
+
+    /**
+     * List all active crons
+     */
+    public function listCrons()
+    {
+        $Manager = new \QUI\Cron\Manager();
+        $list    = $Manager->getList();
+
+        $this->writeLn( 'Cron list:' );
+        $this->writeLn( '=======================================================' );
+        $this->writeLn( '' );
+
+        foreach ( $list as $entry )
+        {
+            if ( $entry['active'] != 1 ) {
+                continue;
+            }
+
+            $time = $entry['min'] .' '. $entry['hour'] .' '. $entry['day'] .' '. $entry['month'];
+            $exec = $entry['exec'];
+
+            $this->writeLn( 'ID: '. $entry['id'] );
+            $this->writeLn( $time ."\t". $exec, 'green' );
+
+            $this->resetColor();
+            $this->writeLn( '' );
+        }
+
+        $this->writeLn( '=======================================================' );
+        $this->writeLn( '' );
+    }
+
+    /**
+     * List all inserted Crons
+     */
+    public function listAllCrons()
+    {
+        $Manager = new \QUI\Cron\Manager();
+        $list    = $Manager->getList();
+
+        $this->writeLn( 'Cron list:' );
+        $this->writeLn( '=======================================================' );
+        $this->writeLn( '' );
+
+        foreach ( $list as $entry )
+        {
+            $time = $entry['min'] .' '. $entry['hour'] .' '. $entry['day'] .' '. $entry['month'];
+            $exec = $entry['exec'];
+
+            $this->writeLn( 'ID: '. $entry['id'] );
+            $this->writeLn( $time ."\t". $exec, 'green' );
+
+            $this->resetColor();
+            $this->writeLn( '' );
+        }
+
+        $this->writeLn( '=======================================================' );
+        $this->writeLn( '' );
     }
 }
