@@ -128,10 +128,26 @@ define('package/quiqqer/cron/bin/Manager', [
                 })
             );
 
+            this.addButton( new QUIButtonSeperator() );
+
+            this.addButton(
+                new QUIButton({
+                    name : 'edit',
+                    text : 'Markierten Cron editieren',
+                    textimage : 'icon-pencil',
+                    events :
+                    {
+                        onClick : function() {
+                            self.editMarkedCron();
+                        }
+                    }
+                })
+            );
+
             this.addButton(
                 new QUIButton({
                     name : 'delete',
-                    text : 'Markierte Cron löschen',
+                    text : 'Markierte(n) Cron(s) löschen',
                     textimage : 'icon-trash',
                     events :
                     {
@@ -158,6 +174,7 @@ define('package/quiqqer/cron/bin/Manager', [
                 })
             );
 
+            this.getButtons( 'edit' ).disable();
             this.getButtons( 'delete' ).disable();
 
 
@@ -240,15 +257,32 @@ define('package/quiqqer/cron/bin/Manager', [
                 },
                 onClick : function()
                 {
-                    var delButton = self.getButtons( 'delete' );
+                    var delButton  = self.getButtons( 'delete' ),
+                        editButton = self.getButtons( 'edit' ),
+                        selected   = self.$Grid.getSelectedIndices().length;
 
-                    if ( self.$Grid.getSelectedIndices().length )
+                    if ( selected == 1 )
+                    {
+                        editButton.enable();
+                    } else
+                    {
+                        editButton.disable();
+                    }
+
+                    if ( selected )
                     {
                         delButton.enable();
                     } else
                     {
                         delButton.disable()
                     }
+                },
+
+                onDblClick : function(data)
+                {
+                    var rowData = self.$Grid.getDataByRow( data.row );
+
+                    self.editCron( rowData.id );
                 }
             });
 
@@ -321,7 +355,51 @@ define('package/quiqqer/cron/bin/Manager', [
         },
 
         /**
-         * Open the addCronWindow
+         * Edit a cron, opens the cron Edit-Window
+         *
+         * @param {String} cronId - ID of the Cron
+         */
+        editCron : function(cronId)
+        {
+            var self = this;
+
+            require(['package/quiqqer/cron/bin/CronWindow'], function(Window)
+            {
+                 new Window({
+                     cronId : cronId,
+                     events :
+                     {
+                         onSubmit : function() {
+                             self.loadCrons();
+                         }
+                     }
+                 }).open();
+            });
+
+            return this;
+        },
+
+        /**
+         * Opens the Edit-Window for the marked cron
+         */
+        editMarkedCron : function()
+        {
+            if ( !this.$Grid ) {
+                return this;
+            }
+
+            var self = this,
+                data = this.$Grid.getSelectedData();
+
+            if ( !data.length ) {
+                return this;
+            }
+
+            this.editCron( data[ 0 ].id );
+        },
+
+        /**
+         * Open the add Cron-Window
          *
          * @return {self}
          */
@@ -329,7 +407,7 @@ define('package/quiqqer/cron/bin/Manager', [
         {
             var self = this;
 
-            require(['package/quiqqer/cron/bin/AddCronWindow'], function(Window)
+            require(['package/quiqqer/cron/bin/CronWindow'], function(Window)
             {
                  new Window({
                      events :

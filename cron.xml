@@ -4,4 +4,16 @@
         <title>Temp Ordner leeren</title>
         <description>Ordner für temporäre Daten leeren</description>
     </cron>
+
+    <cron exec="\QUI\Cron\QuiqqerCrons::clearCache">
+        <title>Cache leeren</title>
+        <description>Kompletten Cache leeren</description>
+    </cron>
+
+    <cron exec="\QUI\Cron\QuiqqerCrons::purgeCache">
+        <title>Cache säubern</title>
+        <description>
+            The purge function removes stale data from the cache backends while leaving current data intact
+        </description>
+    </cron>
 </crons>

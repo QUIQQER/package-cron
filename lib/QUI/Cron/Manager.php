@@ -55,12 +55,12 @@ class Manager
     /**
      * Edit the cron
      *
-     * @param unknown $cronId
-     * @param unknown $min
-     * @param unknown $hour
-     * @param unknown $day
-     * @param unknown $month
-     * @param unknown $params
+     * @param Integer $cronId
+     * @param String $min
+     * @param String $hour
+     * @param String $day
+     * @param String $month
+     * @param Array $params
      */
     public function edit($cronId, $min, $hour, $day, $month, $params=array())
     {

@@ -22,4 +22,20 @@ class QuiqqerCrons
         $Temp = \QUI::getTemp();
         $Temp->clear();
     }
+
+    /**
+     * Clear complete cache
+     */
+    static function clearCache()
+    {
+        \QUI\Cache\Manager::clearAll();
+    }
+
+    /**
+     * Purge the cache
+     */
+    static function purgeCache()
+    {
+        \QUI\Cache\Manager::purge();
+    }
 }

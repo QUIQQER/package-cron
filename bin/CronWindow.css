@@ -52,3 +52,7 @@
     margin: 0 0 0 2px;
     width: 50px;
 }
+
+#control-cron-add-params {
+    margin: 0;
+}

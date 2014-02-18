@@ -1,27 +1,34 @@
+/**
+ * This file contains package/quiqqer/cron/bin/CronWindow
+ *
+ * @author www.namerobot.com (Henning Leutz)
+ */
 
-
-define('package/quiqqer/cron/bin/AddCronWindow', [
+define('package/quiqqer/cron/bin/CronWindow', [
 
     'qui/controls/windows/Confirm',
+    'qui/controls/input/Params',
     'Ajax',
 
-    'css!package/quiqqer/cron/bin/AddCronWindow'
+    'css!package/quiqqer/cron/bin/CronWindow'
 
-], function(QUIConfirm, Ajax)
+], function(QUIConfirm, QUIParams, Ajax)
 {
     "use strict";
 
 
     return new Class({
 
-        Type : 'package/quiqqer/cron/bin/AddCronWindow',
+        Type : 'package/quiqqer/cron/bin/CronWindow',
         Extends : QUIConfirm,
 
         options : {
-            title : 'Cron hinzufügen',
-            icon : 'icon-time',
-            maxWidth : 500,
-            maxHeight : 300
+            title     : 'Cron hinzufügen',
+            icon      : 'icon-time',
+            maxWidth  : 500,
+            maxHeight : 300,
+
+            cronId : null // if you want to edit a cron
         },
 
         initialize : function(options)
@@ -35,6 +42,8 @@ define('package/quiqqer/cron/bin/AddCronWindow', [
             this.$Hour  = null;
             this.$Day   = null;
             this.$Month = null;
+
+            this.$ParamsControl = null;
         },
 
         /**
@@ -87,6 +96,11 @@ define('package/quiqqer/cron/bin/AddCronWindow', [
                         '</div>' +
                     '</div>' +
 
+                    '<label for="control-cron-add-params">' +
+                        'Parameter' +
+                    '</label>' +
+                    '<input type="text" name="params" id="control-cron-add-params"  />' +
+
                 '</div>'
             );
 
@@ -96,6 +110,8 @@ define('package/quiqqer/cron/bin/AddCronWindow', [
             this.$Hour  = Content.getElement( '[name="hour"]' );
             this.$Day   = Content.getElement( '[name="day"]' );
             this.$Month = Content.getElement( '[name="month"]' );
+
+            this.$Params = Content.getElement( '[name="params"]' );
 
 
             Ajax.get('package_quiqqer_cron_ajax_getAvailableCrons', function(result)
@@ -108,11 +124,38 @@ define('package/quiqqer/cron/bin/AddCronWindow', [
                 {
                     new Element('option', {
                         value : result[ i ].title,
-                        html  : result[ i ].description
+                        html  : result[ i ].title +' - '+ result[ i ].description
                     }).inject( self.$List );
                 }
 
-                self.Loader.hide();
+                if ( !self.getAttribute( 'cronId' ) )
+                {
+                    self.Loader.hide();
+                    return;
+                }
+
+                Ajax.get('package_quiqqer_cron_ajax_cron_get', function(result)
+                {
+                    var size = self.getElm().getSize();
+
+                    self.$List.value = result.title;
+
+                    self.$Min.value    = result.min;
+                    self.$Hour.value   = result.hour;
+                    self.$Day.value    = result.day;
+                    self.$Month.value  = result.month;
+                    self.$Params.value = result.params;
+
+                    self.$ParamsControl = new QUIParams( self.$Params, {
+                        windowMaxHeight : size.y,
+                        windowMaxWidth  : size.x
+                    } );
+
+                    self.Loader.hide();
+                }, {
+                    'package' : 'quiqqer/cron',
+                    cronId    : self.getAttribute( 'cronId' )
+                });
 
             }, {
                 'package' : 'quiqqer/cron'
@@ -139,18 +182,41 @@ define('package/quiqqer/cron/bin/AddCronWindow', [
                 return this;
             }
 
+            if ( this.getAttribute( 'cronId' ) )
+            {
+                Ajax.post('package_quiqqer_cron_ajax_edit', function(result)
+                {
+                    self.fireEvent( 'submit' );
+                    self.close();
+                }, {
+                    'package' : 'quiqqer/cron',
+                    cronId : this.getAttribute( 'cronId' ),
+                    cron   : this.$List.value,
+                    min    : this.$Min.value,
+                    hour   : this.$Hour.value,
+                    day    : this.$Day.value,
+                    month  : this.$Month.value,
+                    params : JSON.decode( this.$ParamsControl.getValue() )
+                });
+
+                return this;
+            }
+
             Ajax.post('package_quiqqer_cron_ajax_add', function(result)
             {
                 self.fireEvent( 'submit' );
                 self.close();
             }, {
                 'package' : 'quiqqer/cron',
-                cron  : this.$List.value,
-                min   : this.$Min.value,
-                hour  : this.$Hour.value,
-                day   : this.$Day.value,
-                month : this.$Month.value
+                cron   : this.$List.value,
+                min    : this.$Min.value,
+                hour   : this.$Hour.value,
+                day    : this.$Day.value,
+                month  : this.$Month.value,
+                params : JSON.decode( this.$ParamsControl.getValue() )
             });
+
+            return this;
         }
 
     });
