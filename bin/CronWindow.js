@@ -25,8 +25,8 @@ define('package/quiqqer/cron/bin/CronWindow', [
         options : {
             title     : 'Cron hinzufügen',
             icon      : 'icon-time',
-            maxWidth  : 500,
-            maxHeight : 300,
+            maxWidth  : 440,
+            maxHeight : 500,
 
             cronId : null // if you want to edit a cron
         },
@@ -96,10 +96,12 @@ define('package/quiqqer/cron/bin/CronWindow', [
                         '</div>' +
                     '</div>' +
 
-                    '<label for="control-cron-add-params">' +
-                        'Parameter' +
-                    '</label>' +
-                    '<input type="text" name="params" id="control-cron-add-params"  />' +
+                    '<div class="control-cron-add-params-container">' +
+                        '<label for="control-cron-add-params">' +
+                            'Parameter' +
+                        '</label>' +
+                        '<input type="text" name="params" id="control-cron-add-params"  />' +
+                    '</div>' +
 
                 '</div>'
             );
@@ -118,6 +120,8 @@ define('package/quiqqer/cron/bin/CronWindow', [
             {
                 var i, len;
 
+                var size = self.getElm().getSize();
+
                 self.$available = result;
 
                 for ( i = 0, len = result.length; i < len; i++ )
@@ -128,6 +132,11 @@ define('package/quiqqer/cron/bin/CronWindow', [
                     }).inject( self.$List );
                 }
 
+                self.$ParamsControl = new QUIParams( self.$Params, {
+                    windowMaxHeight : size.y,
+                    windowMaxWidth  : size.x
+                } );
+
                 if ( !self.getAttribute( 'cronId' ) )
                 {
                     self.Loader.hide();
@@ -136,8 +145,6 @@ define('package/quiqqer/cron/bin/CronWindow', [
 
                 Ajax.get('package_quiqqer_cron_ajax_cron_get', function(result)
                 {
-                    var size = self.getElm().getSize();
-
                     self.$List.value = result.title;
 
                     self.$Min.value    = result.min;
@@ -146,10 +153,7 @@ define('package/quiqqer/cron/bin/CronWindow', [
                     self.$Month.value  = result.month;
                     self.$Params.value = result.params;
 
-                    self.$ParamsControl = new QUIParams( self.$Params, {
-                        windowMaxHeight : size.y,
-                        windowMaxWidth  : size.x
-                    } );
+                    self.$Params.fireEvent( 'change' );
 
                     self.Loader.hide();
                 }, {
@@ -182,6 +186,7 @@ define('package/quiqqer/cron/bin/CronWindow', [
                 return this;
             }
 
+
             if ( this.getAttribute( 'cronId' ) )
             {
                 Ajax.post('package_quiqqer_cron_ajax_edit', function(result)
@@ -196,7 +201,7 @@ define('package/quiqqer/cron/bin/CronWindow', [
                     hour   : this.$Hour.value,
                     day    : this.$Day.value,
                     month  : this.$Month.value,
-                    params : JSON.decode( this.$ParamsControl.getValue() )
+                    params : JSON.encode( this.$ParamsControl.getValue() )
                 });
 
                 return this;
@@ -213,7 +218,7 @@ define('package/quiqqer/cron/bin/CronWindow', [
                 hour   : this.$Hour.value,
                 day    : this.$Day.value,
                 month  : this.$Month.value,
-                params : JSON.decode( this.$ParamsControl.getValue() )
+                params : JSON.encode( this.$ParamsControl.getValue() )
             });
 
             return this;

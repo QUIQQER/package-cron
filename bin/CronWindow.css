@@ -1,7 +1,7 @@
 @CHARSET "UTF-8";
 
 .control-cron-add {
-
+    width: 100%;
 }
 
 .control-cron-add label {
@@ -51,6 +51,15 @@
     clear: both;
     margin: 0 0 0 2px;
     width: 50px;
+}
+
+
+.control-cron-add-params-container {
+    border-top: 1px solid #DEDEDE;
+    clear: both;
+    float: left;
+    margin-top: 20px;
+    padding-top: 30px;
 }
 
 #control-cron-add-params {

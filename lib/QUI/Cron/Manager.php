@@ -26,6 +26,9 @@ class Manager
      */
     public function add($cron, $min, $hour, $day, $month, $params=array())
     {
+        \QUI\Rights\Permission::checkPermission( 'quiqqer.cron.add' );
+
+
         if ( !$this->_cronExists( $cron ) ) {
             throw new \QUI\Exception( 'Cannot add Cron. Cron not exists', 404 );
         }
@@ -55,6 +58,7 @@ class Manager
     /**
      * Edit the cron
      *
+     * @param String $cron - Name of the Cron
      * @param Integer $cronId
      * @param String $min
      * @param String $hour
@@ -62,9 +66,21 @@ class Manager
      * @param String $month
      * @param Array $params
      */
-    public function edit($cronId, $min, $hour, $day, $month, $params=array())
+    public function edit($cronId, $cron, $min, $hour, $day, $month, $params=array())
     {
+        \QUI\Rights\Permission::checkPermission( 'quiqqer.cron.edit' );
+
+
+        if ( !$this->_cronExists( $cron ) ) {
+            throw new \QUI\Exception( 'Cannot edit Cron. Cron command not exists', 404 );
+        }
+
+        $cronData = $this->getCronData( $cron );
+
+
         \QUI::getDataBase()->update($this->Table(), array(
+            'exec'   => $cronData['exec'],
+            'title'  => $cronData['title'],
             'min'    => $min,
             'hour'   => $hour,
             'day'    => $day,
@@ -86,6 +102,9 @@ class Manager
      */
     public function activateCron($cronId)
     {
+        \QUI\Rights\Permission::checkPermission( 'quiqqer.cron.deactivate' );
+
+
         \QUI::getDataBase()->update(
             $this->Table(),
             array('active' => 1),
@@ -99,6 +118,9 @@ class Manager
      */
     public function deactivateCron($cronId)
     {
+        \QUI\Rights\Permission::checkPermission( 'quiqqer.cron.activate' );
+
+
         \QUI::getDataBase()->update(
             $this->Table(),
             array('active' => 0),
@@ -112,6 +134,9 @@ class Manager
      */
     public function deleteCronIds($ids)
     {
+        \QUI\Rights\Permission::checkPermission( 'quiqqer.cron.delete' );
+
+
         $DataBase = \QUI::getDataBase();
 
         foreach ( $ids as $id )
@@ -133,6 +158,9 @@ class Manager
      */
     public function execute()
     {
+        \QUI\Rights\Permission::checkPermission( 'quiqqer.cron.execute' );
+
+
         $list = $this->getList();
         $time = time();
 
@@ -175,6 +203,9 @@ class Manager
      */
     public function executeCron($cronId)
     {
+        \QUI\Rights\Permission::checkPermission( 'quiqqer.cron.execute' );
+
+
         $cronData = $this->getCronById( $cronId );
 
         if ( !$cronData ) {

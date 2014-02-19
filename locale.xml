@@ -10,4 +10,66 @@
             <en><![CDATA[The Cron ran successfully]]></en>
         </locale>
     </groups>
+
+    <groups name="locale/permissions" datatype="js">
+        <locale name="quiqqer.cron._title">
+            <de><![CDATA[Cron / Tasks]]></de>
+            <en><![CDATA[Cron / Tasks]]></en>
+        </locale>
+
+        <locale name="quiqqer.cron.execute._title">
+            <de><![CDATA[Cron / Tasks ausführen]]></de>
+            <en><![CDATA[Cron / Tasks execute]]></en>
+        </locale>
+        <locale name="quiqqer.cron.execute._description">
+            <de><![CDATA[Kann Cron / Tasks ausführen]]></de>
+            <en><![CDATA[Can execute cron / tasks]]></en>
+        </locale>
+
+        <locale name="quiqqer.cron.add._title">
+            <de><![CDATA[Cron / Tasks hinzufügen]]></de>
+            <en><![CDATA[Cron / Tasks add]]></en>
+        </locale>
+        <locale name="quiqqer.cron.add._description">
+            <de><![CDATA[Kann Cron / Tasks hinzufügen]]></de>
+            <en><![CDATA[Can add cron / tasks]]></en>
+        </locale>
+
+        <locale name="quiqqer.cron.edit._title">
+            <de><![CDATA[Cron / Tasks editieren]]></de>
+            <en><![CDATA[Cron / Tasks edit]]></en>
+        </locale>
+        <locale name="quiqqer.cron.edit._description">
+            <de><![CDATA[Kann Cron / Tasks editieren]]></de>
+            <en><![CDATA[Can edit cron / tasks]]></en>
+        </locale>
+
+        <locale name="quiqqer.cron.activate._title">
+            <de><![CDATA[Cron / Tasks aktivieren]]></de>
+            <en><![CDATA[Cron / Tasks activate]]></en>
+        </locale>
+        <locale name="quiqqer.cron.activate._description">
+            <de><![CDATA[Kann Cron / Tasks aktivieren]]></de>
+            <en><![CDATA[Can activate cron / tasks]]></en>
+        </locale>
+
+        <locale name="quiqqer.cron.deactivate._title">
+            <de><![CDATA[Cron / Tasks deaktivieren]]></de>
+            <en><![CDATA[Cron / Tasks deactivate]]></en>
+        </locale>
+        <locale name="quiqqer.cron.deactivate._description">
+            <de><![CDATA[Kann Cron / Tasks deaktivieren]]></de>
+            <en><![CDATA[Can deactivate cron / tasks]]></en>
+        </locale>
+
+        <locale name="quiqqer.cron.delete._title">
+            <de><![CDATA[Cron / Tasks löschen]]></de>
+            <en><![CDATA[Cron / Tasks delete]]></en>
+        </locale>
+        <locale name="quiqqer.cron.delete._description">
+            <de><![CDATA[Kann Cron / Tasks löschen]]></de>
+            <en><![CDATA[Can delete cron / tasks]]></en>
+        </locale>
+    </groups>
+
 </locales>
