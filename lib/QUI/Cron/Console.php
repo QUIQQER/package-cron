@@ -29,6 +29,28 @@ class Console extends \QUI\System\Console\Tool
      */
     public function execute()
     {
+        $run     = $this->getArgument('--run');
+        $list    = $this->getArgument('--list');
+        $listall = $this->getArgument('--list-all');
+
+        if ( $run )
+        {
+            $this->run();
+            return;
+        }
+
+        if ( $list )
+        {
+            $this->listCrons();
+            return;
+        }
+
+        if ( $listall )
+        {
+            $this->listAllCrons();
+            return;
+        }
+
         $this->writeLn( 'Welcom to the Cron Manager' );
         $this->writeLn( 'Which Command would you execute?' );
         $this->writeLn( '' );
@@ -84,10 +106,13 @@ class Console extends \QUI\System\Console\Tool
     {
         $Manager = new \QUI\Cron\Manager();
 
+        $this->writeLn( '' );
         $this->write('Execute all upcoming crons ...');
+
         $Manager->execute();
 
         $this->write('finish');
+        $this->writeLn( '' );
     }
 
     /**
