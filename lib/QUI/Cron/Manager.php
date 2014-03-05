@@ -217,8 +217,11 @@ class Manager
         {
             $cronDataParams = json_decode( $cronData['params'], true );
 
-            foreach ( $cronDataParams as $entry ) {
-                $params[ $entry['name'] ] = $entry['value'];
+            if ( is_array( $cronDataParams ) )
+            {
+                foreach ( $cronDataParams as $entry ) {
+                    $params[ $entry['name'] ] = $entry['value'];
+                }
             }
 
             if ( !is_array( $params ) ) {
