@@ -207,12 +207,26 @@ class Manager
 
 
         $cronData = $this->getCronById( $cronId );
+        $params   = array();
 
         if ( !$cronData ) {
             throw new \QUI\Exception( 'Cron ID not exist' );
         }
 
-        call_user_func_array( $cronData['exec'], array($this) );
+        if ( isset( $cronData['params'] ) )
+        {
+            $cronDataParams = json_decode( $cronData['params'], true );
+
+            foreach ( $cronDataParams as $entry ) {
+                $params[ $entry['name'] ] = $entry['value'];
+            }
+
+            if ( !is_array( $params ) ) {
+                $params = array();
+            }
+        }
+
+        call_user_func_array( $cronData['exec'], array($params, $this) );
 
         \QUI::getMessagesHandler()->addSuccess(
             \QUI::getLocale()->get(
