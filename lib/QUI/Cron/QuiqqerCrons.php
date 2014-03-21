@@ -40,6 +40,8 @@ class QuiqqerCrons
     }
 
     /**
+     * Check project sites release dates
+     * Activate or deactivate sites
      *
      * @param Array $params - Cron Parameter
      * @param \QUI\Cron\Manager $CronManager
