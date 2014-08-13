@@ -147,4 +147,19 @@ class QuiqqerCrons
             'Folgende Seiten wurden aktiviert: '. implode(',', $activate)
         );
     }
+
+    /**
+     * Send the mail queue
+     *
+     * @param unknown $params
+     * @param unknown $CronManager
+     */
+    static function mailQueue($params, $CronManager)
+    {
+        $MailQueue = new \QUI\Mail\Queue();
+
+        if ( $MailQueue->count() ) {
+            $MailQueue->send();
+        }
+    }
 }

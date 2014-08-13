@@ -23,4 +23,11 @@
             Durchsucht das Projekt und aktiviert oder deaktiviert Seiten je nach Veröffentlichungsdatum.
         </description>
     </cron>
+
+    <cron exec="\QUI\Cron\QuiqqerCrons::mailQueue">
+        <title>Mail Queue ausführen</title>
+        <description>
+            Arbeitet die Mail Queue ab und sendet die Mails.
+        </description>
+    </cron>
 </crons>
