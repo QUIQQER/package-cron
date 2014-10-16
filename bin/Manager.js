@@ -2,10 +2,11 @@
 /**
  * Cron Manager
  *
+ * @module URL_OPT_DIR/quiqqer/cron/bin/Manager
  * @author www.pcsg.de (Henning Leutz)
  */
 
-define('package/quiqqer/cron/bin/Manager', [
+define([
 
     'qui/QUI',
     'qui/controls/desktop/Panel',
@@ -23,7 +24,7 @@ define('package/quiqqer/cron/bin/Manager', [
     return new Class({
 
         Extends : QUIPanel,
-        Type    : 'package/cron/bin/Manager',
+        Type    : 'URL_OPT_DIR/quiqqer/cron/bin/Manager',
 
         Binds : [
             '$onCreate',
@@ -32,7 +33,7 @@ define('package/quiqqer/cron/bin/Manager', [
 
         options : {
             title : 'Cron-Manager',
-            icon : 'icon-time'
+            icon  : 'icon-time'
         },
 
         initialize : function(options)

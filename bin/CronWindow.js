@@ -1,16 +1,18 @@
+
 /**
- * This file contains package/quiqqer/cron/bin/CronWindow
+ * Cron Window
  *
+ * @module URL_OPT_DIR/quiqqer/cron/bin/CronWindow
  * @author www.namerobot.com (Henning Leutz)
  */
 
-define('package/quiqqer/cron/bin/CronWindow', [
+define([
 
     'qui/controls/windows/Confirm',
     'qui/controls/input/Params',
     'Ajax',
 
-    'css!package/quiqqer/cron/bin/CronWindow'
+    'css!URL_OPT_DIR/quiqqer/cron/bin/CronWindow'
 
 ], function(QUIConfirm, QUIParams, Ajax)
 {
@@ -19,7 +21,7 @@ define('package/quiqqer/cron/bin/CronWindow', [
 
     return new Class({
 
-        Type : 'package/quiqqer/cron/bin/CronWindow',
+        Type : 'URL_OPT_DIR/quiqqer/cron/bin/CronWindow',
         Extends : QUIConfirm,
 
         options : {
@@ -225,5 +227,4 @@ define('package/quiqqer/cron/bin/CronWindow', [
         }
 
     });
-
 });

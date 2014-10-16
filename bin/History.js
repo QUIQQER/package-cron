@@ -1,10 +1,11 @@
 /**
  * Cron History Panel
  *
+ * @module URL_OPT_DIR/quiqqer/cron/bin/History
  * @author www.pcsg.de (Henning Leutz)
  */
 
-define('package/quiqqer/cron/bin/History', [
+define([
 
     'qui/QUI',
     'qui/controls/desktop/Panel',
@@ -22,7 +23,7 @@ define('package/quiqqer/cron/bin/History', [
     return new Class({
 
         Extends : QUIPanel,
-        Type    : 'package/cron/bin/History',
+        Type    : 'URL_OPT_DIR/quiqqer/cron/bin/History',
 
         Binds : [
             '$onCreate',
@@ -31,7 +32,7 @@ define('package/quiqqer/cron/bin/History', [
 
         options : {
             title : 'Cron-History',
-            icon : 'icon-long-arrow-right'
+            icon  : 'icon-long-arrow-right'
         },
 
         initialize : function(options)
@@ -74,7 +75,7 @@ define('package/quiqqer/cron/bin/History', [
                 Container = new Element('div', {
                     'class' : 'box',
                     styles : {
-                        width : '100%',
+                        width  : '100%',
                         height : '100%'
                     }
                 }).inject( Content );
@@ -126,5 +127,4 @@ define('package/quiqqer/cron/bin/History', [
         }
 
     });
-
 });
