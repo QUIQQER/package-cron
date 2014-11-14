@@ -12,7 +12,7 @@ define([
     'qui/controls/input/Params',
     'Ajax',
 
-    'css!URL_OPT_DIR/quiqqer/cron/bin/CronWindow'
+    'css!package/quiqqer/cron/bin/CronWindow'
 
 ], function(QUIConfirm, QUIParams, Ajax)
 {
@@ -21,7 +21,7 @@ define([
 
     return new Class({
 
-        Type : 'URL_OPT_DIR/quiqqer/cron/bin/CronWindow',
+        Type : 'package/quiqqer/cron/bin/CronWindow',
         Extends : QUIConfirm,
 
         options : {
