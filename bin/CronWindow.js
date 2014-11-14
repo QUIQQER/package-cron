@@ -12,7 +12,7 @@ define([
     'qui/controls/input/Params',
     'Ajax',
 
-    'css!package/quiqqer/cron/bin/CronWindow'
+    'css!package/quiqqer/cron/bin/CronWindow.css'
 
 ], function(QUIConfirm, QUIParams, Ajax)
 {
