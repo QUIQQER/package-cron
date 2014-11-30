@@ -1,14 +1,11 @@
 <?php
 
 /**
- * activate a cron
- * @param Integer $cronId - Cron-ID
+ * return the cron history
  */
 function package_quiqqer_cron_ajax_history_get()
 {
-    $Manager = new \QUI\Cron\Manager();
-
-    return $Manager->getHistoryList();
+    return (new \QUI\Cron\Manager())->getHistoryList();
 }
 
 \QUI::$Ajax->register(

@@ -3,6 +3,7 @@
 /**
  * activate a cron
  * @param Integer $cronId - Cron-ID
+ * @return array
  */
 function package_quiqqer_cron_ajax_cron_get($cronId)
 {

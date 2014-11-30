@@ -3,11 +3,13 @@
 /**
  * Add a cron to the cron list
  *
- * @param {String} $cron
- * @param {String} $min
- * @param {String} $hour
- * @param {String} $day
- * @param {String} $month
+ * @param String $cronId
+ * @param String $cron
+ * @param String $min
+ * @param String $hour
+ * @param String $day
+ * @param String $month
+ * @param String $params
  */
 function package_quiqqer_cron_ajax_edit($cronId, $cron, $min, $hour, $day, $month, $params)
 {

@@ -104,7 +104,7 @@ class Console extends \QUI\System\Console\Tool
      */
     public function run()
     {
-        $Manager = new \QUI\Cron\Manager();
+        $Manager = new Manager();
 
         $this->writeLn( '' );
         $this->write('Execute all upcoming crons ...');
@@ -120,7 +120,7 @@ class Console extends \QUI\System\Console\Tool
      */
     public function listCrons()
     {
-        $Manager = new \QUI\Cron\Manager();
+        $Manager = new Manager();
         $list    = $Manager->getList();
 
         $this->writeLn( 'Cron list:' );
@@ -152,7 +152,7 @@ class Console extends \QUI\System\Console\Tool
      */
     public function listAllCrons()
     {
-        $Manager = new \QUI\Cron\Manager();
+        $Manager = new Manager();
         $list    = $Manager->getList();
 
         $this->writeLn( 'Cron list:' );

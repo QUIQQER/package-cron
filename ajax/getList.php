@@ -2,12 +2,11 @@
 
 /**
  * Return the Cronlist
+ * @return array
  */
 function package_quiqqer_cron_ajax_getList()
 {
-    $Manager = new \QUI\Cron\Manager();
-
-    return $Manager->getList();
+    return (new \QUI\Cron\Manager())->getList();
 }
 
 \QUI::$Ajax->register(

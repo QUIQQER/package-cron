@@ -1,13 +1,9 @@
 <?php
 
 /**
- * Add a cron to the cron list
+ * Delete a cron to the cron list
  *
- * @param {String} $cron
- * @param {String} $min
- * @param {String} $hour
- * @param {String} $day
- * @param {String} $month
+ * @param string $ids - json array
  */
 function package_quiqqer_cron_ajax_delete($ids)
 {

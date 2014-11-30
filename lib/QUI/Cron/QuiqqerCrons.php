@@ -6,12 +6,13 @@
 
 namespace QUI\Cron;
 
+use QUI;
+
 /**
  * Cron Manager
  *
  * @author www.pcsg.de (Henning Leutz)
  */
-
 class QuiqqerCrons
 {
     /**
@@ -19,7 +20,7 @@ class QuiqqerCrons
      */
     static function clearTempFolder()
     {
-        $Temp = \QUI::getTemp();
+        $Temp = QUI::getTemp();
         $Temp->clear();
     }
 
@@ -28,7 +29,7 @@ class QuiqqerCrons
      */
     static function clearCache()
     {
-        \QUI\Cache\Manager::clearAll();
+        QUI\Cache\Manager::clearAll();
     }
 
     /**
@@ -36,7 +37,7 @@ class QuiqqerCrons
      */
     static function purgeCache()
     {
-        \QUI\Cache\Manager::purge();
+        QUI\Cache\Manager::purge();
     }
 
     /**
@@ -45,23 +46,24 @@ class QuiqqerCrons
      *
      * @param Array $params - Cron Parameter
      * @param \QUI\Cron\Manager $CronManager
+     * @throws QUI\Exception
      */
     static function realeaseDate($params, $CronManager)
     {
         if ( !isset( $params['project'] ) ) {
-            throw new \QUI\Exception( 'Need a project parameter to search release dates' );
+            throw new QUI\Exception( 'Need a project parameter to search release dates' );
         }
 
         if ( !isset( $params['lang'] ) ) {
-            throw new \QUI\Exception( 'Need a lang parameter to search release dates' );
+            throw new QUI\Exception( 'Need a lang parameter to search release dates' );
         }
 
 
-        $Project = \QUI::getProject( $params['project'], $params['lang'] );
+        $Project = QUI::getProject( $params['project'], $params['lang'] );
         $now     = date('Y-m-d H:i:s');
 
         // search sites with release dates
-        $PDO = \QUI::getDataBase()->getPDO();
+        $PDO = QUI::getDataBase()->getPDO();
 
         $deactivate = array();
         $activate   = array();
@@ -96,9 +98,9 @@ class QuiqqerCrons
 
                 $deactivate[] = (int)$entry['id'];
 
-            } catch ( \QUI\Exception $Exception )
+            } catch ( QUI\Exception $Exception )
             {
-                \QUI\System\Log::writeException( $Exception );
+                QUI\System\Log::writeException( $Exception );
             }
         }
 
@@ -133,17 +135,17 @@ class QuiqqerCrons
 
                 $activate[] = (int)$entry['id'];
 
-            } catch ( \QUI\Exception $Exception )
+            } catch ( QUI\Exception $Exception )
             {
-                \QUI\System\Log::writeException( $Exception );
+                QUI\System\Log::writeException( $Exception );
             }
         }
 
-        \QUI\System\Log::addInfo(
+        QUI\System\Log::addInfo(
             'Folgende Seiten wurden deaktiviert: '. implode(',', $deactivate)
         );
 
-        \QUI\System\Log::addInfo(
+        QUI\System\Log::addInfo(
             'Folgende Seiten wurden aktiviert: '. implode(',', $activate)
         );
     }
@@ -151,12 +153,12 @@ class QuiqqerCrons
     /**
      * Send the mail queue
      *
-     * @param unknown $params
-     * @param unknown $CronManager
+     * @param array $params
+     * @param \QUI\Cron\Manager $CronManager
      */
     static function mailQueue($params, $CronManager)
     {
-        $MailQueue = new \QUI\Mail\Queue();
+        $MailQueue = new QUI\Mail\Queue();
 
         if ( $MailQueue->count() ) {
             $MailQueue->send();
