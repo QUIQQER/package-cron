@@ -17,7 +17,7 @@
     },
 
     "require": {
-        "quiqqer/quiqqer" : "1.*",
+        "quiqqer/quiqqer" : "~1",
         "mtdowling/cron-expression": "1.0.*"
     },
 
