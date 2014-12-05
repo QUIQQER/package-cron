@@ -6,7 +6,8 @@
  */
 function package_quiqqer_cron_ajax_getList()
 {
-    return (new \QUI\Cron\Manager())->getList();
+    $CronManager = new \QUI\Cron\Manager();
+    return $CronManager->getList();
 }
 
 \QUI::$Ajax->register(

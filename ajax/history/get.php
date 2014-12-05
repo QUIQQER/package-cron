@@ -5,7 +5,8 @@
  */
 function package_quiqqer_cron_ajax_history_get()
 {
-    return (new \QUI\Cron\Manager())->getHistoryList();
+    $CronManager = new \QUI\Cron\Manager();
+    return $CronManager->getHistoryList();
 }
 
 \QUI::$Ajax->register(
