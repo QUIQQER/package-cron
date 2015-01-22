@@ -92,6 +92,18 @@ class Manager
 
         $cronData = $this->getCronData( $cron );
 
+        // test the cron data
+        try
+        {
+            CronExpression::factory(
+                "$min $hour $day $month *"
+            );
+
+        } catch ( \Exception $Exception )
+        {
+            throw new QUI\Exception( $Exception->getMessage() );
+        }
+
         QUI::getDataBase()->update($this->Table(), array(
             'exec'   => $cronData['exec'],
             'title'  => $cronData['title'],
@@ -105,7 +117,7 @@ class Manager
         ));
 
         QUI::getMessagesHandler()->addSuccess(
-            'Cron erfolgreich editiert'
+            QUI::getLocale()->get( 'quiqqer/cron', 'message.cron.succesful.edit' )
         );
     }
 

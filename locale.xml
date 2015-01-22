@@ -114,7 +114,11 @@
 
         <locale name="message.cron.succesful.added">
             <de><![CDATA[Cron erfolgreich hinzugefügt]]></de>
-            <en><![CDATA[Cron successfully added]]></en>
+            <en><![CDATA[Cron added successfully]]></en>
+        </locale>
+        <locale name="message.cron.succesful.edit">
+            <de><![CDATA[Cron erfolgreich editiert]]></de>
+            <en><![CDATA[Cron edited successfully]]></en>
         </locale>
 
         <locale name="exception.cron.1001">

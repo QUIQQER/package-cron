@@ -106,7 +106,7 @@ define('package/quiqqer/cron/bin/CronWindow', [
                             '<div class="control-cron-add-intervall-entry">' +
                                 '<input type="text" name="month" id="control-cron-add-month" />' +
                                 '<label for="control-cron-add-month">'+
-                                    QUILocale.get( 'quiqqer/cron', 'cron.month' ) +
+                                    QUILocale.get( 'quiqqer/system', 'month' ) +
                                 '</label>' +
                             '</div>' +
                         '</div>' +
