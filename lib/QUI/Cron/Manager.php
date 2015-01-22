@@ -14,6 +14,9 @@ use Cron\CronExpression;
  * Cron Manager
  *
  * @author www.pcsg.de (Henning Leutz)
+ *
+ * @error 1001 - Cannot add Cron. Cron not exists
+ * @error 1002 - Cannot edit Cron. Cron command not exists
  */
 
 class Manager
@@ -33,9 +36,12 @@ class Manager
     {
         Permission::checkPermission( 'quiqqer.cron.add' );
 
-
-        if ( !$this->_cronExists( $cron ) ) {
-            throw new QUI\Exception( 'Cannot add Cron. Cron not exists', 404 );
+        if ( !$this->_cronExists( $cron ) )
+        {
+            throw new QUI\Exception(
+                QUI::getLocale()->get( 'quiqqer/cron', 'exception.cron.1001' ),
+                1001
+            );
         }
 
         $cronData = $this->getCronData( $cron );
@@ -56,7 +62,7 @@ class Manager
         ));
 
         QUI::getMessagesHandler()->addSuccess(
-            'Cron erfolgreich hinzugefügt'
+            QUI::getLocale()->get( 'quiqqer/cron', 'message.cron.succesful.added' )
         );
     }
 
@@ -76,13 +82,15 @@ class Manager
     {
         Permission::checkPermission( 'quiqqer.cron.edit' );
 
-
-        if ( !$this->_cronExists( $cron ) ) {
-            throw new QUI\Exception( 'Cannot edit Cron. Cron command not exists', 404 );
+        if ( !$this->_cronExists( $cron ) )
+        {
+            throw new QUI\Exception(
+                QUI::getLocale()->get( 'quiqqer/cron', 'exception.cron.1002' ),
+                1002
+            );
         }
 
         $cronData = $this->getCronData( $cron );
-
 
         QUI::getDataBase()->update($this->Table(), array(
             'exec'   => $cronData['exec'],
@@ -95,7 +103,6 @@ class Manager
         ), array(
             'id' => $cronId
         ));
-
 
         QUI::getMessagesHandler()->addSuccess(
             'Cron erfolgreich editiert'

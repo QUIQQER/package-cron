@@ -94,15 +94,27 @@
             <de><![CDATA[Cron Verlauf]]></de>
             <en><![CDATA[Cron history]]></en>
         </locale>
-
-
-
     </groups>
 
     <groups name="quiqqer/cron" datatype="php">
         <locale name="message.cron.succesful.executed">
             <de><![CDATA[Der Cron wurde erfolgreich ausgeführt]]></de>
             <en><![CDATA[The Cron ran successfully]]></en>
+        </locale>
+
+        <locale name="message.cron.succesful.added">
+            <de><![CDATA[Cron erfolgreich hinzugefügt]]></de>
+            <en><![CDATA[Cron successfully added]]></en>
+        </locale>
+
+
+        <locale name="exception.cron.1001">
+            <de><![CDATA[Konnte Cron nicht hinzufügen. Cron existiert nicht.]]></de>
+            <en><![CDATA[Cannot add Cron. Cron not exists.]]></en>
+        </locale>
+        <locale name="exception.cron.1002">
+            <de><![CDATA[Konnte Cron nicht editieren. Cron Befehl existiert nicht.]]></de>
+            <en><![CDATA[Cannot edit Cron. Cron command not exists.]]></en>
         </locale>
     </groups>
 

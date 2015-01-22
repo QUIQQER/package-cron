@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This File contains QUI\Cron\Crons
+ * This File contains QUI\Cron\QuiqqerCrons
  */
 
 namespace QUI\Cron;

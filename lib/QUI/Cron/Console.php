@@ -51,7 +51,7 @@ class Console extends \QUI\System\Console\Tool
             return;
         }
 
-        $this->writeLn( 'Welcom to the Cron Manager' );
+        $this->writeLn( 'Welcome to the Cron Manager' );
         $this->writeLn( 'Which Command would you execute?' );
         $this->writeLn( '' );
 
