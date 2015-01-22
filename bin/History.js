@@ -3,6 +3,15 @@
  *
  * @module package/quiqqer/cron/bin/History
  * @author www.pcsg.de (Henning Leutz)
+ *
+ * @require qui/QUI
+ * @require qui/controls/desktop/Panel
+ * @require qui/controls/windows/Confirm
+ * @require qui/controls/buttons/Button
+ * @require qui/controls/buttons/Seperator
+ * @require controls/grid/Grid
+ * @require Ajax
+ * @require Locale
  */
 
 define('package/quiqqer/cron/bin/History', [
@@ -16,9 +25,12 @@ define('package/quiqqer/cron/bin/History', [
     'Ajax',
     'Locale'
 
-],function(QUI, QUIPanel, QUIConfirm, QUIButton, QUIButtonSeperator, Grid, Ajax, Locale)
+],function(QUI, QUIPanel, QUIConfirm, QUIButton, QUIButtonSeperator, Grid, Ajax, QUILocale)
 {
     "use strict";
+
+    var lg = 'quiqqer/cron';
+
 
     return new Class({
 
@@ -87,27 +99,27 @@ define('package/quiqqer/cron/bin/History', [
 
             this.$Grid = new Grid(Container, {
                 columnModel : [{
-                    header    : '&nbsp;',
+                    header    : QUILocale.get('quiqqer/system', 'createdate'),
                     dataIndex : 'lastexec',
                     dataType  : 'date',
                     width     : 150
                 }, {
-                    header    : 'Cron-ID',
+                    header    : QUILocale.get( lg, 'cron.id' ),
                     dataIndex : 'cronid',
                     dataType  : 'string',
                     width     : 50
                 }, {
-                    header    : 'Cron-Title',
+                    header    : QUILocale.get( lg, 'cron.title'),
                     dataIndex : 'cronTitle',
                     dataType  : 'string',
                     width     : 200
                 }, {
-                    header    : 'User-ID',
+                    header    : QUILocale.get('quiqqer/system', 'user_id'),
                     dataIndex : 'uid',
                     dataType  : 'string',
                     width     : 100
                 }, {
-                    header    : 'Username',
+                    header    : QUILocale.get('quiqqer/system', 'username'),
                     dataIndex : 'username',
                     dataType  : 'string',
                     width     : 150

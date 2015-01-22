@@ -26,9 +26,11 @@ define('package/quiqqer/cron/bin/Manager', [
     'Ajax',
     'Locale'
 
-],function(QUI, QUIPanel, QUIConfirm, QUIButton, QUIButtonSeperator, Grid, Ajax, Locale)
+],function(QUI, QUIPanel, QUIConfirm, QUIButton, QUIButtonSeperator, Grid, Ajax, QUILocale)
 {
     "use strict";
+
+    var lg = 'quiqqer/cron';
 
     return new Class({
 
@@ -87,7 +89,7 @@ define('package/quiqqer/cron/bin/Manager', [
                 for ( var i = 0, len = result.length; i < len; i++ )
                 {
                     result[ i ].status = {
-                        title  : 'Cron aktivieren / deaktivieren',
+                        title  : QUILocale.get( lg, 'cron.panel.manager.btn.toggle' ),
                         icon   : result[ i ].active == 1 ? 'icon-ok' : 'icon-remove',
                         cronId : result[ i ].id,
                         events : {
@@ -97,7 +99,7 @@ define('package/quiqqer/cron/bin/Manager', [
 
                     result[ i ].play = {
                         name   : 'cron-play-button-'+ result[ i ].id,
-                        title  : 'Cron ausführen',
+                        title  : QUILocale.get( lg, 'cron.panel.manager.btn.execute' ),
                         icon   : 'icon-play',
                         cronId : result[ i ].id,
                         events : {
@@ -127,7 +129,7 @@ define('package/quiqqer/cron/bin/Manager', [
             this.addButton(
                 new QUIButton({
                     name : 'add',
-                    text : 'Cron hinzufügen',
+                    text : QUILocale.get( lg, 'cron.panel.manager.btn.add' ),
                     textimage : 'icon-plus',
                     events :
                     {
@@ -143,7 +145,7 @@ define('package/quiqqer/cron/bin/Manager', [
             this.addButton(
                 new QUIButton({
                     name : 'edit',
-                    text : 'Markierten Cron editieren',
+                    text : QUILocale.get( lg, 'cron.panel.manager.btn.edit' ),
                     textimage : 'icon-pencil',
                     events :
                     {
@@ -157,7 +159,7 @@ define('package/quiqqer/cron/bin/Manager', [
             this.addButton(
                 new QUIButton({
                     name : 'delete',
-                    text : 'Markierte(n) Cron(s) löschen',
+                    text : QUILocale.get( lg, 'cron.panel.manager.btn.delete' ),
                     textimage : 'icon-trash',
                     events :
                     {
@@ -173,7 +175,7 @@ define('package/quiqqer/cron/bin/Manager', [
             this.addButton(
                 new QUIButton({
                     name : 'history',
-                    text : 'Cron History',
+                    text : QUILocale.get( lg, 'cron.panel.manager.btn.history' ),
                     textimage : 'icon-long-arrow-right',
                     events :
                     {
@@ -201,7 +203,7 @@ define('package/quiqqer/cron/bin/Manager', [
 
             this.$Grid = new Grid(Container, {
                 columnModel : [{
-                    header    : 'Status',
+                    header    : QUILocale.get( 'quiqqer/system', 'status' ),
                     dataIndex : 'status',
                     dataType  : 'button',
                     width     : 60
@@ -211,47 +213,47 @@ define('package/quiqqer/cron/bin/Manager', [
                     dataType  : 'button',
                     width     : 60
                 }, {
-                    header    : 'ID',
+                    header    : QUILocale.get( 'quiqqer/system', 'id' ),
                     dataIndex : 'id',
                     dataType  : 'string',
                     width     : 50
                 }, {
-                    header    : 'Cron-Name',
+                    header    : QUILocale.get( lg, 'cron.title' ),
                     dataIndex : 'title',
                     dataType  : 'string',
                     width     : 150
                 }, {
-                    header    : 'Min',
+                    header    : QUILocale.get( lg, 'cron.min' ),
                     dataIndex : 'min',
                     dataType  : 'string',
                     width     : 50
                 }, {
-                    header    : 'Std',
+                    header    : QUILocale.get( lg, 'cron.hour' ),
                     dataIndex : 'hour',
                     dataType  : 'string',
                     width     : 50
                 }, {
-                    header    : 'Tag',
+                    header    : QUILocale.get( lg, 'cron.day' ),
                     dataIndex : 'day',
                     dataType  : 'string',
                     width     : 50
                 }, {
-                    header    : 'Monat',
+                    header    : QUILocale.get( lg, 'cron.month' ),
                     dataIndex : 'month',
                     dataType  : 'string',
                     width     : 50
                 }, {
-                    header    : 'Exec',
+                    header    : QUILocale.get( lg, 'cron.execute' ),
                     dataIndex : 'exec',
                     dataType  : 'string',
                     width     : 150
                 }, {
-                    header    : 'Parameter',
+                    header    : QUILocale.get( lg, 'cron.params' ),
                     dataIndex : 'params',
                     dataType  : 'string',
                     width     : 150
                 }, {
-                    header    : 'Cron-Beschreibung',
+                    header    : QUILocale.get( lg, 'cron.desc' ),
                     dataIndex : 'desc',
                     dataType  : 'string',
                     width     : 200
@@ -337,11 +339,12 @@ define('package/quiqqer/cron/bin/Manager', [
             });
 
             new QUIConfirm({
-                icon : 'icon-remove',
-                title : 'Cron Einträge löschen',
-                text : '<p>Möchten Sie folgende Cron Einträge wirklich löschen?</p>',
-                information : '<p>Zu löschende Cron-Einträge: <b>'+ ids.join(',') +'</b></p>' +
-                              '<p>Beachten Sie, die Cron-Einträge sind nicht wieder herstellbar</p>',
+                icon  : 'icon-remove',
+                title : QUILocale.get( lg, 'cron.window.delete.cron.title' ),
+                text  : QUILocale.get( lg, 'cron.window.delete.cron.text' ),
+                information : QUILocale.get( lg, 'cron.window.delete.cron.information', {
+                    ids : ids.join(',')
+                }),
                 events :
                 {
                     onSubmit : function(Win)
@@ -495,5 +498,4 @@ define('package/quiqqer/cron/bin/Manager', [
             });
         }
     });
-
 });

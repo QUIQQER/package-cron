@@ -4,17 +4,23 @@
  *
  * @module URL_OPT_DIR/quiqqer/cron/bin/CronWindow
  * @author www.namerobot.com (Henning Leutz)
+ *
+ * @require qui/controls/windows/Confirm
+ * @require qui/controls/input/Params
+ * @require Ajax
+ * @require css!package/quiqqer/cron/bin/CronWindow.css
  */
 
-define([
+define('package/quiqqer/cron/bin/CronWindow', [
 
     'qui/controls/windows/Confirm',
     'qui/controls/input/Params',
     'Ajax',
+    'Locale',
 
     'css!package/quiqqer/cron/bin/CronWindow.css'
 
-], function(QUIConfirm, QUIParams, Ajax)
+], function(QUIConfirm, QUIParams, Ajax, QUILocale)
 {
     "use strict";
 
@@ -25,7 +31,7 @@ define([
         Extends : QUIConfirm,
 
         options : {
-            title     : 'Cron hinzufügen',
+            title     : QUILocale.get( 'quiqqer/cron', 'cron.window.add.cron.title' ),
             icon      : 'icon-time',
             maxWidth  : 440,
             maxHeight : 500,
@@ -75,32 +81,40 @@ define([
 
                     '<div class="control-cron-add-intervall">' +
                         '<div class="control-cron-add-intervall-title">' +
-                            'Intervall:' +
+                            QUILocale.get( 'quiqqer/cron', 'cron.interval' ) +
                         '</div>' +
 
                         '<div class="control-cron-add-intervall-entries">' +
                             '<div class="control-cron-add-intervall-entry">' +
                                 '<input type="text" name="min" id="control-cron-add-minute" />' +
-                                '<label for="control-cron-add-minute">Minute</label>' +
+                                '<label for="control-cron-add-minute">'+
+                                    QUILocale.get( 'quiqqer/system', 'minute' ) +
+                                '</label>' +
                             '</div>' +
                             '<div class="control-cron-add-intervall-entry">' +
                                 '<input type="text" name="hour" id="control-cron-add-hour" />' +
-                                '<label for="control-cron-add-hour">Stunde</label>' +
+                                '<label for="control-cron-add-hour">'+
+                                    QUILocale.get( 'quiqqer/system', 'hour' ) +
+                                '</label>' +
                             '</div>' +
                             '<div class="control-cron-add-intervall-entry">' +
                                 '<input type="text" name="day" id="control-cron-add-day" />' +
-                                '<label for="control-cron-add-day">Tag</label>' +
+                                '<label for="control-cron-add-day">'+
+                                    QUILocale.get( 'quiqqer/system', 'day' ) +
+                                '</label>' +
                             '</div>' +
                             '<div class="control-cron-add-intervall-entry">' +
                                 '<input type="text" name="month" id="control-cron-add-month" />' +
-                                '<label for="control-cron-add-month">Monat</label>' +
+                                '<label for="control-cron-add-month">'+
+                                    QUILocale.get( 'quiqqer/system', 'month' ) +
+                                '</label>' +
                             '</div>' +
                         '</div>' +
                     '</div>' +
 
                     '<div class="control-cron-add-params-container">' +
                         '<label for="control-cron-add-params">' +
-                            'Parameter' +
+                            QUILocale.get( 'quiqqer/cron', 'cron.params' ) +
                         '</label>' +
                         '<input type="text" name="params" id="control-cron-add-params"  />' +
                     '</div>' +
@@ -191,7 +205,7 @@ define([
 
             if ( this.getAttribute( 'cronId' ) )
             {
-                Ajax.post('package_quiqqer_cron_ajax_edit', function(result)
+                Ajax.post('package_quiqqer_cron_ajax_edit', function()
                 {
                     self.fireEvent( 'submit' );
                     self.close();
@@ -209,7 +223,7 @@ define([
                 return this;
             }
 
-            Ajax.post('package_quiqqer_cron_ajax_add', function(result)
+            Ajax.post('package_quiqqer_cron_ajax_add', function()
             {
                 self.fireEvent( 'submit' );
                 self.close();
@@ -225,6 +239,5 @@ define([
 
             return this;
         }
-
     });
 });

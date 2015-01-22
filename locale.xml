@@ -1,6 +1,101 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <locales>
+    <groups name="quiqqer/cron" datatype="php,js">
+
+    </groups>
+
     <groups name="quiqqer/cron" datatype="js">
+        <locale name="cron.id">
+            <de><![CDATA[Cron-ID]]></de>
+            <en><![CDATA[Cron-ID]]></en>
+        </locale>
+        <locale name="cron.title">
+            <de><![CDATA[Cron-Title]]></de>
+            <en><![CDATA[Cron title]]></en>
+        </locale>
+        <locale name="cron.desc">
+            <de><![CDATA[Cron-Beschreibung]]></de>
+            <en><![CDATA[Cron description]]></en>
+        </locale>
+        <locale name="cron.min">
+            <de><![CDATA[Min]]></de>
+            <en><![CDATA[min]]></en>
+        </locale>
+        <locale name="cron.hour">
+            <de><![CDATA[Std]]></de>
+            <en><![CDATA[hr]]></en>
+        </locale>
+        <locale name="cron.day">
+            <de><![CDATA[Tag]]></de>
+            <en><![CDATA[day]]></en>
+        </locale>
+        <locale name="cron.month">
+            <de><![CDATA[Monat]]></de>
+            <en><![CDATA[month]]></en>
+        </locale>
+        <locale name="cron.execute">
+            <de><![CDATA[Exec]]></de>
+            <en><![CDATA[Exec]]></en>
+        </locale>
+        <locale name="cron.params">
+            <de><![CDATA[Parameter]]></de>
+            <en><![CDATA[parameter]]></en>
+        </locale>
+        <locale name="cron.interval">
+            <de><![CDATA[Intervall]]></de>
+            <en><![CDATA[Interval]]></en>
+        </locale>
+
+        <locale name="cron.window.delete.cron.title">
+            <de><![CDATA[Cron Einträge löschen]]></de>
+            <en><![CDATA[Delete Crons]]></en>
+        </locale>
+        <locale name="cron.window.delete.cron.text">
+            <de><![CDATA[<p>Möchten Sie folgende Cron Einträge wirklich löschen?</p>]]></de>
+            <en><![CDATA[<p>Do you really want to delete the following crons?</p>]]></en>
+        </locale>
+        <locale name="cron.window.delete.cron.information">
+            <de><![CDATA[
+                <p>Zu löschende Cron-Einträge: <b>[ids]</b></p>
+                <p>Beachten Sie, die Cron-Einträge sind nicht wieder herstellbar</p>
+            ]]></de>
+            <en><![CDATA[
+                <p>You want to delete following crons: <b>[ids]</b></p>
+                <p>Note that the crons can not be restored</p>
+            ]]></en>
+        </locale>
+
+        <locale name="cron.window.add.cron.title">
+            <de><![CDATA[Cron hinzufügen]]></de>
+            <en><![CDATA[Add Cron]]></en>
+        </locale>
+
+        <locale name="cron.panel.manager.btn.toggle">
+            <de><![CDATA[Cron aktivieren / deaktivieren]]></de>
+            <en><![CDATA[De/Activate cron]]></en>
+        </locale>
+        <locale name="cron.panel.manager.btn.execute">
+            <de><![CDATA[Cron ausführen]]></de>
+            <en><![CDATA[Run cron]]></en>
+        </locale>
+        <locale name="cron.panel.manager.btn.add">
+            <de><![CDATA[Cron hinzufügen]]></de>
+            <en><![CDATA[New cron]]></en>
+        </locale>
+        <locale name="cron.panel.manager.btn.edit">
+            <de><![CDATA[Markierten Cron editieren]]></de>
+            <en><![CDATA[Edit marked cron]]></en>
+        </locale>
+        <locale name="cron.panel.manager.btn.delete">
+            <de><![CDATA[Markierte(n) Cron(s) löschen]]></de>
+            <en><![CDATA[Delete marked crons]]></en>
+        </locale>
+        <locale name="cron.panel.manager.btn.history">
+            <de><![CDATA[Cron Verlauf]]></de>
+            <en><![CDATA[Cron history]]></en>
+        </locale>
+
+
 
     </groups>
 
