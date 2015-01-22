@@ -107,7 +107,6 @@
             <en><![CDATA[Cron successfully added]]></en>
         </locale>
 
-
         <locale name="exception.cron.1001">
             <de><![CDATA[Konnte Cron nicht hinzufügen. Cron existiert nicht.]]></de>
             <en><![CDATA[Cannot add Cron. Cron not exists.]]></en>
