@@ -101,6 +101,16 @@
             <de><![CDATA[Der Cron wurde erfolgreich ausgeführt]]></de>
             <en><![CDATA[The Cron ran successfully]]></en>
         </locale>
+        <locale name="message.cron.admin.info.24h">
+            <de><![CDATA[
+                In den letzten 24 Stunden wurde kein Cron ausgeführt.
+                Unter Umständen werden die Crons nicht richtig ausgeführt.
+            ]]></de>
+            <en><![CDATA[
+                In the past 24 hours no cron was running.
+                It is possible that the Crons will not run properly.
+            ]]></en>
+        </locale>
 
         <locale name="message.cron.succesful.added">
             <de><![CDATA[Cron erfolgreich hinzugefügt]]></de>
