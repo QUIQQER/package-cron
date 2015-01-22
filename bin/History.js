@@ -1,11 +1,11 @@
 /**
  * Cron History Panel
  *
- * @module URL_OPT_DIR/quiqqer/cron/bin/History
+ * @module package/quiqqer/cron/bin/History
  * @author www.pcsg.de (Henning Leutz)
  */
 
-define([
+define('package/quiqqer/cron/bin/History', [
 
     'qui/QUI',
     'qui/controls/desktop/Panel',
@@ -23,7 +23,7 @@ define([
     return new Class({
 
         Extends : QUIPanel,
-        Type    : 'URL_OPT_DIR/quiqqer/cron/bin/History',
+        Type    : 'package/quiqqer/cron/bin/History',
 
         Binds : [
             '$onCreate',
@@ -50,16 +50,21 @@ define([
          */
         loadData : function()
         {
-            var self = this;
+            var self    = this,
+                options = this.$Grid.options;
+
+            this.Loader.show();
 
             Ajax.get('package_quiqqer_cron_ajax_history_get', function(result)
             {
-                self.$Grid.setData({
-                    data : result
-                });
-
+                self.$Grid.setData( result );
+                self.Loader.hide();
             }, {
-                'package' : 'quiqqer/cron'
+                'package' : 'quiqqer/cron',
+                params    : JSON.encode({
+                    perPage : options.perPage,
+                    page    : options.page
+                })
             });
         },
 
@@ -68,9 +73,8 @@ define([
          */
         $onCreate : function()
         {
-            var self      = this,
-                Content   = this.getContent(),
-                size      = Content.getSize(),
+            var self    = this,
+                Content = this.getContent(),
 
                 Container = new Element('div', {
                     'class' : 'box',
@@ -91,10 +95,20 @@ define([
                     header    : 'Cron-ID',
                     dataIndex : 'cronid',
                     dataType  : 'string',
-                    width     : 100
+                    width     : 50
+                }, {
+                    header    : 'Cron-Title',
+                    dataIndex : 'cronTitle',
+                    dataType  : 'string',
+                    width     : 200
                 }, {
                     header    : 'User-ID',
                     dataIndex : 'uid',
+                    dataType  : 'string',
+                    width     : 100
+                }, {
+                    header    : 'Username',
+                    dataIndex : 'username',
                     dataType  : 'string',
                     width     : 150
                 }],

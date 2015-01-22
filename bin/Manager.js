@@ -2,11 +2,20 @@
 /**
  * Cron Manager
  *
- * @module URL_OPT_DIR/quiqqer/cron/bin/Manager
+ * @module package/quiqqer/cron/bin/Manager
  * @author www.pcsg.de (Henning Leutz)
+ *
+ * @require qui/QUI
+ * @require qui/controls/desktop/Panel
+ * @require qui/controls/windows/Confirm
+ * @require qui/controls/buttons/Button
+ * @require qui/controls/buttons/Seperator
+ * @require controls/grid/Grid
+ * @require Ajax
+ * @require Locale
  */
 
-define([
+define('package/quiqqer/cron/bin/Manager', [
 
     'qui/QUI',
     'qui/controls/desktop/Panel',
@@ -24,7 +33,7 @@ define([
     return new Class({
 
         Extends : QUIPanel,
-        Type    : 'URL_OPT_DIR/quiqqer/cron/bin/Manager',
+        Type    : 'package/quiqqer/cron/bin/Manager',
 
         Binds : [
             '$onCreate',
@@ -61,22 +70,28 @@ define([
                     return;
                 }
 
-                var i, len, Btn;
+                var execCron = function(Btn)
+                {
+                    self.execCron(
+                        Btn.getAttribute( 'cronId' )
+                    );
+                };
 
-                for ( i = 0, len = result.length; i < len; i++ )
+                var toggleCron = function(Btn)
+                {
+                    self.toggleStatusOfCron(
+                        Btn.getAttribute( 'cronId' )
+                    );
+                };
+
+                for ( var i = 0, len = result.length; i < len; i++ )
                 {
                     result[ i ].status = {
                         title  : 'Cron aktivieren / deaktivieren',
                         icon   : result[ i ].active == 1 ? 'icon-ok' : 'icon-remove',
                         cronId : result[ i ].id,
-                        events :
-                        {
-                            onClick : function(Btn)
-                            {
-                                self.toggleStatusOfCron(
-                                    Btn.getAttribute( 'cronId' )
-                                );
-                            }
+                        events : {
+                            onClick : toggleCron
                         }
                     };
 
@@ -85,14 +100,8 @@ define([
                         title  : 'Cron ausführen',
                         icon   : 'icon-play',
                         cronId : result[ i ].id,
-                        events :
-                        {
-                            onClick : function(Btn)
-                            {
-                                self.execCron(
-                                    Btn.getAttribute( 'cronId' )
-                                );
-                            }
+                        events : {
+                            onClick : execCron
                         }
                     };
                 }
@@ -179,8 +188,7 @@ define([
             this.getButtons( 'delete' ).disable();
 
 
-            var Content   = this.getContent(),
-                size      = Content.getSize(),
+            var Content = this.getContent(),
 
                 Container = new Element('div', {
                     'class' : 'box',
@@ -196,12 +204,12 @@ define([
                     header    : 'Status',
                     dataIndex : 'status',
                     dataType  : 'button',
-                    width     : 50
+                    width     : 60
                 }, {
                     header    : '&nbsp;',
                     dataIndex : 'play',
                     dataType  : 'button',
-                    width     : 50
+                    width     : 60
                 }, {
                     header    : 'ID',
                     dataIndex : 'id',
@@ -275,7 +283,7 @@ define([
                         delButton.enable();
                     } else
                     {
-                        delButton.disable()
+                        delButton.disable();
                     }
                 },
 
@@ -389,8 +397,7 @@ define([
                 return this;
             }
 
-            var self = this,
-                data = this.$Grid.getSelectedData();
+            var data = this.$Grid.getSelectedData();
 
             if ( !data.length ) {
                 return this;
@@ -411,8 +418,7 @@ define([
             require(['package/quiqqer/cron/bin/CronWindow'], function(Window)
             {
                  new Window({
-                     events :
-                     {
+                     events : {
                          onSubmit : function() {
                              self.loadCrons();
                          }
@@ -428,14 +434,14 @@ define([
          * If the cron is active to deactive
          * If the cron is deactive to active
          *
-         * @param {Integer} cronId - ID of the Cron
+         * @param {Number} cronId - ID of the Cron
          * @return {self}
          */
         toggleStatusOfCron : function(cronId)
         {
             var self = this;
 
-            Ajax.post('package_quiqqer_cron_ajax_cron_toggle', function(result)
+            Ajax.post('package_quiqqer_cron_ajax_cron_toggle', function()
             {
                 self.loadCrons();
             }, {
@@ -449,7 +455,7 @@ define([
         /**
          * Execute the cron
          *
-         * @param {Integer} cronId - ID of the Cron
+         * @param {Number} cronId - ID of the Cron
          * @return {self}
          */
         execCron : function(cronId)
@@ -465,7 +471,7 @@ define([
                 buttons[ i ].setAttribute('icon', 'icon-refresh icon-spin');
             }
 
-            Ajax.post('package_quiqqer_cron_ajax_cron_executeCron', function(result)
+            Ajax.post('package_quiqqer_cron_ajax_cron_executeCron', function()
             {
                 for ( i = 0, len = buttons.length; i < len; i++ ) {
                     buttons[ i ].setAttribute('icon', 'icon-play');

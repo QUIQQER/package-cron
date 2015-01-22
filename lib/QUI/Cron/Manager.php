@@ -335,12 +335,78 @@ class Manager
 
     /**
      * Return the history list
+     *
+     * @param array $params - select params -> (page, perPage)
+     * @return array
      */
-    public function getHistoryList()
+    public function getHistoryList($params=array())
     {
-        return QUI::getDataBase()->fetch(array(
-            'from' => self::TableHistory()
+        $limit = '0,20';
+        $order = 'lastexec DESC';
+
+        if ( isset( $params['perPage'] ) && isset( $params['page'] ) )
+        {
+            $start = (int)$params['page'] - 1;
+            $limit = $start .','. (int)$params['perPage'];
+        }
+
+        $data = QUI::getDataBase()->fetch(array(
+            'from'  => self::TableHistory(),
+            'limit' => $limit,
+            'order' => $order
         ));
+
+        $dataOfCron = QUI::getDataBase()->fetch(array(
+            'from'  => $this->Table()
+        ));
+
+        $Users  = QUI::getUsers();
+        $crons  = array();
+        $result = array();
+
+        // create assoc cron data array
+        foreach ( $dataOfCron as $cronData ) {
+            $crons[ $cronData['id'] ] = $cronData;
+        }
+
+
+        foreach ( $data as $entry )
+        {
+            $entry['cronTitle'] = '';
+            $entry['username']  = '';
+
+            if ( isset( $crons[ $entry['cronid'] ] ) ) {
+                $entry['cronTitle'] = $crons[ $entry['cronid'] ]['title'];
+            }
+
+            try
+            {
+                $entry['username']  = $Users->get( $entry['uid'] )->getName();
+
+            } catch ( QUI\Exception $Exception )
+            {
+
+            }
+
+            $result[] = $entry;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Return the history count, how many history entries exist
+     *
+     * @return Integer
+     */
+    public function getHistoryCount()
+    {
+        $result = QUI::getDataBase()->fetch(array(
+            'from'   => self::TableHistory(),
+            'count'  => 'id'
+        ));
+
+        return $result[0]['id'];
     }
 
     /**

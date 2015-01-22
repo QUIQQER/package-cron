@@ -9,7 +9,7 @@
 
     <item parent="/extras/crons/"
           name="manager"
-          require="URL_OPT_DIR/quiqqer/cron/bin/Manager"
+          require="package/quiqqer/cron/bin/Manager"
           icon="icon-time"
     >
         Cron-Manager
@@ -17,7 +17,7 @@
 
     <item parent="/extras/crons/"
           name="history"
-          require="URL_OPT_DIR/quiqqer/cron/bin/History"
+          require="package/quiqqer/cron/bin/History"
           icon="icon-long-arrow-right"
     >
         Cron-History
