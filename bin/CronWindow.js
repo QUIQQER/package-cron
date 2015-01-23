@@ -131,16 +131,46 @@ define('package/quiqqer/cron/bin/CronWindow', [
 
             this.$Params = Content.getElement( '[name="params"]' );
 
+            this.$List.addEvent('change', function()
+            {
+                if ( !self.$available ) {
+                    return;
+                }
+
+                if ( !self.$ParamsControl ) {
+                    return;
+                }
+
+                var i, len, p, plen;
+                var val       = self.$List.value,
+                    available = self.$available,
+
+                    allowedParams = [],
+                    params        = [];
+
+                for ( i = 0, len = available.length; i < len; i++ )
+                {
+                    if ( available[ i ].title != val ) {
+                        continue;
+                    }
+
+                    params = available[ i ].params;
+
+                    for ( p = 0, plen = params.length; p < plen; p++ ) {
+                        allowedParams.push( params[ p ].name );
+                    }
+                }
+
+                self.$ParamsControl.setAttribute( 'allowedParams', allowedParams );
+            });
 
             Ajax.get('package_quiqqer_cron_ajax_getAvailableCrons', function(result)
             {
-                var i, len;
-
                 var size = self.getElm().getSize();
 
                 self.$available = result;
 
-                for ( i = 0, len = result.length; i < len; i++ )
+                for ( var i = 0, len = result.length; i < len; i++ )
                 {
                     new Element('option', {
                         value : result[ i ].title,
@@ -161,8 +191,7 @@ define('package/quiqqer/cron/bin/CronWindow', [
 
                 Ajax.get('package_quiqqer_cron_ajax_cron_get', function(result)
                 {
-                    self.$List.value = result.title;
-
+                    self.$List.value   = result.title;
                     self.$Min.value    = result.min;
                     self.$Hour.value   = result.hour;
                     self.$Day.value    = result.day;
@@ -170,6 +199,7 @@ define('package/quiqqer/cron/bin/CronWindow', [
                     self.$Params.value = result.params;
 
                     self.$Params.fireEvent( 'change' );
+                    self.$List.fireEvent( 'change' );
 
                     self.Loader.hide();
                 }, {

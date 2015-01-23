@@ -22,6 +22,10 @@
         <description>
             Durchsucht das Projekt und aktiviert oder deaktiviert Seiten je nach Veröffentlichungsdatum.
         </description>
+        <params>
+            <param name="project" type="string" />
+            <param name="lang" type="string" />
+        </params>
     </cron>
 
     <cron exec="\QUI\Cron\QuiqqerCrons::mailQueue">

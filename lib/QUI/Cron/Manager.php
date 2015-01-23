@@ -508,12 +508,14 @@ class Manager
         {
             $Cron = $list->item( $i );
 
-            $title = '';
-            $desc  = '';
+            $title  = '';
+            $desc   = '';
+            $params = array();
 
             /* @var $Cron \DOMElement */
-            $Title = $Cron->getElementsByTagName( 'title' );
-            $Desc  = $Cron->getElementsByTagName( 'description' );
+            $Title  = $Cron->getElementsByTagName( 'title' );
+            $Desc   = $Cron->getElementsByTagName( 'description' );
+            $Params = $Cron->getElementsByTagName( 'param' );
 
             if ( $Title->length ) {
                 $title = trim( $Title->item( 0 )->nodeValue );
@@ -523,10 +525,22 @@ class Manager
                 $desc = trim( $Desc->item( 0 )->nodeValue );
             }
 
+            if ( $Params->length )
+            {
+                foreach ( $Params as $Param )
+                {
+                    $params[] = array(
+                        'name' => $Param->getAttribute( 'name' ),
+                        'type' => $Param->getAttribute( 'type' )
+                    );
+                }
+            }
+
             $result[] = array(
                 'title'       => $title,
                 'description' => $desc,
-                'exec'        => $Cron->getAttribute( 'exec' )
+                'exec'        => $Cron->getAttribute( 'exec' ),
+                'params'      => $params
             );
         }
 
