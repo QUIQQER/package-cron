@@ -19,7 +19,7 @@ class Events
     /**
      * event : on admin header loaded
      */
-    static function onAdminLoaded()
+    static function onAdminLoad()
     {
         if ( !defined( 'ADMIN' ) ) {
             return;
@@ -32,6 +32,14 @@ class Events
         $User = QUI::getUserBySession();
 
         if ( !$User->isSU() ) {
+            return;
+        }
+
+        $Package = QUI::getPackageManager()->getInstalledPackage( 'quiqqer/cron' );
+        $Config  = $Package->getConfig();
+
+        // send admin info
+        if ( !$Config->get( 'settings', 'showAdminMessageIfCronNotRun' ) ) {
             return;
         }
 
@@ -53,6 +61,34 @@ class Events
         // in 24h no cron??
         if ( time() - 86400 > $date ) {
             self::sendAdminInfoCronError();
+        }
+    }
+
+    /**
+     * event : on admin loaded -> footer output
+     */
+    static function adminLoadFooter()
+    {
+        $Package = QUI::getPackageManager()->getInstalledPackage( 'quiqqer/cron' );
+        $Config  = $Package->getConfig();
+
+        // execute cron ?
+        if ( $Config->get( 'settings', 'executeOnAdminLogin' ) )
+        {
+            echo '
+            <script>window.addEvent("load", function()
+            {
+                require(["Ajax"], function(QUIAjax)
+                {
+                    QUIAjax.post("package_quiqqer_cron_ajax_execute", function()
+                    {
+
+                    }, {
+                        "package" : "quiqqer/cron"
+                    });
+                });
+            });
+            </script>';
         }
     }
 

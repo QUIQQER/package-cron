@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiqqer>
+    <settings>
+
+        <config>
+            <section name="settings">
+                <conf name="executeOnAdminLogin">
+                    <type><![CDATA[bool]]></type>
+                    <defaultvalue>0</defaultvalue>
+                </conf>
+                <conf name="showAdminMessageIfCronNotRun">
+                    <type><![CDATA[bool]]></type>
+                    <defaultvalue>1</defaultvalue>
+                </conf>
+            </section>
+        </config>
+
+        <window>
+            <title>Cron Einstellungen</title>
+            <params>
+                <icon>icon-time</icon>
+            </params>
+
+            <categories>
+                <category name="cron_settings">
+                    <text>Allgemeine Einstellungen</text>
+                    <icon>icon-time</icon>
+
+                    <settings title="settings" name="settings">
+                        <title>Allgemeine Cron Einstellungen</title>
+                        <input conf="settings.executeOnAdminLogin" type="checkbox">
+                            <text>
+                                Crons ausführen wenn sich in die Administration eingeloggt wird
+                            </text>
+                        </input>
+                        <input conf="settings.showAdminMessageIfCronNotRun" type="checkbox">
+                            <text>
+                                Cron Hinweise an einen Administration in der Administration anzeigen
+                            </text>
+                            <description>
+                                Der Administrator Benutzer bekommt eine Nachricht wenn die Crons die letzten 24h nicht liefen
+                            </description>
+                        </input>
+                    </settings>
+
+                </category>
+            </categories>
+        </window>
+
+    </settings>
+</quiqqer>
