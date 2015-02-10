@@ -213,7 +213,18 @@ class Manager
             }
 
             // execute cron
-            $this->executeCron( $entry['id'] );
+            try
+            {
+                $this->executeCron( $entry['id'] );
+
+            } catch ( \Exception $Exception )
+            {
+                $message  = print_r( $entry, true );
+                $message .= "\n". $Exception->getMessage();
+
+                self::log( $message );
+                QUI::getMessagesHandler()->addError( $message );
+            }
         }
     }
 
@@ -252,7 +263,7 @@ class Manager
             }
         }
 
-        call_user_func_array( $cronData['exec'], array($params, $this) );
+        call_user_func_array($cronData['exec'], array($params, $this));
 
         QUI::getMessagesHandler()->addSuccess(
             QUI::getLocale()->get(
