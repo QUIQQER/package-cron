@@ -1,20 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <locales>
-    <groups name="quiqqer/cron" datatype="php,js">
-
+    <groups name="quiqqer/cron" datatype="php">
+        <locale name="message.cron.succesful.executed">
+            <de><![CDATA[Die Aufgabe wurde erfolgreich ausgeführt]]></de>
+            <en><![CDATA[The Cron ran successfully]]></en>
+        </locale>
+        <locale name="message.cron.admin.info.24h">
+            <de><![CDATA[In den letzten 24 Stunden wurde keine geplante Aufgabe ausgeführt.
+                Unter Umständen sind die geplanten Augaben fehlerhaft.]]></de>
+            <en><![CDATA[In the past 24 hours no cron was running.
+                It is possible that the Crons will not run properly.]]></en>
+        </locale>
+        <locale name="message.cron.succesful.added">
+            <de><![CDATA[Aufgabe erfolgreich hinzugefügt]]></de>
+            <en><![CDATA[Cron added successfully]]></en>
+        </locale>
+        <locale name="message.cron.succesful.edit">
+            <de><![CDATA[Aufgabe erfolgreich editiert]]></de>
+            <en><![CDATA[Cron edited successfully]]></en>
+        </locale>
+        <locale name="exception.cron.1001">
+            <de><![CDATA[Konnte Aufgabe nicht hinzufügen. Aufgabe existiert nicht.]]></de>
+            <en><![CDATA[Cannot add Cron. Cron not exists.]]></en>
+        </locale>
+        <locale name="exception.cron.1002">
+            <de><![CDATA[Konnte Aufgabe nicht editieren. Befehl existiert nicht.]]></de>
+            <en><![CDATA[Cannot edit Cron. Cron command not exists.]]></en>
+        </locale>
     </groups>
-
     <groups name="quiqqer/cron" datatype="js">
         <locale name="cron.id">
-            <de><![CDATA[Cron-ID]]></de>
+            <de><![CDATA[Aufgaben-ID]]></de>
             <en><![CDATA[Cron-ID]]></en>
         </locale>
         <locale name="cron.title">
-            <de><![CDATA[Cron-Title]]></de>
+            <de><![CDATA[Aufgabentitel]]></de>
             <en><![CDATA[Cron title]]></en>
         </locale>
         <locale name="cron.desc">
-            <de><![CDATA[Cron-Beschreibung]]></de>
+            <de><![CDATA[Aufgabenbeschreibung]]></de>
             <en><![CDATA[Cron description]]></en>
         </locale>
         <locale name="cron.min">
@@ -45,151 +69,47 @@
             <de><![CDATA[Intervall]]></de>
             <en><![CDATA[Interval]]></en>
         </locale>
-
         <locale name="cron.window.delete.cron.title">
-            <de><![CDATA[Cron Einträge löschen]]></de>
+            <de><![CDATA[Aufgaben-Einträge löschen]]></de>
             <en><![CDATA[Delete Crons]]></en>
         </locale>
         <locale name="cron.window.delete.cron.text">
-            <de><![CDATA[<p>Möchten Sie folgende Cron Einträge wirklich löschen?</p>]]></de>
+            <de><![CDATA[<p>Möchten Sie folgende Aufgaben-Einträge wirklich löschen?</p>]]></de>
             <en><![CDATA[<p>Do you really want to delete the following crons?</p>]]></en>
         </locale>
         <locale name="cron.window.delete.cron.information">
-            <de><![CDATA[
-                <p>Zu löschende Cron-Einträge: <b>[ids]</b></p>
-                <p>Beachten Sie, die Cron-Einträge sind nicht wieder herstellbar</p>
-            ]]></de>
-            <en><![CDATA[
-                <p>You want to delete following crons: <b>[ids]</b></p>
-                <p>Note that the crons can not be restored</p>
-            ]]></en>
+            <de><![CDATA[<p>Zu löschende Aufgaben-Einträge: <b>[ids]</b></p>
+                <p>Beachten Sie, die Aufgaben-Einträge sind nicht wieder herstellbar</p>]]></de>
+            <en><![CDATA[<p>You want to delete following crons: <b>[ids]</b></p>
+                <p>Note that the crons can not be restored</p>]]></en>
         </locale>
-
         <locale name="cron.window.add.cron.title">
-            <de><![CDATA[Cron hinzufügen]]></de>
+            <de><![CDATA[Aufgabe hinzufügen]]></de>
             <en><![CDATA[Add Cron]]></en>
         </locale>
-
         <locale name="cron.panel.manager.btn.toggle">
-            <de><![CDATA[Cron aktivieren / deaktivieren]]></de>
+            <de><![CDATA[Aufgabe aktivieren / deaktivieren]]></de>
             <en><![CDATA[De/Activate cron]]></en>
         </locale>
         <locale name="cron.panel.manager.btn.execute">
-            <de><![CDATA[Cron ausführen]]></de>
+            <de><![CDATA[Aufgabe ausführen]]></de>
             <en><![CDATA[Run cron]]></en>
         </locale>
         <locale name="cron.panel.manager.btn.add">
-            <de><![CDATA[Cron hinzufügen]]></de>
+            <de><![CDATA[Aufgabe hinzufügen]]></de>
             <en><![CDATA[New cron]]></en>
         </locale>
         <locale name="cron.panel.manager.btn.edit">
-            <de><![CDATA[Markierten Cron editieren]]></de>
+            <de><![CDATA[Markierte Aufgabe editieren]]></de>
             <en><![CDATA[Edit marked cron]]></en>
         </locale>
         <locale name="cron.panel.manager.btn.delete">
-            <de><![CDATA[Markierte(n) Cron(s) löschen]]></de>
+            <de><![CDATA[Markierte Aufgabe(n) löschen]]></de>
             <en><![CDATA[Delete marked crons]]></en>
         </locale>
         <locale name="cron.panel.manager.btn.history">
-            <de><![CDATA[Cron Verlauf]]></de>
+            <de><![CDATA[Aufgabenverlauf]]></de>
             <en><![CDATA[Cron history]]></en>
         </locale>
     </groups>
-
-    <groups name="quiqqer/cron" datatype="php">
-        <locale name="message.cron.succesful.executed">
-            <de><![CDATA[Der Cron wurde erfolgreich ausgeführt]]></de>
-            <en><![CDATA[The Cron ran successfully]]></en>
-        </locale>
-        <locale name="message.cron.admin.info.24h">
-            <de><![CDATA[
-                In den letzten 24 Stunden wurde kein Cron ausgeführt.
-                Unter Umständen werden die Crons nicht richtig ausgeführt.
-            ]]></de>
-            <en><![CDATA[
-                In the past 24 hours no cron was running.
-                It is possible that the Crons will not run properly.
-            ]]></en>
-        </locale>
-
-        <locale name="message.cron.succesful.added">
-            <de><![CDATA[Cron erfolgreich hinzugefügt]]></de>
-            <en><![CDATA[Cron added successfully]]></en>
-        </locale>
-        <locale name="message.cron.succesful.edit">
-            <de><![CDATA[Cron erfolgreich editiert]]></de>
-            <en><![CDATA[Cron edited successfully]]></en>
-        </locale>
-
-        <locale name="exception.cron.1001">
-            <de><![CDATA[Konnte Cron nicht hinzufügen. Cron existiert nicht.]]></de>
-            <en><![CDATA[Cannot add Cron. Cron not exists.]]></en>
-        </locale>
-        <locale name="exception.cron.1002">
-            <de><![CDATA[Konnte Cron nicht editieren. Cron Befehl existiert nicht.]]></de>
-            <en><![CDATA[Cannot edit Cron. Cron command not exists.]]></en>
-        </locale>
-    </groups>
-
-    <groups name="locale/permissions" datatype="js">
-        <locale name="quiqqer.cron._title">
-            <de><![CDATA[Cron / Tasks]]></de>
-            <en><![CDATA[Cron / Tasks]]></en>
-        </locale>
-
-        <locale name="quiqqer.cron.execute._title">
-            <de><![CDATA[Cron / Tasks ausführen]]></de>
-            <en><![CDATA[Cron / Tasks execute]]></en>
-        </locale>
-        <locale name="quiqqer.cron.execute._description">
-            <de><![CDATA[Kann Cron / Tasks ausführen]]></de>
-            <en><![CDATA[Can execute cron / tasks]]></en>
-        </locale>
-
-        <locale name="quiqqer.cron.add._title">
-            <de><![CDATA[Cron / Tasks hinzufügen]]></de>
-            <en><![CDATA[Cron / Tasks add]]></en>
-        </locale>
-        <locale name="quiqqer.cron.add._description">
-            <de><![CDATA[Kann Cron / Tasks hinzufügen]]></de>
-            <en><![CDATA[Can add cron / tasks]]></en>
-        </locale>
-
-        <locale name="quiqqer.cron.edit._title">
-            <de><![CDATA[Cron / Tasks editieren]]></de>
-            <en><![CDATA[Cron / Tasks edit]]></en>
-        </locale>
-        <locale name="quiqqer.cron.edit._description">
-            <de><![CDATA[Kann Cron / Tasks editieren]]></de>
-            <en><![CDATA[Can edit cron / tasks]]></en>
-        </locale>
-
-        <locale name="quiqqer.cron.activate._title">
-            <de><![CDATA[Cron / Tasks aktivieren]]></de>
-            <en><![CDATA[Cron / Tasks activate]]></en>
-        </locale>
-        <locale name="quiqqer.cron.activate._description">
-            <de><![CDATA[Kann Cron / Tasks aktivieren]]></de>
-            <en><![CDATA[Can activate cron / tasks]]></en>
-        </locale>
-
-        <locale name="quiqqer.cron.deactivate._title">
-            <de><![CDATA[Cron / Tasks deaktivieren]]></de>
-            <en><![CDATA[Cron / Tasks deactivate]]></en>
-        </locale>
-        <locale name="quiqqer.cron.deactivate._description">
-            <de><![CDATA[Kann Cron / Tasks deaktivieren]]></de>
-            <en><![CDATA[Can deactivate cron / tasks]]></en>
-        </locale>
-
-        <locale name="quiqqer.cron.delete._title">
-            <de><![CDATA[Cron / Tasks löschen]]></de>
-            <en><![CDATA[Cron / Tasks delete]]></en>
-        </locale>
-        <locale name="quiqqer.cron.delete._description">
-            <de><![CDATA[Kann Cron / Tasks löschen]]></de>
-            <en><![CDATA[Can delete cron / tasks]]></en>
-        </locale>
-    </groups>
-
 </locales>
