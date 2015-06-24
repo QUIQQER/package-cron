@@ -178,10 +178,7 @@ define('package/quiqqer/cron/bin/CronWindow', [
                     }).inject( self.$List );
                 }
 
-                self.$ParamsControl = new QUIParams( self.$Params, {
-                    windowMaxHeight : size.y,
-                    windowMaxWidth  : size.x
-                } );
+                self.$ParamsControl = new QUIParams(self.$Params);
 
                 if ( !self.getAttribute( 'cronId' ) )
                 {
