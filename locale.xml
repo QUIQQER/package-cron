@@ -111,5 +111,35 @@
             <de><![CDATA[Aufgabenverlauf]]></de>
             <en><![CDATA[Cron history]]></en>
         </locale>
+
+        <locale name="permission.quiqqer.cron._header">
+            <de><![CDATA[Aufgaben / Tasks]]></de>
+            <en><![CDATA[Ttasks]]></en>
+        </locale>
+        <locale name="permission.quiqqer.cron.execute">
+            <de><![CDATA[Darf Aufgaben / Tasks ausführen.]]></de>
+            <en><![CDATA[Can execute tasks.]]></en>
+        </locale>
+        <locale name="permission.quiqqer.cron.add">
+            <de><![CDATA[Darf Aufgaben / Tasks hinzufügen.]]></de>
+            <en><![CDATA[Can add tasks.]]></en>
+        </locale>
+        <locale name="permission.quiqqer.cron.edit">
+            <de><![CDATA[Darf Aufgaben / Tasks bearbeiten.]]></de>
+            <en><![CDATA[Can edit tasks.]]></en>
+        </locale>
+        <locale name="permission.quiqqer.cron.delete">
+            <de><![CDATA[Darf Aufgaben / Tasks löschen.]]></de>
+            <en><![CDATA[Can delete tasks.]]></en>
+        </locale>
+        <locale name="permission.quiqqer.cron.activate">
+            <de><![CDATA[Darf Aufgaben / Tasks aktivieren.]]></de>
+            <en><![CDATA[Can activate tasks.]]></en>
+        </locale>
+        <locale name="permission.quiqqer.cron.deactivate">
+            <de><![CDATA[Darf Aufgaben / Tasks deaktivieren.]]></de>
+            <en><![CDATA[Can deactivate tasks.]]></en>
+        </locale>
+
     </groups>
 </locales>

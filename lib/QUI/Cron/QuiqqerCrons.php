@@ -41,6 +41,14 @@ class QuiqqerCrons
     }
 
     /**
+     * Clear the media cache of the administration
+     */
+    static function clearAdminMediaCache()
+    {
+        QUI\Utils\System\File::unlink(VAR_DIR.'cache/admin/media/');
+    }
+
+    /**
      * Check project sites release dates
      * Activate or deactivate sites
      *

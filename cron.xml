@@ -10,6 +10,15 @@
         <description>Kompletten Cache leeren</description>
     </cron>
 
+    <cron exec="\QUI\Cron\QuiqqerCrons::clearAdminMediaCache">
+        <title>Media Cache der Administration leeren</title>
+        <description>
+            Leert die Cachebilder von der Administration.<br />
+            Dies sind zum Beispiel die Vorschaubilder in der Administration.<br />
+            Der öffentliche Mediacache wird nicht geleert
+        </description>
+    </cron>
+
     <cron exec="\QUI\Cron\QuiqqerCrons::purgeCache">
         <title>Cache säubern</title>
         <description>
