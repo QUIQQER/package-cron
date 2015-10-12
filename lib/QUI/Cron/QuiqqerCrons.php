@@ -41,32 +41,41 @@ class QuiqqerCrons
     }
 
     /**
+     * Clear the media cache of the administration
+     */
+    static function clearAdminMediaCache()
+    {
+        QUI\Utils\System\File::unlink(VAR_DIR.'cache/admin/media/');
+    }
+
+    /**
      * Check project sites release dates
      * Activate or deactivate sites
      *
-     * @param Array $params - Cron Parameter
+     * @param Array             $params - Cron Parameter
      * @param \QUI\Cron\Manager $CronManager
+     *
      * @throws QUI\Exception
      */
     static function realeaseDate($params, $CronManager)
     {
-        if ( !isset( $params['project'] ) ) {
-            throw new QUI\Exception( 'Need a project parameter to search release dates' );
+        if (!isset($params['project'])) {
+            throw new QUI\Exception('Need a project parameter to search release dates');
         }
 
-        if ( !isset( $params['lang'] ) ) {
-            throw new QUI\Exception( 'Need a lang parameter to search release dates' );
+        if (!isset($params['lang'])) {
+            throw new QUI\Exception('Need a lang parameter to search release dates');
         }
 
 
-        $Project = QUI::getProject( $params['project'], $params['lang'] );
-        $now     = date('Y-m-d H:i:s');
+        $Project = QUI::getProject($params['project'], $params['lang']);
+        $now = date('Y-m-d H:i:s');
 
         // search sites with release dates
         $PDO = QUI::getDataBase()->getPDO();
 
         $deactivate = array();
-        $activate   = array();
+        $activate = array();
 
 
         /**
@@ -83,24 +92,21 @@ class QuiqqerCrons
             ;
         ");
 
-        $Statment->bindValue( ':date', $now, \PDO::PARAM_STR );
-        $Statment->bindValue( ':empty', '0000-00-00 00:00:00', \PDO::PARAM_STR );
+        $Statment->bindValue(':date', $now, \PDO::PARAM_STR);
+        $Statment->bindValue(':empty', '0000-00-00 00:00:00', \PDO::PARAM_STR);
         $Statment->execute();
 
-        $result = $Statment->fetchAll( \PDO::FETCH_ASSOC );
+        $result = $Statment->fetchAll(\PDO::FETCH_ASSOC);
 
-        foreach ( $result as $entry )
-        {
-            try
-            {
-                $Site = $Project->get( (int)$entry['id'] );
+        foreach ($result as $entry) {
+            try {
+                $Site = $Project->get((int)$entry['id']);
                 $Site->deactivate();
 
                 $deactivate[] = (int)$entry['id'];
 
-            } catch ( QUI\Exception $Exception )
-            {
-                QUI\System\Log::writeException( $Exception );
+            } catch (QUI\Exception $Exception) {
+                QUI\System\Log::writeException($Exception);
             }
         }
 
@@ -120,47 +126,44 @@ class QuiqqerCrons
             ;
         ");
 
-        $Statment->bindValue( ':date', $now, \PDO::PARAM_STR );
-        $Statment->bindValue( ':empty', '0000-00-00 00:00:00', \PDO::PARAM_STR );
+        $Statment->bindValue(':date', $now, \PDO::PARAM_STR);
+        $Statment->bindValue(':empty', '0000-00-00 00:00:00', \PDO::PARAM_STR);
         $Statment->execute();
 
-        $result = $Statment->fetchAll( \PDO::FETCH_ASSOC );
+        $result = $Statment->fetchAll(\PDO::FETCH_ASSOC);
 
-        foreach ( $result as $entry )
-        {
-            try
-            {
-                $Site = $Project->get( (int)$entry['id'] );
+        foreach ($result as $entry) {
+            try {
+                $Site = $Project->get((int)$entry['id']);
                 $Site->activate();
 
                 $activate[] = (int)$entry['id'];
 
-            } catch ( QUI\Exception $Exception )
-            {
-                QUI\System\Log::writeException( $Exception );
+            } catch (QUI\Exception $Exception) {
+                QUI\System\Log::writeException($Exception);
             }
         }
 
         QUI\System\Log::addInfo(
-            'Folgende Seiten wurden deaktiviert: '. implode(',', $deactivate)
+            'Folgende Seiten wurden deaktiviert: '.implode(',', $deactivate)
         );
 
         QUI\System\Log::addInfo(
-            'Folgende Seiten wurden aktiviert: '. implode(',', $activate)
+            'Folgende Seiten wurden aktiviert: '.implode(',', $activate)
         );
     }
 
     /**
      * Send the mail queue
      *
-     * @param array $params
+     * @param array             $params
      * @param \QUI\Cron\Manager $CronManager
      */
     static function mailQueue($params, $CronManager)
     {
         $MailQueue = new QUI\Mail\Queue();
 
-        if ( $MailQueue->count() ) {
+        if ($MailQueue->count()) {
             $MailQueue->send();
         }
     }

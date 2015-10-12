@@ -7,14 +7,14 @@
  */
 function package_quiqqer_cron_ajax_delete($ids)
 {
-    $ids     = json_decode( $ids, true );
+    $ids = json_decode($ids, true);
     $Manager = new \QUI\Cron\Manager();
 
-    $Manager->deleteCronIds( $ids );
+    $Manager->deleteCronIds($ids);
 }
 
 \QUI::$Ajax->register(
     'package_quiqqer_cron_ajax_delete',
-    array( 'ids' ),
+    array('ids'),
     'Permission::checkAdminUser'
 );

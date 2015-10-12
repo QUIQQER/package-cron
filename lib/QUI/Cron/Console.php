@@ -25,35 +25,36 @@ class Console extends \QUI\System\Console\Tool
 
     /**
      * (non-PHPdoc)
+     *
      * @see \QUI\System\Console\Tool::execute()
      */
     public function execute()
     {
-        $run     = $this->getArgument('--run');
-        $list    = $this->getArgument('--list');
+        $run = $this->getArgument('--run');
+        $list = $this->getArgument('--list');
         $listall = $this->getArgument('--list-all');
 
-        if ( $run )
-        {
+        if ($run) {
             $this->run();
+
             return;
         }
 
-        if ( $list )
-        {
+        if ($list) {
             $this->listCrons();
+
             return;
         }
 
-        if ( $listall )
-        {
+        if ($listall) {
             $this->listAllCrons();
+
             return;
         }
 
-        $this->writeLn( 'Welcome to the Cron Manager' );
-        $this->writeLn( 'Which Command would you execute?' );
-        $this->writeLn( '' );
+        $this->writeLn('Welcome to the Cron Manager');
+        $this->writeLn('Which Command would you execute?');
+        $this->writeLn('');
 
         $this->commandRead();
     }
@@ -63,38 +64,38 @@ class Console extends \QUI\System\Console\Tool
      */
     public function commandRead()
     {
-        $this->writeLn( 'Available Commands: ' );
-        $this->writeLn( "- run\t\trun all active crons" );
-        $this->writeLn( "- list\t\tlist all active crons" );
-        $this->writeLn( "- list-all\tlist all crons" );
+        $this->writeLn('Available Commands: ');
+        $this->writeLn("- run\t\trun all active crons");
+        $this->writeLn("- list\t\tlist all active crons");
+        $this->writeLn("- list-all\tlist all crons");
 
-        $this->writeLn( '' );
+        $this->writeLn('');
 
-        $this->writeLn( 'Command: ' );
+        $this->writeLn('Command: ');
         $command = $this->readInput();
 
-        switch ( $command )
-        {
+        switch ($command) {
             // run all crons
             case 'run':
                 $this->run();
                 $this->commandRead();
-            break;
+                break;
 
             // list all inserted crons
             case 'list':
                 $this->listCrons();
                 $this->commandRead();
-            break;
+                break;
 
             // list all inserted crons
             case 'list-all':
                 $this->listAllCrons();
                 $this->commandRead();
-            break;
+                break;
 
             default:
-                $this->writeLn( 'Command not found, please type another command', 'red' );
+                $this->writeLn('Command not found, please type another command',
+                    'red');
                 $this->commandRead();
         }
     }
@@ -106,13 +107,13 @@ class Console extends \QUI\System\Console\Tool
     {
         $Manager = new Manager();
 
-        $this->writeLn( '' );
+        $this->writeLn('');
         $this->write('Execute all upcoming crons ...');
 
         $Manager->execute();
 
         $this->write('finish');
-        $this->writeLn( '' );
+        $this->writeLn('');
     }
 
     /**
@@ -121,30 +122,30 @@ class Console extends \QUI\System\Console\Tool
     public function listCrons()
     {
         $Manager = new Manager();
-        $list    = $Manager->getList();
+        $list = $Manager->getList();
 
-        $this->writeLn( 'Cron list:' );
-        $this->writeLn( '=======================================================' );
-        $this->writeLn( '' );
+        $this->writeLn('Cron list:');
+        $this->writeLn('=======================================================');
+        $this->writeLn('');
 
-        foreach ( $list as $entry )
-        {
-            if ( $entry['active'] != 1 ) {
+        foreach ($list as $entry) {
+            if ($entry['active'] != 1) {
                 continue;
             }
 
-            $time = $entry['min'] .' '. $entry['hour'] .' '. $entry['day'] .' '. $entry['month'];
+            $time = $entry['min'].' '.$entry['hour'].' '.$entry['day'].' '
+                .$entry['month'];
             $exec = $entry['exec'];
 
-            $this->writeLn( 'ID: '. $entry['id'] );
-            $this->writeLn( $time ."\t". $exec, 'green' );
+            $this->writeLn('ID: '.$entry['id']);
+            $this->writeLn($time."\t".$exec, 'green');
 
             $this->resetColor();
-            $this->writeLn( '' );
+            $this->writeLn('');
         }
 
-        $this->writeLn( '=======================================================' );
-        $this->writeLn( '' );
+        $this->writeLn('=======================================================');
+        $this->writeLn('');
     }
 
     /**
@@ -153,25 +154,25 @@ class Console extends \QUI\System\Console\Tool
     public function listAllCrons()
     {
         $Manager = new Manager();
-        $list    = $Manager->getList();
+        $list = $Manager->getList();
 
-        $this->writeLn( 'Cron list:' );
-        $this->writeLn( '=======================================================' );
-        $this->writeLn( '' );
+        $this->writeLn('Cron list:');
+        $this->writeLn('=======================================================');
+        $this->writeLn('');
 
-        foreach ( $list as $entry )
-        {
-            $time = $entry['min'] .' '. $entry['hour'] .' '. $entry['day'] .' '. $entry['month'];
+        foreach ($list as $entry) {
+            $time = $entry['min'].' '.$entry['hour'].' '.$entry['day'].' '
+                .$entry['month'];
             $exec = $entry['exec'];
 
-            $this->writeLn( 'ID: '. $entry['id'] );
-            $this->writeLn( $time ."\t". $exec, 'green' );
+            $this->writeLn('ID: '.$entry['id']);
+            $this->writeLn($time."\t".$exec, 'green');
 
             $this->resetColor();
-            $this->writeLn( '' );
+            $this->writeLn('');
         }
 
-        $this->writeLn( '=======================================================' );
-        $this->writeLn( '' );
+        $this->writeLn('=======================================================');
+        $this->writeLn('');
     }
 }

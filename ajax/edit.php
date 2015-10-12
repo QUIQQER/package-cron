@@ -11,16 +11,23 @@
  * @param String $month
  * @param String $params
  */
-function package_quiqqer_cron_ajax_edit($cronId, $cron, $min, $hour, $day, $month, $params)
-{
-    $params = json_decode( $params, true );
+function package_quiqqer_cron_ajax_edit(
+    $cronId,
+    $cron,
+    $min,
+    $hour,
+    $day,
+    $month,
+    $params
+) {
+    $params = json_decode($params, true);
 
     $Manager = new \QUI\Cron\Manager();
-    $Manager->edit( $cronId, $cron, $min, $hour, $day, $month, $params );
+    $Manager->edit($cronId, $cron, $min, $hour, $day, $month, $params);
 }
 
 \QUI::$Ajax->register(
     'package_quiqqer_cron_ajax_edit',
-    array( 'cronId', 'cron', 'min', 'hour', 'day', 'month', 'params' ),
+    array('cronId', 'cron', 'min', 'hour', 'day', 'month', 'params'),
     'Permission::checkAdminUser'
 );
