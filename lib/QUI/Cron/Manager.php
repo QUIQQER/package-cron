@@ -23,12 +23,12 @@ class Manager
     /**
      * Add a cron
      *
-     * @param String $cron   - Name of the Cron
-     * @param String $min    - On which minute should it start
-     * @param String $hour   - On which hour should it start
-     * @param String $day    - On which day should it start
-     * @param String $month  - On which month should it start
-     * @param Array  $params - Cron Parameter
+     * @param String $cron - Name of the Cron
+     * @param String $min - On which minute should it start
+     * @param String $hour - On which hour should it start
+     * @param String $day - On which day should it start
+     * @param String $month - On which month should it start
+     * @param Array $params - Cron Parameter
      *
      * @throws QUI\Exception
      */
@@ -62,20 +62,20 @@ class Manager
 
         QUI::getMessagesHandler()->addSuccess(
             QUI::getLocale()
-               ->get('quiqqer/cron', 'message.cron.succesful.added')
+                ->get('quiqqer/cron', 'message.cron.succesful.added')
         );
     }
 
     /**
      * Edit the cron
      *
-     * @param String  $cron - Name of the Cron
+     * @param String $cron - Name of the Cron
      * @param Integer $cronId
-     * @param String  $min
-     * @param String  $hour
-     * @param String  $day
-     * @param String  $month
-     * @param Array   $params
+     * @param String $min
+     * @param String $hour
+     * @param String $day
+     * @param String $month
+     * @param Array $params
      *
      * @throws QUI\Exception
      */
@@ -201,11 +201,11 @@ class Manager
 
             $lastexec = $entry['lastexec'];
 
-            $min = $entry['min'];
-            $hour = $entry['hour'];
-            $day = $entry['day'];
+            $min   = $entry['min'];
+            $hour  = $entry['hour'];
+            $day   = $entry['day'];
             $month = $entry['month'];
-            $year = '*';
+            $year  = '*';
 
             $Cron = CronExpression::factory(
                 "$min $hour $day $month $year"
@@ -224,7 +224,7 @@ class Manager
 
             } catch (\Exception $Exception) {
                 $message = print_r($entry, true);
-                $message .= "\n".$Exception->getMessage();
+                $message .= "\n" . $Exception->getMessage();
 
                 self::log($message);
                 QUI::getMessagesHandler()->addError($message);
@@ -246,7 +246,7 @@ class Manager
 
 
         $cronData = $this->getCronById($cronId);
-        $params = array();
+        $params   = array();
 
         if (!$cronData) {
             throw new QUI\Exception('Cron ID not exist');
@@ -299,13 +299,13 @@ class Manager
     public function getAvailableCrons()
     {
         $PackageManager = QUI::getPackageManager();
-        $packageList = $PackageManager->getInstalled();
+        $packageList    = $PackageManager->getInstalled();
 
         $result = array();
 
         foreach ($packageList as $entry) {
-            $dir = OPT_DIR.$entry['name'].'/';
-            $cronFile = $dir.'cron.xml';
+            $dir      = OPT_DIR . $entry['name'] . '/';
+            $cronFile = $dir . 'cron.xml';
 
             if (!file_exists($cronFile)) {
                 continue;
@@ -380,7 +380,7 @@ class Manager
 
         if (isset($params['perPage']) && isset($params['page'])) {
             $start = (int)$params['page'] - 1;
-            $limit = $start.','.(int)$params['perPage'];
+            $limit = $start . ',' . (int)$params['perPage'];
         }
 
         $data = QUI::getDataBase()->fetch(array(
@@ -393,8 +393,8 @@ class Manager
             'from' => $this->Table()
         ));
 
-        $Users = QUI::getUsers();
-        $crons = array();
+        $Users  = QUI::getUsers();
+        $crons  = array();
         $result = array();
 
         // create assoc cron data array
@@ -405,7 +405,7 @@ class Manager
 
         foreach ($data as $entry) {
             $entry['cronTitle'] = '';
-            $entry['username'] = '';
+            $entry['username']  = '';
 
             if (isset($crons[$entry['cronid']])) {
                 $entry['cronTitle'] = $crons[$entry['cronid']]['title'];
@@ -474,7 +474,7 @@ class Manager
      */
     static function Table()
     {
-        return QUI_DB_PRFX.'cron';
+        return QUI_DB_PRFX . 'cron';
     }
 
     /**
@@ -484,7 +484,7 @@ class Manager
      */
     static function TableHistory()
     {
-        return QUI_DB_PRFX.'cron_history';
+        return QUI_DB_PRFX . 'cron_history';
     }
 
     /**
@@ -500,7 +500,7 @@ class Manager
             return array();
         }
 
-        $Dom = QUI\Utils\XML::getDomFromXml($file);
+        $Dom   = QUI\Utils\XML::getDomFromXml($file);
         $crons = $Dom->getElementsByTagName('crons');
 
         if (!$crons || !$crons->length) {
@@ -509,7 +509,7 @@ class Manager
 
         /* @var $Crons \DOMElement */
         $Crons = $crons->item(0);
-        $list = $Crons->getElementsByTagName('cron');
+        $list  = $Crons->getElementsByTagName('cron');
 
         if (!$list || !$list->length) {
             return array();
@@ -520,21 +520,21 @@ class Manager
         for ($i = 0; $i < $list->length; $i++) {
             $Cron = $list->item($i);
 
-            $title = '';
-            $desc = '';
+            $title  = '';
+            $desc   = '';
             $params = array();
 
             /* @var $Cron \DOMElement */
-            $Title = $Cron->getElementsByTagName('title');
-            $Desc = $Cron->getElementsByTagName('description');
+            $Title  = $Cron->getElementsByTagName('title');
+            $Desc   = $Cron->getElementsByTagName('description');
             $Params = $Cron->getElementsByTagName('param');
 
             if ($Title->length) {
-                $title = trim($Title->item(0)->nodeValue);
+                $title = QUI\Utils\DOM::getTextFromNode($Title->item(0));
             }
 
             if ($Desc->length) {
-                $desc = trim($Desc->item(0)->nodeValue);
+                $desc = QUI\Utils\DOM::getTextFromNode($Desc->item(0));
             }
 
             if ($Params->length) {
@@ -565,7 +565,7 @@ class Manager
     static function log($message)
     {
         $User = QUI::getUsers()->getUserBySession();
-        $str = '['.date('Y-m-d H:i:s').' :: '.$User->getName().'] '.$message;
+        $str  = '[' . date('Y-m-d H:i:s') . ' :: ' . $User->getName() . '] ' . $message;
 
         QUI\System\Log::write($str, 'cron');
     }
