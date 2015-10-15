@@ -564,9 +564,6 @@ class Manager
      */
     static function log($message)
     {
-        $User = QUI::getUsers()->getUserBySession();
-        $str  = '[' . date('Y-m-d H:i:s') . ' :: ' . $User->getName() . '] ' . $message;
-
-        QUI\System\Log::write($str, 'cron');
+        QUI\System\Log::addInfo($message, array(), 'cron');
     }
 }
