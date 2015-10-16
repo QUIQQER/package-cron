@@ -10,6 +10,7 @@
             <field type="VARCHAR( 128 ) NOT NULL">hour</field>
             <field type="VARCHAR( 128 ) NOT NULL">day</field>
             <field type="VARCHAR( 128 ) NOT NULL">month</field>
+            <field type="VARCHAR( 128 ) NOT NULL">dayOfWeek</field>
             <field type="TEXT NOT NULL">exec</field>
             <field type="TEXT NOT NULL">params</field>
             <field type="DATETIME NULL">lastexec</field>

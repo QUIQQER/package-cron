@@ -57,6 +57,10 @@
             <de><![CDATA[Monat]]></de>
             <en><![CDATA[month]]></en>
         </locale>
+        <locale name="cron.dayOfWeek">
+            <de><![CDATA[Tag der Woche]]></de>
+            <en><![CDATA[Day of week]]></en>
+        </locale>
         <locale name="cron.execute">
             <de><![CDATA[Exec]]></de>
             <en><![CDATA[Exec]]></en>

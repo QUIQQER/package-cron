@@ -38,21 +38,20 @@
 .control-cron-add-intervall-entry {
     float: left;
     margin-right: 10px;
-    width: 50px;
+    width: 100px;
 }
 
 .control-cron-add-intervall-entry input {
     float: left;
     margin: 0;
-    width: 50px;
+    width: 100%;
 }
 
 .control-cron-add-intervall-entry label {
     clear: both;
     margin: 0 0 0 2px;
-    width: 50px;
+    width: 100%;
 }
-
 
 .control-cron-add-params-container {
     border-top: 1px solid #DEDEDE;
@@ -60,6 +59,7 @@
     float: left;
     margin-top: 20px;
     padding-top: 30px;
+    width: 100%;
 }
 
 #control-cron-add-params {

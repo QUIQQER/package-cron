@@ -1,4 +1,3 @@
-
 /**
  * Cron Manager
  *
@@ -14,7 +13,6 @@
  * @require Ajax
  * @require Locale
  */
-
 define('package/quiqqer/cron/bin/Manager', [
 
     'qui/QUI',
@@ -26,34 +24,32 @@ define('package/quiqqer/cron/bin/Manager', [
     'Ajax',
     'Locale'
 
-],function(QUI, QUIPanel, QUIConfirm, QUIButton, QUIButtonSeperator, Grid, Ajax, QUILocale)
-{
+], function (QUI, QUIPanel, QUIConfirm, QUIButton, QUIButtonSeperator, Grid, Ajax, QUILocale) {
     "use strict";
 
     var lg = 'quiqqer/cron';
 
     return new Class({
 
-        Extends : QUIPanel,
-        Type    : 'package/quiqqer/cron/bin/Manager',
+        Extends: QUIPanel,
+        Type   : 'package/quiqqer/cron/bin/Manager',
 
-        Binds : [
+        Binds: [
             '$onCreate',
             '$onResize'
         ],
 
-        options : {
-            title : 'Cron-Manager',
-            icon  : 'icon-time'
+        options: {
+            title: 'Cron-Manager',
+            icon : 'icon-time'
         },
 
-        initialize : function(options)
-        {
-            this.parent( options );
+        initialize: function (options) {
+            this.parent(options);
 
             this.addEvents({
-                onCreate : this.$onCreate,
-                onResize : this.$onResize
+                onCreate: this.$onCreate,
+                onResize: this.$onResize
             });
         },
 
@@ -62,58 +58,53 @@ define('package/quiqqer/cron/bin/Manager', [
          *
          * @return {self}
          */
-        loadCrons : function()
-        {
+        loadCrons: function () {
             var self = this;
 
-            Ajax.get('package_quiqqer_cron_ajax_getList', function(result)
-            {
-                if ( !self.$Grid ) {
+            Ajax.get('package_quiqqer_cron_ajax_getList', function (result) {
+                if (!self.$Grid) {
                     return;
                 }
 
-                var execCron = function(Btn)
-                {
+                var execCron = function (Btn) {
                     self.execCron(
-                        Btn.getAttribute( 'cronId' )
+                        Btn.getAttribute('cronId')
                     );
                 };
 
-                var toggleCron = function(Btn)
-                {
+                var toggleCron = function (Btn) {
                     self.toggleStatusOfCron(
-                        Btn.getAttribute( 'cronId' )
+                        Btn.getAttribute('cronId')
                     );
                 };
 
-                for ( var i = 0, len = result.length; i < len; i++ )
-                {
-                    result[ i ].status = {
-                        title  : QUILocale.get( lg, 'cron.panel.manager.btn.toggle' ),
-                        icon   : result[ i ].active == 1 ? 'icon-ok' : 'icon-remove',
-                        cronId : result[ i ].id,
-                        events : {
-                            onClick : toggleCron
+                for (var i = 0, len = result.length; i < len; i++) {
+                    result[i].status = {
+                        title : QUILocale.get(lg, 'cron.panel.manager.btn.toggle'),
+                        icon  : result[i].active == 1 ? 'icon-ok' : 'icon-remove',
+                        cronId: result[i].id,
+                        events: {
+                            onClick: toggleCron
                         }
                     };
 
-                    result[ i ].play = {
-                        name   : 'cron-play-button-'+ result[ i ].id,
-                        title  : QUILocale.get( lg, 'cron.panel.manager.btn.execute' ),
-                        icon   : 'icon-play',
-                        cronId : result[ i ].id,
-                        events : {
-                            onClick : execCron
+                    result[i].play = {
+                        name  : 'cron-play-button-' + result[i].id,
+                        title : QUILocale.get(lg, 'cron.panel.manager.btn.execute'),
+                        icon  : 'icon-play',
+                        cronId: result[i].id,
+                        events: {
+                            onClick: execCron
                         }
                     };
                 }
 
                 self.$Grid.setData({
-                    data : result
+                    data: result
                 });
 
             }, {
-                'package' : 'quiqqer/cron'
+                'package': 'quiqqer/cron'
             });
 
             return this;
@@ -122,34 +113,31 @@ define('package/quiqqer/cron/bin/Manager', [
         /**
          * event : on Create
          */
-        $onCreate : function()
-        {
+        $onCreate: function () {
             var self = this;
 
             this.addButton(
                 new QUIButton({
-                    name : 'add',
-                    text : QUILocale.get( lg, 'cron.panel.manager.btn.add' ),
-                    textimage : 'icon-plus',
-                    events :
-                    {
-                        onClick : function() {
+                    name     : 'add',
+                    text     : QUILocale.get(lg, 'cron.panel.manager.btn.add'),
+                    textimage: 'icon-plus',
+                    events   : {
+                        onClick: function () {
                             self.openAddCronWindow();
                         }
                     }
                 })
             );
 
-            this.addButton( new QUIButtonSeperator() );
+            this.addButton(new QUIButtonSeperator());
 
             this.addButton(
                 new QUIButton({
-                    name : 'edit',
-                    text : QUILocale.get( lg, 'cron.panel.manager.btn.edit' ),
-                    textimage : 'icon-pencil',
-                    events :
-                    {
-                        onClick : function() {
+                    name     : 'edit',
+                    text     : QUILocale.get(lg, 'cron.panel.manager.btn.edit'),
+                    textimage: 'icon-pencil',
+                    events   : {
+                        onClick: function () {
                             self.editMarkedCron();
                         }
                     }
@@ -158,142 +146,139 @@ define('package/quiqqer/cron/bin/Manager', [
 
             this.addButton(
                 new QUIButton({
-                    name : 'delete',
-                    text : QUILocale.get( lg, 'cron.panel.manager.btn.delete' ),
-                    textimage : 'icon-trash',
-                    events :
-                    {
-                        onClick : function() {
+                    name     : 'delete',
+                    text     : QUILocale.get(lg, 'cron.panel.manager.btn.delete'),
+                    textimage: 'icon-trash',
+                    events   : {
+                        onClick: function () {
                             self.deleteMarkedCrons();
                         }
                     }
                 })
             );
 
-            this.addButton( new QUIButtonSeperator() );
+            this.addButton(new QUIButtonSeperator());
 
             this.addButton(
                 new QUIButton({
-                    name : 'history',
-                    text : QUILocale.get( lg, 'cron.panel.manager.btn.history' ),
-                    textimage : 'icon-long-arrow-right',
-                    events :
-                    {
-                        onClick : function() {
+                    name     : 'history',
+                    text     : QUILocale.get(lg, 'cron.panel.manager.btn.history'),
+                    textimage: 'icon-long-arrow-right',
+                    events   : {
+                        onClick: function () {
                             self.showHistory();
                         }
                     }
                 })
             );
 
-            this.getButtons( 'edit' ).disable();
-            this.getButtons( 'delete' ).disable();
+            this.getButtons('edit').disable();
+            this.getButtons('delete').disable();
 
 
-            var Content = this.getContent(),
+            var Content   = this.getContent(),
 
                 Container = new Element('div', {
-                    'class' : 'box',
+                    'class': 'box',
                     styles : {
                         width : '100%',
-                        height : '100%'
+                        height: '100%'
                     }
-                }).inject( Content );
+                }).inject(Content);
 
 
             this.$Grid = new Grid(Container, {
-                columnModel : [{
-                    header    : QUILocale.get( 'quiqqer/system', 'status' ),
-                    dataIndex : 'status',
-                    dataType  : 'button',
-                    width     : 60
+                columnModel      : [{
+                    header   : QUILocale.get('quiqqer/system', 'status'),
+                    dataIndex: 'status',
+                    dataType : 'button',
+                    width    : 60
                 }, {
-                    header    : '&nbsp;',
-                    dataIndex : 'play',
-                    dataType  : 'button',
-                    width     : 60
+                    header   : '&nbsp;',
+                    dataIndex: 'play',
+                    dataType : 'button',
+                    width    : 60
                 }, {
-                    header    : QUILocale.get( 'quiqqer/system', 'id' ),
-                    dataIndex : 'id',
-                    dataType  : 'string',
-                    width     : 50
+                    header   : QUILocale.get('quiqqer/system', 'id'),
+                    dataIndex: 'id',
+                    dataType : 'string',
+                    width    : 50
                 }, {
-                    header    : QUILocale.get( lg, 'cron.title' ),
-                    dataIndex : 'title',
-                    dataType  : 'string',
-                    width     : 150
+                    header   : QUILocale.get(lg, 'cron.title'),
+                    dataIndex: 'title',
+                    dataType : 'string',
+                    width    : 150
                 }, {
-                    header    : QUILocale.get( lg, 'cron.min' ),
-                    dataIndex : 'min',
-                    dataType  : 'string',
-                    width     : 50
+                    header   : QUILocale.get(lg, 'cron.min'),
+                    dataIndex: 'min',
+                    dataType : 'string',
+                    width    : 50
                 }, {
-                    header    : QUILocale.get( lg, 'cron.hour' ),
-                    dataIndex : 'hour',
-                    dataType  : 'string',
-                    width     : 50
+                    header   : QUILocale.get(lg, 'cron.hour'),
+                    dataIndex: 'hour',
+                    dataType : 'string',
+                    width    : 50
                 }, {
-                    header    : QUILocale.get( lg, 'cron.day' ),
-                    dataIndex : 'day',
-                    dataType  : 'string',
-                    width     : 50
+                    header   : QUILocale.get(lg, 'cron.day'),
+                    dataIndex: 'day',
+                    dataType : 'string',
+                    width    : 50
                 }, {
-                    header    : QUILocale.get( lg, 'cron.month' ),
-                    dataIndex : 'month',
-                    dataType  : 'string',
-                    width     : 50
+                    header   : QUILocale.get(lg, 'cron.month'),
+                    dataIndex: 'month',
+                    dataType : 'string',
+                    width    : 50
                 }, {
-                    header    : QUILocale.get( lg, 'cron.execute' ),
-                    dataIndex : 'exec',
-                    dataType  : 'string',
-                    width     : 150
+                    header   : QUILocale.get(lg, 'cron.dayOfWeek'),
+                    dataIndex: 'dayOfWeek',
+                    dataType : 'string',
+                    width    : 50
                 }, {
-                    header    : QUILocale.get( lg, 'cron.params' ),
-                    dataIndex : 'params',
-                    dataType  : 'string',
-                    width     : 150
+                    header   : QUILocale.get(lg, 'cron.execute'),
+                    dataIndex: 'exec',
+                    dataType : 'string',
+                    width    : 150
                 }, {
-                    header    : QUILocale.get( lg, 'cron.desc' ),
-                    dataIndex : 'desc',
-                    dataType  : 'string',
-                    width     : 200
+                    header   : QUILocale.get(lg, 'cron.params'),
+                    dataIndex: 'params',
+                    dataType : 'string',
+                    width    : 150
+                }, {
+                    header   : QUILocale.get(lg, 'cron.desc'),
+                    dataIndex: 'desc',
+                    dataType : 'string',
+                    width    : 200
                 }],
-                multipleSelection : true,
-                pagination : true
+                multipleSelection: true,
+                pagination       : true
             });
 
             this.$Grid.addEvents({
-                onRefresh : function() {
+                onRefresh: function () {
                     self.loadCrons();
                 },
-                onClick : function()
-                {
-                    var delButton  = self.getButtons( 'delete' ),
-                        editButton = self.getButtons( 'edit' ),
+                onClick  : function () {
+                    var delButton  = self.getButtons('delete'),
+                        editButton = self.getButtons('edit'),
                         selected   = self.$Grid.getSelectedIndices().length;
 
-                    if ( selected == 1 )
-                    {
+                    if (selected == 1) {
                         editButton.enable();
-                    } else
-                    {
+                    } else {
                         editButton.disable();
                     }
 
-                    if ( selected )
-                    {
+                    if (selected) {
                         delButton.enable();
-                    } else
-                    {
+                    } else {
                         delButton.disable();
                     }
                 },
 
-                onDblClick : function(data)
-                {
-                    var rowData = self.$Grid.getDataByRow( data.row );
+                onDblClick: function (data) {
+                    var rowData = self.$Grid.getDataByRow(data.row);
 
-                    self.editCron( rowData.id );
+                    self.editCron(rowData.id);
                 }
             });
 
@@ -303,17 +288,16 @@ define('package/quiqqer/cron/bin/Manager', [
         /**
          * event : on resize
          */
-        $onResize : function()
-        {
-            if ( !this.$Grid ) {
+        $onResize: function () {
+            if (!this.$Grid) {
                 return;
             }
 
             var Content = this.getContent(),
                 size    = Content.getSize();
 
-            this.$Grid.setHeight( size.y - 40 );
-            this.$Grid.setWidth( size.x - 40 );
+            this.$Grid.setHeight(size.y - 40);
+            this.$Grid.setWidth(size.x - 40);
         },
 
         /**
@@ -321,43 +305,39 @@ define('package/quiqqer/cron/bin/Manager', [
          *
          * @return {self}
          */
-        deleteMarkedCrons : function()
-        {
-            if ( !this.$Grid ) {
+        deleteMarkedCrons: function () {
+            if (!this.$Grid) {
                 return this;
             }
 
             var self = this,
                 data = this.$Grid.getSelectedData();
 
-            if ( !data.length ) {
+            if (!data.length) {
                 return this;
             }
 
-            var ids = data.map(function(o) {
+            var ids = data.map(function (o) {
                 return o.id;
             });
 
             new QUIConfirm({
-                icon  : 'icon-remove',
-                title : QUILocale.get( lg, 'cron.window.delete.cron.title' ),
-                text  : QUILocale.get( lg, 'cron.window.delete.cron.text' ),
-                information : QUILocale.get( lg, 'cron.window.delete.cron.information', {
-                    ids : ids.join(',')
+                icon       : 'icon-remove',
+                title      : QUILocale.get(lg, 'cron.window.delete.cron.title'),
+                text       : QUILocale.get(lg, 'cron.window.delete.cron.text'),
+                information: QUILocale.get(lg, 'cron.window.delete.cron.information', {
+                    ids: ids.join(',')
                 }),
-                events :
-                {
-                    onSubmit : function(Win)
-                    {
+                events     : {
+                    onSubmit: function (Win) {
                         Win.Loader.show();
 
-                        Ajax.post('package_quiqqer_cron_ajax_delete', function()
-                        {
+                        Ajax.post('package_quiqqer_cron_ajax_delete', function () {
                             Win.close();
                             self.loadCrons();
                         }, {
-                            'package' : 'quiqqer/cron',
-                            ids : JSON.encode( ids )
+                            'package': 'quiqqer/cron',
+                            ids      : JSON.encode(ids)
                         });
                     }
                 }
@@ -371,21 +351,18 @@ define('package/quiqqer/cron/bin/Manager', [
          *
          * @param {String} cronId - ID of the Cron
          */
-        editCron : function(cronId)
-        {
+        editCron: function (cronId) {
             var self = this;
 
-            require(['package/quiqqer/cron/bin/CronWindow'], function(Window)
-            {
-                 new Window({
-                     cronId : cronId,
-                     events :
-                     {
-                         onSubmit : function() {
-                             self.loadCrons();
-                         }
-                     }
-                 }).open();
+            require(['package/quiqqer/cron/bin/CronWindow'], function (Window) {
+                new Window({
+                    cronId: cronId,
+                    events: {
+                        onSubmit: function () {
+                            self.loadCrons();
+                        }
+                    }
+                }).open();
             });
 
             return this;
@@ -394,19 +371,18 @@ define('package/quiqqer/cron/bin/Manager', [
         /**
          * Opens the Edit-Window for the marked cron
          */
-        editMarkedCron : function()
-        {
-            if ( !this.$Grid ) {
+        editMarkedCron: function () {
+            if (!this.$Grid) {
                 return this;
             }
 
             var data = this.$Grid.getSelectedData();
 
-            if ( !data.length ) {
+            if (!data.length) {
                 return this;
             }
 
-            this.editCron( data[ 0 ].id );
+            this.editCron(data[0].id);
         },
 
         /**
@@ -414,19 +390,17 @@ define('package/quiqqer/cron/bin/Manager', [
          *
          * @return {self}
          */
-        openAddCronWindow : function()
-        {
+        openAddCronWindow: function () {
             var self = this;
 
-            require(['package/quiqqer/cron/bin/CronWindow'], function(Window)
-            {
-                 new Window({
-                     events : {
-                         onSubmit : function() {
-                             self.loadCrons();
-                         }
-                     }
-                 }).open();
+            require(['package/quiqqer/cron/bin/CronWindow'], function (Window) {
+                new Window({
+                    events: {
+                        onSubmit: function () {
+                            self.loadCrons();
+                        }
+                    }
+                }).open();
             });
 
             return this;
@@ -440,16 +414,14 @@ define('package/quiqqer/cron/bin/Manager', [
          * @param {Number} cronId - ID of the Cron
          * @return {self}
          */
-        toggleStatusOfCron : function(cronId)
-        {
+        toggleStatusOfCron: function (cronId) {
             var self = this;
 
-            Ajax.post('package_quiqqer_cron_ajax_cron_toggle', function()
-            {
+            Ajax.post('package_quiqqer_cron_ajax_cron_toggle', function () {
                 self.loadCrons();
             }, {
-                'package' : 'quiqqer/cron',
-                cronId    : cronId
+                'package': 'quiqqer/cron',
+                cronId   : cronId
             });
 
             return this;
@@ -461,40 +433,37 @@ define('package/quiqqer/cron/bin/Manager', [
          * @param {Number} cronId - ID of the Cron
          * @return {self}
          */
-        execCron : function(cronId)
-        {
+        execCron: function (cronId) {
             var i, len;
             var buttons = [];
 
-            if ( this.$Grid ) {
-                buttons = QUI.Controls.get( 'cron-play-button-'+ cronId );
+            if (this.$Grid) {
+                buttons = QUI.Controls.get('cron-play-button-' + cronId);
             }
 
-            for ( i = 0, len = buttons.length; i < len; i++ ) {
-                buttons[ i ].setAttribute('icon', 'icon-refresh icon-spin');
+            for (i = 0, len = buttons.length; i < len; i++) {
+                buttons[i].setAttribute('icon', 'icon-refresh icon-spin');
             }
 
-            Ajax.post('package_quiqqer_cron_ajax_cron_executeCron', function()
-            {
-                for ( i = 0, len = buttons.length; i < len; i++ ) {
-                    buttons[ i ].setAttribute('icon', 'icon-play');
+            Ajax.post('package_quiqqer_cron_ajax_cron_executeCron', function () {
+                for (i = 0, len = buttons.length; i < len; i++) {
+                    buttons[i].setAttribute('icon', 'icon-play');
                 }
 
             }, {
-                'package' : 'quiqqer/cron',
-                cronId    : cronId
+                'package': 'quiqqer/cron',
+                cronId   : cronId
             });
         },
 
         /**
          * Show the Cron-History Panel
          */
-        showHistory : function()
-        {
+        showHistory: function () {
             var self = this;
 
-            require(['package/quiqqer/cron/bin/History'], function(Panel) {
-                new Panel().inject( self.getParent() );
+            require(['package/quiqqer/cron/bin/History'], function (Panel) {
+                new Panel().inject(self.getParent());
             });
         }
     });

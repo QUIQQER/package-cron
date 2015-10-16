@@ -28,11 +28,12 @@ class Manager
      * @param String $hour - On which hour should it start
      * @param String $day - On which day should it start
      * @param String $month - On which month should it start
+     * @param String $dayOfWeek - day of week (0 - 6) (0 to 6 are Sunday to Saturday, or use names; 7 is Sunday, the same as 0)
      * @param Array $params - Cron Parameter
      *
      * @throws QUI\Exception
      */
-    public function add($cron, $min, $hour, $day, $month, $params = array())
+    public function add($cron, $min, $hour, $day, $month, $dayOfWeek, $params = array())
     {
         Permission::checkPermission('quiqqer.cron.add');
 
@@ -50,19 +51,22 @@ class Manager
         }
 
         QUI::getDataBase()->insert($this->Table(), array(
-            'active' => 1,
-            'exec'   => $cronData['exec'],
-            'title'  => $cronData['title'],
-            'min'    => $min,
-            'hour'   => $hour,
-            'day'    => $day,
-            'month'  => $month,
-            'params' => json_encode($params)
+            'active'    => 1,
+            'exec'      => $cronData['exec'],
+            'title'     => $cronData['title'],
+            'min'       => $min,
+            'hour'      => $hour,
+            'day'       => $day,
+            'month'     => $month,
+            'dayOfWeek' => $dayOfWeek,
+            'params'    => json_encode($params)
         ));
 
         QUI::getMessagesHandler()->addSuccess(
-            QUI::getLocale()
-                ->get('quiqqer/cron', 'message.cron.succesful.added')
+            QUI::getLocale()->get(
+                'quiqqer/cron',
+                'message.cron.succesful.added'
+            )
         );
     }
 
@@ -75,6 +79,7 @@ class Manager
      * @param String $hour
      * @param String $day
      * @param String $month
+     * @param String $dayOfWeek
      * @param Array $params
      *
      * @throws QUI\Exception
@@ -86,6 +91,7 @@ class Manager
         $hour,
         $day,
         $month,
+        $dayOfWeek,
         $params = array()
     ) {
         Permission::checkPermission('quiqqer.cron.edit');
@@ -102,7 +108,7 @@ class Manager
         // test the cron data
         try {
             CronExpression::factory(
-                "$min $hour $day $month *"
+                "$min $hour $day $month $dayOfWeek"
             );
 
         } catch (\Exception $Exception) {
@@ -110,19 +116,23 @@ class Manager
         }
 
         QUI::getDataBase()->update($this->Table(), array(
-            'exec'   => $cronData['exec'],
-            'title'  => $cronData['title'],
-            'min'    => $min,
-            'hour'   => $hour,
-            'day'    => $day,
-            'month'  => $month,
-            'params' => json_encode($params)
+            'exec'      => $cronData['exec'],
+            'title'     => $cronData['title'],
+            'min'       => $min,
+            'hour'      => $hour,
+            'day'       => $day,
+            'month'     => $month,
+            'dayOfWeek' => $dayOfWeek,
+            'params'    => json_encode($params)
         ), array(
             'id' => $cronId
         ));
 
         QUI::getMessagesHandler()->addSuccess(
-            QUI::getLocale()->get('quiqqer/cron', 'message.cron.succesful.edit')
+            QUI::getLocale()->get(
+                'quiqqer/cron',
+                'message.cron.succesful.edit'
+            )
         );
     }
 
@@ -201,14 +211,19 @@ class Manager
 
             $lastexec = $entry['lastexec'];
 
-            $min   = $entry['min'];
-            $hour  = $entry['hour'];
-            $day   = $entry['day'];
-            $month = $entry['month'];
-            $year  = '*';
+            $min       = $entry['min'];
+            $hour      = $entry['hour'];
+            $day       = $entry['day'];
+            $month     = $entry['month'];
+            $dayOfWeek = '*';
+
+            if (isset($entry['dayOfMonth']) && !empty($entry['dayOfMonth'])) {
+                $dayOfWeek = $entry['dayOfMonth'];
+            }
+
 
             $Cron = CronExpression::factory(
-                "$min $hour $day $month $year"
+                "$min $hour $day $month $dayOfWeek"
             );
 
             $next = $Cron->getNextRunDate($lastexec)->getTimestamp();
