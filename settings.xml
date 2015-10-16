@@ -16,29 +16,38 @@
         </config>
 
         <window>
-            <title>Cron Einstellungen</title>
+            <title>
+                <locale group="quiqqer/cron" var="settings.title" />
+            </title>
             <params>
                 <icon>icon-time</icon>
             </params>
 
             <categories>
                 <category name="cron_settings">
-                    <text>Allgemeine Einstellungen</text>
+                    <text>
+                        <locale group="quiqqer/cron" var="settings.title" />
+                    </text>
                     <icon>icon-time</icon>
 
                     <settings title="settings" name="settings">
-                        <title>Allgemeine Cron Einstellungen</title>
+                        <title>
+                            <locale group="quiqqer/cron" var="settings.cron.title" />
+                        </title>
                         <input conf="settings.executeOnAdminLogin" type="checkbox">
                             <text>
-                                Crons ausführen wenn sich in die Administration eingeloggt wird
+                                <locale group="quiqqer/cron" var="settings.cron.executeOnAdminLogin" />
                             </text>
+                            <description>
+                                <locale group="quiqqer/cron" var="settings.cron.executeOnAdminLogin.description" />
+                            </description>
                         </input>
                         <input conf="settings.showAdminMessageIfCronNotRun" type="checkbox">
                             <text>
-                                Cron Hinweise an einen Administration in der Administration anzeigen
+                                <locale group="quiqqer/cron" var="settings.cron.showAdminMessageIfCronNotRun" />
                             </text>
                             <description>
-                                Der Administrator Benutzer bekommt eine Nachricht wenn die Crons die letzten 24h nicht liefen
+                                <locale group="quiqqer/cron" var="settings.cron.showAdminMessageIfCronNotRun.description" />
                             </description>
                         </input>
                     </settings>

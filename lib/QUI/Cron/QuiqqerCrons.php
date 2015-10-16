@@ -45,14 +45,14 @@ class QuiqqerCrons
      */
     static function clearAdminMediaCache()
     {
-        QUI\Utils\System\File::unlink(VAR_DIR.'cache/admin/media/');
+        QUI\Utils\System\File::unlink(VAR_DIR . 'cache/admin/media/');
     }
 
     /**
      * Check project sites release dates
      * Activate or deactivate sites
      *
-     * @param Array             $params - Cron Parameter
+     * @param Array $params - Cron Parameter
      * @param \QUI\Cron\Manager $CronManager
      *
      * @throws QUI\Exception
@@ -69,13 +69,13 @@ class QuiqqerCrons
 
 
         $Project = QUI::getProject($params['project'], $params['lang']);
-        $now = date('Y-m-d H:i:s');
+        $now     = date('Y-m-d H:i:s');
 
         // search sites with release dates
         $PDO = QUI::getDataBase()->getPDO();
 
         $deactivate = array();
-        $activate = array();
+        $activate   = array();
 
 
         /**
@@ -145,18 +145,18 @@ class QuiqqerCrons
         }
 
         QUI\System\Log::addInfo(
-            'Folgende Seiten wurden deaktiviert: '.implode(',', $deactivate)
+            'Folgende Seiten wurden deaktiviert: ' . implode(',', $deactivate)
         );
 
         QUI\System\Log::addInfo(
-            'Folgende Seiten wurden aktiviert: '.implode(',', $activate)
+            'Folgende Seiten wurden aktiviert: ' . implode(',', $activate)
         );
     }
 
     /**
      * Send the mail queue
      *
-     * @param array             $params
+     * @param array $params
      * @param \QUI\Cron\Manager $CronManager
      */
     static function mailQueue($params, $CronManager)
