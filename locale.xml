@@ -27,6 +27,37 @@
             <de><![CDATA[Konnte Aufgabe nicht editieren. Befehl existiert nicht.]]></de>
             <en><![CDATA[Cannot edit Cron. Cron command not exists.]]></en>
         </locale>
+
+        <locale name="settings.title">
+            <de><![CDATA[Cron Einstellungen]]></de>
+            <en><![CDATA[Cron settings]]></en>
+        </locale>
+        <locale name="settings.cron.title">
+            <de><![CDATA[Allgemeine Einstellungen]]></de>
+            <en><![CDATA[General settings]]></en>
+        </locale>
+        <locale name="settings.cron.executeOnAdminLogin">
+            <de><![CDATA[Crons ausführen wenn sich in die Administration eingeloggt wird]]></de>
+            <en><![CDATA[Execute Crons when logged into the Administration]]></en>
+        </locale>
+        <locale name="settings.cron.executeOnAdminLogin.description">
+            <de><![CDATA[
+            Weitere Infos wie das automatische ausführen von Crons finden Sie im Wiki:<br />
+            <a href="https://dev.quiqqer.com/quiqqer/package-cron/wikis/administration" target="_blank">https://dev.quiqqer.com/quiqqer/package-cron/wikis/administration</a>
+            ]]></de>
+            <en><![CDATA[
+            Learn more about how to run automatically by Cron, see the wiki:<br />
+            <a href="https://dev.quiqqer.com/quiqqer/package-cron/wikis/administration" target="_blank">https://dev.quiqqer.com/quiqqer/package-cron/wikis/administration</a>
+            ]]></en>
+        </locale>
+        <locale name="settings.cron.showAdminMessageIfCronNotRun">
+            <de><![CDATA[Cron Hinweise anzeigen wenn sich ein Administrator einloggt hat.]]></de>
+            <en><![CDATA[Show Cron informations when an an administrator has logged in.]]></en>
+        </locale>
+        <locale name="settings.cron.showAdminMessageIfCronNotRun.description">
+            <de><![CDATA[Der Administrator bekommt eine Nachricht wenn die Crons die letzten 24h nicht liefen.]]></de>
+            <en><![CDATA[The administrator receives a message when the Cron did not run the last 24 hours]]></en>
+        </locale>
     </groups>
     <groups name="quiqqer/cron" datatype="js">
         <locale name="cron.id">
