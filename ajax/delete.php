@@ -5,16 +5,15 @@
  *
  * @param string $ids - json array
  */
-function package_quiqqer_cron_ajax_delete($ids)
-{
-    $ids = json_decode($ids, true);
-    $Manager = new QUI\Cron\Manager();
 
-    $Manager->deleteCronIds($ids);
-}
-
-QUI::$Ajax->register(
+QUI::$Ajax->registerFunction(
     'package_quiqqer_cron_ajax_delete',
+    function ($ids) {
+        $ids     = json_decode($ids, true);
+        $Manager = new QUI\Cron\Manager();
+
+        $Manager->deleteCronIds($ids);
+    },
     array('ids'),
     'Permission::checkAdminUser'
 );
