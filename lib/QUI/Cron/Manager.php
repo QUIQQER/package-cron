@@ -23,13 +23,14 @@ class Manager
     /**
      * Add a cron
      *
-     * @param String $cron - Name of the Cron
-     * @param String $min - On which minute should it start
-     * @param String $hour - On which hour should it start
-     * @param String $day - On which day should it start
-     * @param String $month - On which month should it start
-     * @param String $dayOfWeek - day of week (0 - 6) (0 to 6 are Sunday to Saturday, or use names; 7 is Sunday, the same as 0)
-     * @param Array $params - Cron Parameter
+     * @param string $cron - Name of the Cron
+     * @param string $min - On which minute should it start
+     * @param string $hour - On which hour should it start
+     * @param string $day - On which day should it start
+     * @param string $month - On which month should it start
+     * @param string $dayOfWeek - day of week (0 - 6) (0 to 6 are Sunday to Saturday,
+     *        or use names; 7 is Sunday, the same as 0)
+     * @param array $params - Cron Parameter
      *
      * @throws QUI\Exception
      */
@@ -37,7 +38,7 @@ class Manager
     {
         Permission::checkPermission('quiqqer.cron.add');
 
-        if (!$this->_cronExists($cron)) {
+        if (!$this->cronExists($cron)) {
             throw new QUI\Exception(
                 QUI::getLocale()->get('quiqqer/cron', 'exception.cron.1001'),
                 1001
@@ -73,14 +74,14 @@ class Manager
     /**
      * Edit the cron
      *
-     * @param String $cron - Name of the Cron
-     * @param Integer $cronId
-     * @param String $min
-     * @param String $hour
-     * @param String $day
-     * @param String $month
-     * @param String $dayOfWeek
-     * @param Array $params
+     * @param string $cron - Name of the Cron
+     * @param integer $cronId
+     * @param string $min
+     * @param string $hour
+     * @param string $day
+     * @param string $month
+     * @param string $dayOfWeek
+     * @param array $params
      *
      * @throws QUI\Exception
      */
@@ -96,7 +97,7 @@ class Manager
     ) {
         Permission::checkPermission('quiqqer.cron.edit');
 
-        if (!$this->_cronExists($cron)) {
+        if (!$this->cronExists($cron)) {
             throw new QUI\Exception(
                 QUI::getLocale()->get('quiqqer/cron', 'exception.cron.1002'),
                 1002
@@ -139,7 +140,7 @@ class Manager
     /**
      * activate a cron in the cron list
      *
-     * @param Integer $cronId - ID of the cron
+     * @param integer $cronId - ID of the cron
      */
     public function activateCron($cronId)
     {
@@ -155,7 +156,7 @@ class Manager
     /**
      * deactivate a cron in the cron list
      *
-     * @param Integer $cronId - ID of the cron
+     * @param integer $cronId - ID of the cron
      */
     public function deactivateCron($cronId)
     {
@@ -171,7 +172,7 @@ class Manager
     /**
      * Delete the crons
      *
-     * @param Array $ids - Array of the Cron-Ids
+     * @param array $ids - Array of the Cron-Ids
      */
     public function deleteCronIds($ids)
     {
@@ -250,7 +251,7 @@ class Manager
     /**
      * Execute a cron
      *
-     * @param Integer $cronId - ID of the cron
+     * @param integer $cronId - ID of the cron
      *
      * @return \QUI\Cron\Manager
      * @throws QUI\Exception
@@ -290,7 +291,7 @@ class Manager
             )
         );
 
-        QUI::getDataBase()->insert(self::TableHistory(), array(
+        QUI::getDataBase()->insert(self::tableHistory(), array(
             'cronid'   => $cronId,
             'lastexec' => date('Y-m-d H:i:s'),
             'uid'      => QUI::getUserBySession()->getId()
@@ -309,7 +310,7 @@ class Manager
     /**
      * Return the Crons which are available and from other Plugins provided
      *
-     * @return Array
+     * @return array
      */
     public function getAvailableCrons()
     {
@@ -338,9 +339,9 @@ class Manager
     /**
      * Return the data of a inserted cron
      *
-     * @param Integer $cronId - ID of the Cron
+     * @param integer $cronId - ID of the Cron
      *
-     * @return Array|false - Cron Data
+     * @return array|false - Cron Data
      */
     public function getCronById($cronId)
     {
@@ -363,9 +364,9 @@ class Manager
      * Return the data of a specific cron from the available cron list
      * This cron is not in the cron list
      *
-     * @param String $cron - Name of the Cron
+     * @param string $cron - Name of the Cron
      *
-     * @return Array|false - Cron Data
+     * @return array|false - Cron Data
      */
     public function getCronData($cron)
     {
@@ -399,7 +400,7 @@ class Manager
         }
 
         $data = QUI::getDataBase()->fetch(array(
-            'from'  => self::TableHistory(),
+            'from'  => self::tableHistory(),
             'limit' => $limit,
             'order' => $order
         ));
@@ -430,7 +431,6 @@ class Manager
                 $entry['username'] = $Users->get($entry['uid'])->getName();
 
             } catch (QUI\Exception $Exception) {
-
             }
 
             $result[] = $entry;
@@ -442,12 +442,12 @@ class Manager
     /**
      * Return the history count, how many history entries exist
      *
-     * @return Integer
+     * @return integer
      */
     public function getHistoryCount()
     {
         $result = QUI::getDataBase()->fetch(array(
-            'from'  => self::TableHistory(),
+            'from'  => self::tableHistory(),
             'count' => 'id'
         ));
 
@@ -457,7 +457,7 @@ class Manager
     /**
      * Return the cron list
      *
-     * @return Array
+     * @return array
      */
     public function getList()
     {
@@ -473,7 +473,7 @@ class Manager
      *
      * @return Bool
      */
-    protected function _cronExists($cron)
+    protected function cronExists($cron)
     {
         return $this->getCronData($cron) === false ? false : true;
     }
@@ -485,9 +485,9 @@ class Manager
     /**
      * Return the cron tabe
      *
-     * @return String
+     * @return string
      */
-    static function Table()
+    public static function TABLE()
     {
         return QUI_DB_PRFX . 'cron';
     }
@@ -495,9 +495,9 @@ class Manager
     /**
      * Return the cron tabe
      *
-     * @return String
+     * @return string
      */
-    static function TableHistory()
+    public static function tableHistory()
     {
         return QUI_DB_PRFX . 'cron_history';
     }
@@ -505,11 +505,11 @@ class Manager
     /**
      * Return the Crons from a XML File
      *
-     * @param String $file
+     * @param string $file
      *
-     * @return Array
+     * @return array
      */
-    static function getCronsFromFile($file)
+    public static function getCronsFromFile($file)
     {
         if (!file_exists($file)) {
             return array();
@@ -554,6 +554,7 @@ class Manager
 
             if ($Params->length) {
                 foreach ($Params as $Param) {
+                    /* @var $Param \DOMElement */
                     $params[] = array(
                         'name' => $Param->getAttribute('name'),
                         'type' => $Param->getAttribute('type')
@@ -577,7 +578,7 @@ class Manager
      *
      * @param String $message - Message
      */
-    static function log($message)
+    public static function log($message)
     {
         QUI\System\Log::addInfo($message, array(), 'cron');
     }

@@ -18,7 +18,7 @@ class QuiqqerCrons
     /**
      * Clear the temp folder
      */
-    static function clearTempFolder()
+    public static function clearTempFolder()
     {
         $Temp = QUI::getTemp();
         $Temp->clear();
@@ -27,7 +27,7 @@ class QuiqqerCrons
     /**
      * Clear complete cache
      */
-    static function clearCache()
+    public static function clearCache()
     {
         QUI\Cache\Manager::clearAll();
     }
@@ -35,7 +35,7 @@ class QuiqqerCrons
     /**
      * Purge the cache
      */
-    static function purgeCache()
+    public static function purgeCache()
     {
         QUI\Cache\Manager::purge();
     }
@@ -43,7 +43,7 @@ class QuiqqerCrons
     /**
      * Clear the media cache of the administration
      */
-    static function clearAdminMediaCache()
+    public static function clearAdminMediaCache()
     {
         QUI\Utils\System\File::unlink(VAR_DIR . 'cache/admin/media/');
     }
@@ -52,12 +52,12 @@ class QuiqqerCrons
      * Check project sites release dates
      * Activate or deactivate sites
      *
-     * @param Array $params - Cron Parameter
+     * @param array $params - Cron Parameter
      * @param \QUI\Cron\Manager $CronManager
      *
      * @throws QUI\Exception
      */
-    static function realeaseDate($params, $CronManager)
+    public static function realeaseDate($params, $CronManager)
     {
         if (!isset($params['project'])) {
             throw new QUI\Exception('Need a project parameter to search release dates');
@@ -159,7 +159,7 @@ class QuiqqerCrons
      * @param array $params
      * @param \QUI\Cron\Manager $CronManager
      */
-    static function mailQueue($params, $CronManager)
+    public static function mailQueue($params, $CronManager)
     {
         $MailQueue = new QUI\Mail\Queue();
 
