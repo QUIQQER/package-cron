@@ -7,12 +7,12 @@
  */
 function package_quiqqer_cron_ajax_getAvailableCrons()
 {
-    $CronManager = new \QUI\Cron\Manager();
+    $CronManager = new QUI\Cron\Manager();
 
     return $CronManager->getAvailableCrons();
 }
 
-\QUI::$Ajax->register(
+QUI::$Ajax->register(
     'package_quiqqer_cron_ajax_getAvailableCrons',
     false,
     'Permission::checkAdminUser'

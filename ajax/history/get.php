@@ -2,10 +2,13 @@
 
 /**
  * return the cron history
+ *
+ * @param {array} $params - filter params
+ * @return array
  */
 function package_quiqqer_cron_ajax_history_get($params)
 {
-    $CronManager = new \QUI\Cron\Manager();
+    $CronManager = new QUI\Cron\Manager();
     $params = json_decode($params, true);
 
     return array(
@@ -15,7 +18,7 @@ function package_quiqqer_cron_ajax_history_get($params)
     );
 }
 
-\QUI::$Ajax->register(
+QUI::$Ajax->register(
     'package_quiqqer_cron_ajax_history_get',
     array('params'),
     'Permission::checkAdminUser'

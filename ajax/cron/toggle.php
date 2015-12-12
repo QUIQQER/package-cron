@@ -9,11 +9,11 @@
  */
 function package_quiqqer_cron_ajax_cron_toggle($cronId)
 {
-    $Manager = new \QUI\Cron\Manager();
-    $data = $Manager->getCronById($cronId);
+    $Manager = new QUI\Cron\Manager();
+    $data    = $Manager->getCronById($cronId);
 
     if (!$data) {
-        throw new \QUI\Exception('Cron not exists', 404);
+        throw new QUI\Exception('Cron not exists', 404);
     }
 
     if ($data['active'] == 1) {
@@ -23,7 +23,7 @@ function package_quiqqer_cron_ajax_cron_toggle($cronId)
     }
 }
 
-\QUI::$Ajax->register(
+QUI::$Ajax->register(
     'package_quiqqer_cron_ajax_cron_toggle',
     array('cronId'),
     'Permission::checkAdminUser'
