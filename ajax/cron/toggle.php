@@ -3,7 +3,7 @@
 /**
  * Toggle the status of a cron
  *
- * @param Integer $cronId
+ * @param integer $cronId
  *
  * @throws \QUI\Exception
  */

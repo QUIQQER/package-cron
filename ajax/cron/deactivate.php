@@ -3,7 +3,7 @@
 /**
  * deactivate a cron
  *
- * @param Integer $cronId - Cron-ID
+ * @param integer $cronId - Cron-ID
  */
 QUI::$Ajax->registerFunction(
     'package_quiqqer_cron_ajax_cron_deactivate',

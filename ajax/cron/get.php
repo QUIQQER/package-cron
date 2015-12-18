@@ -3,7 +3,7 @@
 /**
  * activate a cron
  *
- * @param Integer $cronId - Cron-ID
+ * @param integer $cronId - Cron-ID
  *
  * @return array
  */
