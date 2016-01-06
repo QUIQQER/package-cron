@@ -11,7 +11,7 @@ use QUI;
 /**
  * Cron Main Events
  *
- * @author www.namerobot.com (Henning Leutz)
+ * @author www.pcsg.de (Henning Leutz)
  */
 class EventHandler
 {

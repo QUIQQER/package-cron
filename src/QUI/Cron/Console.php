@@ -11,7 +11,7 @@ use QUI;
 /**
  * Cron Console Manager
  *
- * @author www.namerobot.com (Henning Leutz)
+ * @author www.pcsg.de (Henning Leutz)
  */
 class Console extends QUI\System\Console\Tool
 {
