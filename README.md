@@ -2,13 +2,13 @@
 QUIQQER Cron (Aufgaben)
 ========
 
-Cron Package erweitert QUIQQER um eine Aufgaben Verwaltung.
+Cron Paket erweitert QUIQQER um eine Aufgaben Verwaltung.
 Crons sind sich wiederhohlende Aufgaben.
 
 Jedes Plugin kann eigene Crons / Tasks zur Verfügung stellen
 mit dem Cron Manager können diese Tasks in intervallen ausgeführt werden.
 
-Packetname:
+Paketname:
 
     quiqqer/cron
 
