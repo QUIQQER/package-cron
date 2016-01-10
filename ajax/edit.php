@@ -12,24 +12,15 @@
  * @param String $dayOfWeek
  * @param String $params
  */
-function package_quiqqer_cron_ajax_edit(
-    $cronId,
-    $cron,
-    $min,
-    $hour,
-    $day,
-    $month,
-    $dayOfWeek,
-    $params
-) {
-    $params = json_decode($params, true);
 
-    $Manager = new QUI\Cron\Manager();
-    $Manager->edit($cronId, $cron, $min, $hour, $day, $month, $dayOfWeek, $params);
-}
-
-QUI::$Ajax->register(
+QUI::$Ajax->registerFunction(
     'package_quiqqer_cron_ajax_edit',
+    function ($cronId, $cron, $min, $hour, $day, $month, $dayOfWeek, $params) {
+        $params = json_decode($params, true);
+
+        $Manager = new QUI\Cron\Manager();
+        $Manager->edit($cronId, $cron, $min, $hour, $day, $month, $dayOfWeek, $params);
+    },
     array('cronId', 'cron', 'min', 'hour', 'day', 'month', 'dayOfWeek', 'params'),
     'Permission::checkAdminUser'
 );

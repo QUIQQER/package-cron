@@ -5,15 +5,13 @@
  *
  * @return array
  */
-function package_quiqqer_cron_ajax_getList()
-{
-    $CronManager = new QUI\Cron\Manager();
 
-    return $CronManager->getList();
-}
-
-QUI::$Ajax->register(
+QUI::$Ajax->registerFunction(
     'package_quiqqer_cron_ajax_getList',
+    function () {
+        $CronManager = new QUI\Cron\Manager();
+        return $CronManager->getList();
+    },
     false,
     'Permission::checkAdminUser'
 );

@@ -3,16 +3,14 @@
 /**
  * activate a cron
  *
- * @param Integer $cronId - Cron-ID
+ * @param integer $cronId - Cron-ID
  */
-function package_quiqqer_cron_ajax_cron_activate($cronId)
-{
-    $Manager = new \QUI\Cron\Manager();
-    $Manager->activateCron($cronId);
-}
-
-\QUI::$Ajax->register(
+QUI::$Ajax->registerFunction(
     'package_quiqqer_cron_ajax_cron_activate',
+    function ($cronId) {
+        $Manager = new QUI\Cron\Manager();
+        $Manager->activateCron($cronId);
+    },
     array('cronId'),
     'Permission::checkAdminUser'
 );

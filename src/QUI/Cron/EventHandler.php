@@ -11,55 +11,53 @@ use QUI;
 /**
  * Cron Main Events
  *
- * @author www.namerobot.com (Henning Leutz)
+ * @author www.pcsg.de (Henning Leutz)
  */
-
-class Events
+class EventHandler
 {
     /**
      * event : on admin header loaded
      */
-    static function onAdminLoad()
+    public static function onAdminLoad()
     {
-        if ( !defined( 'ADMIN' ) ) {
+        if (!defined('ADMIN')) {
             return;
         }
 
-        if ( !ADMIN ) {
+        if (!ADMIN) {
             return;
         }
 
         $User = QUI::getUserBySession();
 
-        if ( !$User->isSU() ) {
+        if (!$User->isSU()) {
             return;
         }
 
-        $Package = QUI::getPackageManager()->getInstalledPackage( 'quiqqer/cron' );
+        $Package = QUI::getPackageManager()->getInstalledPackage('quiqqer/cron');
         $Config  = $Package->getConfig();
 
         // send admin info
-        if ( !$Config->get( 'settings', 'showAdminMessageIfCronNotRun' ) ) {
+        if (!$Config->get('settings', 'showAdminMessageIfCronNotRun')) {
             return;
         }
 
         // check last cron execution
         $CronManager = new Manager();
         $result      = $CronManager->getHistoryList(array(
-            'page'    => 1,
+            'page' => 1,
             'perPage' => 1
         ));
 
-        if ( !isset( $result[ 0 ] ) )
-        {
+        if (!isset($result[0])) {
             self::sendAdminInfoCronError();
             return;
         }
 
-        $date = strtotime( $result[ 0 ][ 'lastexec' ] );
+        $date = strtotime($result[0]['lastexec']);
 
         // in 24h no cron??
-        if ( time() - 86400 > $date ) {
+        if (time() - 86400 > $date) {
             self::sendAdminInfoCronError();
         }
     }
@@ -67,14 +65,13 @@ class Events
     /**
      * event : on admin loaded -> footer output
      */
-    static function adminLoadFooter()
+    public static function adminLoadFooter()
     {
-        $Package = QUI::getPackageManager()->getInstalledPackage( 'quiqqer/cron' );
+        $Package = QUI::getPackageManager()->getInstalledPackage('quiqqer/cron');
         $Config  = $Package->getConfig();
 
         // execute cron ?
-        if ( $Config->get( 'settings', 'executeOnAdminLogin' ) )
-        {
+        if ($Config->get('settings', 'executeOnAdminLogin')) {
             echo '
             <script>window.addEvent("load", function()
             {
@@ -96,11 +93,11 @@ class Events
      * send a message to the user, maybe an error in the crons exist
      * last 24h was no cron sended
      */
-    static function sendAdminInfoCronError()
+    public static function sendAdminInfoCronError()
     {
         QUI::getMessagesHandler()->sendAttention(
             QUI::getUserBySession(),
-            QUI::getLocale()->get( 'quiqqer/cron', 'message.cron.admin.info.24h' )
+            QUI::getLocale()->get('quiqqer/cron', 'message.cron.admin.info.24h')
         );
     }
 }

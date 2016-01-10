@@ -3,19 +3,17 @@
 /**
  * activate a cron
  *
- * @param Integer $cronId - Cron-ID
+ * @param integer $cronId - Cron-ID
  *
  * @return array
  */
-function package_quiqqer_cron_ajax_cron_get($cronId)
-{
-    $Manager = new \QUI\Cron\Manager();
-
-    return $Manager->getCronById($cronId);
-}
-
-\QUI::$Ajax->register(
+QUI::$Ajax->registerFunction(
     'package_quiqqer_cron_ajax_cron_get',
+    function ($cronId) {
+        $Manager = new QUI\Cron\Manager();
+
+        return $Manager->getCronById($cronId);
+    },
     array('cronId'),
     'Permission::checkAdminUser'
 );
