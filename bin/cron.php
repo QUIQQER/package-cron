@@ -19,6 +19,10 @@ try {
     $Response->send();
 
 } catch (QUI\Exception $Exception) {
+    QUI\System\Log::addAlert($Exception->getMessage());
+
     $Response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
     $Response->send();
 }
+
+exit;
