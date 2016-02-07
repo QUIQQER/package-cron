@@ -33,6 +33,7 @@ try {
 } catch (QUI\Exception $Exception) {
     $Response->setStatusCode(Response::HTTP_FORBIDDEN);
     $Response->send();
+    exit;
 }
 
 try {
