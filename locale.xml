@@ -149,7 +149,7 @@
 
         <locale name="permission.quiqqer.cron._header">
             <de><![CDATA[Aufgaben / Tasks]]></de>
-            <en><![CDATA[Ttasks]]></en>
+            <en><![CDATA[Tasks]]></en>
         </locale>
         <locale name="permission.quiqqer.cron.execute">
             <de><![CDATA[Darf Aufgaben / Tasks ausführen.]]></de>
