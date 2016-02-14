@@ -20,7 +20,7 @@
                 <locale group="quiqqer/cron" var="settings.title" />
             </title>
             <params>
-                <icon>icon-time</icon>
+                <icon>fa fa-clock-o</icon>
             </params>
 
             <categories>
@@ -28,7 +28,7 @@
                     <text>
                         <locale group="quiqqer/cron" var="settings.title" />
                     </text>
-                    <icon>icon-time</icon>
+                    <icon>fa fa-clock-o</icon>
 
                     <settings title="settings" name="settings">
                         <title>

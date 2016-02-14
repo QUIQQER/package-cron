@@ -32,7 +32,7 @@ define('package/quiqqer/cron/bin/CronWindow', [
 
         options: {
             title    : QUILocale.get('quiqqer/cron', 'cron.window.add.cron.title'),
-            icon     : 'icon-time',
+            icon     : 'fa fa-clock-o',
             maxWidth : 750,
             maxHeight: 500,
 
@@ -40,11 +40,11 @@ define('package/quiqqer/cron/bin/CronWindow', [
 
             cancel_button : {
                 text      : QUILocale.get('quiqqer/system', 'cancel'),
-                textimage : 'icon-remove fa fa-remove'
+                textimage : 'fa fa-remove'
             },
             ok_button : {
                 text      : QUILocale.get('quiqqer/system', 'ok'),
-                textimage : 'icon-ok  fa fa-check'
+                textimage : 'fa fa-check'
             }
         },
 

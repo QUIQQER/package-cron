@@ -2,7 +2,7 @@
 <menu>
     <item parent="/extras/"
           name="crons"
-          icon="icon-time"
+          icon="fa fa-clock-o"
     >
         Crons
     </item>
@@ -10,7 +10,7 @@
     <item parent="/extras/crons/"
           name="manager"
           require="package/quiqqer/cron/bin/Manager"
-          icon="icon-time"
+          icon="fa fa-clock-o"
     >
         Cron-Manager
     </item>
@@ -18,7 +18,7 @@
     <item parent="/extras/crons/"
           name="history"
           require="package/quiqqer/cron/bin/History"
-          icon="icon-long-arrow-right"
+          icon="fa fa-long-arrow-right"
     >
         Cron-History
     </item>
