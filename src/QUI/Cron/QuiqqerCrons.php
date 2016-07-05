@@ -49,6 +49,34 @@ class QuiqqerCrons
     }
 
     /**
+     * delete all unwanted / unneeded sessions
+     */
+    public static function clearSessions()
+    {
+        // clear nativ session storage
+        $sessionDir = VAR_DIR . 'sessions/';
+
+        if (!is_dir($sessionDir)) {
+            return;
+        }
+
+        $sessionFiles = QUI\Utils\System\File::readDir($sessionDir);
+        $maxtime      = 1400;
+
+        if (QUI::conf('session', 'max_life_time')) {
+            $maxtime = (int)QUI::conf('session', 'max_life_time');
+        }
+
+        foreach ($sessionFiles as $sessionFile) {
+            $fmtime = filemtime($sessionDir . $sessionFile);
+
+            if ($fmtime + $maxtime < time()) {
+                unlink($sessionDir . $sessionFile);
+            }
+        }
+    }
+
+    /**
      * Check project sites release dates
      * Activate or deactivate sites
      *
