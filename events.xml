@@ -2,4 +2,5 @@
 <events>
     <event on="onAdminLoad" fire="\QUI\Cron\EventHandler::onAdminLoad" />
     <event on="onAdminLoadFooter" fire="\QUI\Cron\EventHandler::adminLoadFooter" />
+    <event on="onPackageSetup" fire="\QUI\Cron\EventHandler::onPackageSetup" />
 </events>

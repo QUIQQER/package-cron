@@ -16,6 +16,31 @@ use QUI;
 class EventHandler
 {
     /**
+     * event: onPackageSetup
+     */
+    public static function onPackageSetup()
+    {
+        self::checkCronTable();
+    }
+
+    /**
+     * Checks if the table cron is correct
+     *
+     * @return void
+     */
+    protected static function checkCronTable()
+    {
+        $categoryColumn = QUI::getDataBase()->table()->getColumn('cron', 'title');
+
+        if ($categoryColumn['Type'] === 'varchar(1000)') {
+            return;
+        }
+
+        $Stmnt = QUI::getDataBase()->getPDO()->prepare("ALTER TABLE cron MODIFY `title` VARCHAR(1000)");
+        $Stmnt->execute();
+    }
+
+    /**
      * event : on admin header loaded
      */
     public static function onAdminLoad()
