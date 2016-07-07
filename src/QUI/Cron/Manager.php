@@ -467,6 +467,25 @@ class Manager
     }
 
     /**
+     * Checks if a specific cron is already set up
+     *
+     * @param string $cron - cron title
+     * @return bool
+     */
+    public function isCronSetUp($cron)
+    {
+        $list = $this->getList();
+
+        foreach ($list as $entry) {
+            if ($entry['title'] == $cron) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Exist the cron?
      *
      * @param string $cron - name of the cron
@@ -546,6 +565,7 @@ class Manager
 
             if ($Title->length) {
                 $title = QUI\Utils\DOM::getTextFromNode($Title->item(0));
+                \QUI\System\Log::writeRecursive($title);
             }
 
             if ($Desc->length) {
