@@ -7,7 +7,7 @@
 namespace QUI\Cron;
 
 use QUI;
-use QUI\Rights\Permission;
+use QUI\Permissions\Permission;
 use Cron\CronExpression;
 
 /**
@@ -51,7 +51,7 @@ class Manager
             $params = array();
         }
 
-        QUI::getDataBase()->insert($this->Table(), array(
+        QUI::getDataBase()->insert($this->table(), array(
             'active'    => 1,
             'exec'      => $cronData['exec'],
             'title'     => $cronData['title'],
@@ -116,7 +116,7 @@ class Manager
             throw new QUI\Exception($Exception->getMessage());
         }
 
-        QUI::getDataBase()->update($this->Table(), array(
+        QUI::getDataBase()->update($this->table(), array(
             'exec'      => $cronData['exec'],
             'title'     => $cronData['title'],
             'min'       => $min,
@@ -147,7 +147,7 @@ class Manager
         Permission::checkPermission('quiqqer.cron.deactivate');
 
         QUI::getDataBase()->update(
-            $this->Table(),
+            $this->table(),
             array('active' => 1),
             array('id' => (int)$cronId)
         );
@@ -163,7 +163,7 @@ class Manager
         Permission::checkPermission('quiqqer.cron.activate');
 
         QUI::getDataBase()->update(
-            $this->Table(),
+            $this->table(),
             array('active' => 0),
             array('id' => (int)$cronId)
         );
@@ -188,7 +188,7 @@ class Manager
                 return;
             }
 
-            $DataBase->delete($this->Table(), array(
+            $DataBase->delete($this->table(), array(
                 'id' => $id
             ));
         }
@@ -299,7 +299,7 @@ class Manager
 
 
         QUI::getDataBase()->update(
-            self::Table(),
+            self::table(),
             array('lastexec' => date('Y-m-d H:i:s')),
             array('id' => $cronId)
         );
@@ -346,7 +346,7 @@ class Manager
     public function getCronById($cronId)
     {
         $result = QUI::getDataBase()->fetch(array(
-            'from'  => $this->Table(),
+            'from'  => $this->table(),
             'where' => array(
                 'id' => (int)$cronId
             ),
@@ -406,7 +406,7 @@ class Manager
         ));
 
         $dataOfCron = QUI::getDataBase()->fetch(array(
-            'from' => $this->Table()
+            'from' => $this->table()
         ));
 
         $Users  = QUI::getUsers();
@@ -462,7 +462,7 @@ class Manager
     public function getList()
     {
         return QUI::getDataBase()->fetch(array(
-            'from' => self::Table()
+            'from' => self::table()
         ));
     }
 
@@ -506,7 +506,7 @@ class Manager
      *
      * @return string
      */
-    public static function TABLE()
+    public static function table()
     {
         return QUI_DB_PRFX . 'cron';
     }
