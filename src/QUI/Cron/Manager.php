@@ -565,7 +565,6 @@ class Manager
 
             if ($Title->length) {
                 $title = QUI\Utils\DOM::getTextFromNode($Title->item(0));
-                \QUI\System\Log::writeRecursive($title);
             }
 
             if ($Desc->length) {
