@@ -132,7 +132,6 @@ class QuiqqerCrons
                 $Site->deactivate();
 
                 $deactivate[] = (int)$entry['id'];
-
             } catch (QUI\Exception $Exception) {
                 QUI\System\Log::writeException($Exception);
             }
@@ -166,7 +165,6 @@ class QuiqqerCrons
                 $Site->activate();
 
                 $activate[] = (int)$entry['id'];
-
             } catch (QUI\Exception $Exception) {
                 QUI\System\Log::writeException($Exception);
             }

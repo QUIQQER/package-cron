@@ -111,7 +111,6 @@ class Manager
             CronExpression::factory(
                 "$min $hour $day $month $dayOfWeek"
             );
-
         } catch (\Exception $Exception) {
             throw new QUI\Exception($Exception->getMessage());
         }
@@ -237,7 +236,6 @@ class Manager
             // execute cron
             try {
                 $this->executeCron($entry['id']);
-
             } catch (\Exception $Exception) {
                 $message = print_r($entry, true);
                 $message .= "\n" . $Exception->getMessage();
@@ -418,7 +416,6 @@ class Manager
             $crons[$cronData['id']] = $cronData;
         }
 
-
         foreach ($data as $entry) {
             $entry['cronTitle'] = '';
             $entry['username']  = '';
@@ -429,7 +426,6 @@ class Manager
 
             try {
                 $entry['username'] = $Users->get($entry['uid'])->getName();
-
             } catch (QUI\Exception $Exception) {
             }
 
@@ -534,7 +530,7 @@ class Manager
             return array();
         }
 
-        $Dom   = QUI\Utils\XML::getDomFromXml($file);
+        $Dom   = QUI\Utils\Text\XML::getDomFromXml($file);
         $crons = $Dom->getElementsByTagName('crons');
 
         if (!$crons || !$crons->length) {
@@ -565,7 +561,6 @@ class Manager
 
             if ($Title->length) {
                 $title = QUI\Utils\DOM::getTextFromNode($Title->item(0));
-                \QUI\System\Log::writeRecursive($title);
             }
 
             if ($Desc->length) {
