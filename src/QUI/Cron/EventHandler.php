@@ -17,10 +17,14 @@ class EventHandler
 {
     /**
      * event: onPackageSetup
+     *
+     * @param QUI\Package\Package $Package
      */
-    public static function onPackageSetup()
+    public static function onPackageSetup(QUI\Package\Package $Package)
     {
-        self::checkCronTable();
+        if ($Package->getName() === 'quiqqer/cron') {
+            self::checkCronTable();
+        }
     }
 
     /**
@@ -70,7 +74,7 @@ class EventHandler
         // check last cron execution
         $CronManager = new Manager();
         $result      = $CronManager->getHistoryList(array(
-            'page' => 1,
+            'page'    => 1,
             'perPage' => 1
         ));
 
