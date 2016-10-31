@@ -158,5 +158,4 @@ class CronService
 
         return $response[$function]['result'];
     }
-
 }
