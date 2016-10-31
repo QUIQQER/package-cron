@@ -1,0 +1,62 @@
+
+.quiqqer-cron-cronservicewindow-btn-openRegistration {
+    margin : 30px auto 0 auto;
+    float  : right;
+}
+
+.quiqqer-cron-cronserviceWindow h2 {
+    font-weight: normal;
+    margin-bottom: 10px;
+}
+
+.quiqqer-cron-cronservicewindow-title {
+    padding-bottom : 10px;
+    text-align     : center;
+}
+
+.quiqqer-cron-cronservicewindow-title span {
+    clear   : both;
+    display : block;
+}
+
+.quiqqer-cron-cronservicewindow-title .fa {
+    font-size : 60px;
+}
+
+.quiqqer-cron-cronservicewindow-section {
+    margin : 15px auto;
+}
+
+.quiqqer-cron-cronservicewindow-buttons {
+    text-align: center;
+    margin-top: 40px;
+    width: 100%;
+}
+
+/* Registration Sheet */
+
+.quiqqer-cron-cronservicewindow-registration {
+    padding : 20px;
+}
+
+.quiqqer-cron-cronservicewindow-registration-title {
+    border-bottom  : 1px solid #eee;
+    padding-bottom : 10px;
+}
+
+.quiqqer-cron-cronservicewindow-registration-lbl-email {
+    font-weight : bold;
+    padding     : 2px;
+    width       : 100%;
+}
+
+.quiqqer-cron-cronservicewindow-registration-txt-email {
+    width      : 100%;
+    margin-top : 6px;
+}
+
+.quiqqer-cron-cronservicewindow-btn-register {
+    margin-top : 20px;
+    float      : right;
+}
+
