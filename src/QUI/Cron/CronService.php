@@ -68,9 +68,12 @@ class CronService
         return $status;
     }
 
+    /**
+     * Revoked the registration for this quiqqer instance
+     */
     public function revokeRegistration()
     {
-        $token = "0VamlwcIlNUgE79ocOgpUKTvjhS8I4cr";
+        $token = $this->readRevokeToken();
 
         $this->makeServerAjaxCall('package_pcsg_cronservice_ajax_revokeRegistration', array(
             'domain' => $this->domain,
@@ -85,9 +88,23 @@ class CronService
      * @param $email - The Email that should be used for communication.
      * @param $packageDir - The package url dir
      * @param $https - wether or not http secure should be used to call the cron.php
+     * @throws Exception
      */
     private function sendRegistrationRequest($domain, $email, $packageDir, $https)
     {
+        if (empty($domain)) {
+            throw new Exception(array("quiqqer/cron", "exception.registration.empty.domain"));
+        }
+
+        if (empty($email)) {
+            throw new Exception(array("quiqqer/cron", "exception.registration.empty.email"));
+        }
+
+        if (empty($packageDir)) {
+            throw new Exception(array("quiqqer/cron", "exception.registration.empty.packageDir"));
+        }
+
+
         $url = self::CRONSERVICE_URL . "/admin/ajax.php?" .
             "_rf=" . urlencode("[\"package_pcsg_cronservice_ajax_register\"]") .
             "&package=" . urlencode("pcsg/cronservice") .
@@ -97,7 +114,6 @@ class CronService
             "&packageDir=" . urlencode($packageDir) .
             "&https=" . ($https ? "1" : "0");
 
-        Log::addDebug($url);
 
         $curl = curl_init();
         curl_setopt_array($curl, array(
@@ -107,9 +123,29 @@ class CronService
         ));
 
         $response = curl_exec($curl);
-        curl_close($curl);
+        $response = substr($response, 9, -10);
+        $data     = json_decode($response, true);
+        if (json_last_error() != JSON_ERROR_NONE) {
+            Log::addDebug($response);
+            throw new Exception(json_last_error_msg());
+        }
 
-        Log::addDebug($response);
+        if (!isset($data['package_pcsg_cronservice_ajax_register']['result'])) {
+            throw new Exception("Something went wrong!");
+        }
+
+        $data = $data['package_pcsg_cronservice_ajax_register']['result'];
+        if (!isset($data['status']) || $data['status'] != 1) {
+            Log::addDebug($response);
+            Log::writeRecursive($data);
+            throw new Exception("Something went wrong!");
+        }
+
+
+        $revokeCode = $data['revokeCode'];
+        $this->saveRevokeToken($revokeCode);
+
+        curl_close($curl);
     }
 
     /**
@@ -157,5 +193,44 @@ class CronService
         Log::writeRecursive($response);
 
         return $response[$function]['result'];
+    }
+
+    /**
+     * Saves the revoke token into a file
+     * @param $token
+     */
+    private function saveRevokeToken($token)
+    {
+        $varDir   = QUI::getPackage('quiqqer/cron')->getVarDir() . '/cronservice';
+        $fileName = $varDir . '/.revoketoken';
+
+        if (!is_dir($varDir)) {
+            mkdir($varDir, 0700, true);
+        }
+
+        file_put_contents($fileName, $token);
+    }
+
+    /**
+     * Reads the revoke token from the filesystem
+     * @return string
+     * @throws Exception
+     */
+    private function readRevokeToken()
+    {
+        $varDir   = QUI::getPackage('quiqqer/cron')->getVarDir() . '/cronservice';
+        $fileName = $varDir . '/.revoketoken';
+
+        if (!file_exists($fileName)) {
+            throw new Exception("Tokenfile not present");
+        }
+
+        $token = file_get_contents($fileName);
+
+        if ($token === false) {
+            throw new Exception("Could not read tokenfile.");
+        }
+
+        return $token;
     }
 }

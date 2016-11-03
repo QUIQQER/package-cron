@@ -43,6 +43,8 @@ define('package/quiqqer/cron/bin/CronServiceWindow', [
         initialize: function (options) {
             this.parent(options);
 
+            this.registered = false;
+
             this.addEvents({
                 onOpen: this.$onOpen
             });
@@ -94,24 +96,37 @@ define('package/quiqqer/cron/bin/CronServiceWindow', [
                     status                                                          : status['status'],
                     statusErrors                                                    : status['errors'],
                     statusLastExecution                                             : status['last_execution'],
-                    registered                                                      : (status['status'] != 0)
+                    registered                                                      : (status['status'] != 0),
+                    active                                                          : (status['status'] == 1),
+                    inactive                                                        : (status['status'] == 2)
                 }));
+
+                self.registered = (status['status'] != 0);
 
                 var Buttons = Content.getElement('.quiqqer-cron-cronservicewindow-buttons');
 
+                // get the button text : register or unregister
+                var btnText = QUILocale.get(lg, 'cron.window.cronservice.content.btn.register');
+                if (self.registered) {
+                    btnText = QUILocale.get(lg, 'cron.window.cronservice.content.btn.unregister');
+                }
+
                 new QUIButton({
-                    text     : QUILocale.get(lg, 'cron.window.cronservice.content.btn.register'),
+                    text     : btnText,
                     textimage: 'fa fa-arrow-right',
                     events   : {
-                        onClick: function(Button) {
-                            if (reg) {
+                        onClick: function (Button) {
+                            if (!self.registered) {
                                 self.showRegistration();
                                 return;
                             }
-
-                            Button.setAttribute('text', 'Sind Sie sicher?');
-
-                            self.showUnRegistration()
+                            Button.setAttribute('text', QUILocale.get('quiqqer/cron', 'cron.window.cronservice.content.btn.unregister.confirm'));
+                            if (Button.getAttribute('clickcnt') == 1) {
+                                self.unregister().then(function () {
+                                    self.refresh();
+                                });
+                            }
+                            Button.setAttribute('clickcnt', 1);
                         }
                     },
                     styles   : {
@@ -121,17 +136,6 @@ define('package/quiqqer/cron/bin/CronServiceWindow', [
                     }
                 }).inject(Buttons);
 
-                //
-                // Content.getElements('.quiqqer-cron-cronservicewindow-btn-openRegistration')
-                //     .addEvent('click', function () {
-                //         self.showRegistration();
-                //     });
-                //
-                // Content.getElements('.quiqqer-cron-cronservicewindow-btn-unregister')
-                //     .addEvent('click', function () {
-                //         self.unregister();
-                //     });
-                //
 
                 self.Loader.hide();
             }, {
@@ -150,8 +154,8 @@ define('package/quiqqer/cron/bin/CronServiceWindow', [
 
             new QUISheets({
                 header : true,
-                icon: 'fa fa-cloud',
-                title: QUILocale.get(lg, 'cron.window.cronservice.title'),
+                icon   : 'fa fa-cloud',
+                title  : QUILocale.get(lg, 'cron.window.cronservice.title'),
                 buttons: false,
                 events : {
                     onOpen: function (Sheet) {
@@ -170,7 +174,7 @@ define('package/quiqqer/cron/bin/CronServiceWindow', [
                             self.Loader.show();
                             self.register(Email.value).then(function () {
                                 self.refresh();
-                                Sheet.close();
+                                Sheet.destroy();
                             });
                         });
                     },

@@ -5,8 +5,8 @@
 }
 
 .quiqqer-cron-cronserviceWindow h2 {
-    font-weight: normal;
-    margin-bottom: 10px;
+    font-weight   : normal;
+    margin-bottom : 10px;
 }
 
 .quiqqer-cron-cronservicewindow-title {
@@ -28,9 +28,29 @@
 }
 
 .quiqqer-cron-cronservicewindow-buttons {
-    text-align: center;
-    margin-top: 40px;
-    width: 100%;
+    text-align : center;
+    margin-top : 40px;
+    width      : 100%;
+}
+
+.quiqqer-cron-cronservicewindow-stat-title {
+    font-weight : bold;
+}
+
+.quiqqer-cron-cronservice-table-stats {
+    width : 100%;
+}
+
+.quiqqer-cron-cronservice-table-stats td {
+    width : 50%;
+}
+
+.quiqqer-cron-cronservicewindow-stat-negative {
+    color : red;
+}
+
+.quiqqer-cron-cronservicewindow-stat-positive {
+    color : green;
 }
 
 /* Registration Sheet */

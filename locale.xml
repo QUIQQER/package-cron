@@ -58,6 +58,19 @@
             <de><![CDATA[Der Administrator bekommt eine Nachricht wenn die Crons die letzten 24h nicht liefen.]]></de>
             <en><![CDATA[The administrator receives a message when the Cron did not run the last 24 hours]]></en>
         </locale>
+        <locale name="exception.registration.empty.domain">
+            <de><![CDATA[Es muss eine Domain angegeben sein]]></de>
+            <en><![CDATA[Domain can not be empty]]></en>
+        </locale>
+        <locale name="exception.registration.empty.email">
+            <de><![CDATA[Es muss eine Email angegeben sein.]]></de>
+            <en><![CDATA[A email must be given.]]></en>
+        </locale>
+        <locale name="exception.registration.empty.packageDir">
+            <de><![CDATA[Konnte den "package" Pfad nicht auslesen!]]></de>
+            <en><![CDATA[Could not parse the "package" folder path.]]></en>
+        </locale>
+
     </groups>
     <groups name="quiqqer/cron" datatype="js">
         <locale name="cron.id">
@@ -238,6 +251,14 @@ This is works with an external server on which QUIQQER systems can register them
         <locale name="cron.window.cronservice.content.register.lbl.stats.lastExecution">
             <de><![CDATA[Letzte Ausführung: ]]></de>
             <en><![CDATA[Last execution: ]]></en>
+        </locale>
+        <locale name="cron.window.cronservice.content.btn.unregister.confirm">
+            <de><![CDATA[Sind Sie sicher?]]></de>
+            <en><![CDATA[Are you sure?]]></en>
+        </locale>
+        <locale name="cron.window.cronservice.content.btn.unregister">
+            <de><![CDATA[Registrierung entfernen]]></de>
+            <en><![CDATA[Unregister]]></en>
         </locale>
 
         <locale name="permission.quiqqer.cron._header">
