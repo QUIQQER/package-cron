@@ -8,7 +8,7 @@ use QUI\System\Log;
 class CronService
 {
 
-    const CRONSERVICE_URL = "http://server.local";
+    const CRONSERVICE_URL = "https://cron.quiqqer.com";
 
     private $domain;
     private $https;
@@ -108,11 +108,12 @@ class CronService
         $url = self::CRONSERVICE_URL . "/admin/ajax.php?" .
             "_rf=" . urlencode("[\"package_pcsg_cronservice_ajax_register\"]") .
             "&package=" . urlencode("pcsg/cronservice") .
-            "&lang=de" . // TODO Detect language
+            "&lang=" . QUI::getUserBySession()->getLang() .
             "&domain=" . urlencode($domain) .
             "&email=" . urlencode($email) .
             "&packageDir=" . urlencode($packageDir) .
-            "&https=" . ($https ? "1" : "0");
+            "&https=" . ($https ? "1" : "0") .
+            "&user=" . QUI::getUserBySession()->getName();
 
 
         $curl = curl_init();
@@ -138,6 +139,10 @@ class CronService
         if (!isset($data['status']) || $data['status'] != 1) {
             Log::addDebug($response);
             Log::writeRecursive($data);
+            if (isset($data['message'])) {
+                throw new Exception($data['message']);
+            }
+
             throw new Exception("Something went wrong!");
         }
 
@@ -160,7 +165,7 @@ class CronService
         $url = self::CRONSERVICE_URL . "/admin/ajax.php?" .
             "_rf=" . urlencode('["' . $function . '"]') .
             "&package=" . urlencode("pcsg/cronservice") .
-            "&lang=de";// TODO Detect language
+            "&lang=" . QUI::getUserBySession()->getLang();
 
         foreach ($params as $param => $value) {
             $url .= '&' . $param . '=' . urlencode($value);
