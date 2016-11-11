@@ -78,7 +78,7 @@ define('package/quiqqer/cron/bin/CronServiceWindow', [
                 if (status['status'] == 2) {
                     statusText = QUILocale.get(lg, 'cron.window.cronservice.status.text.inactive');
                 }
-                console.log(status);
+
 
                 Content.set('html', Mustache.render(template, {
                     cron_window_cronservice_content_title                           : QUILocale.get(lg, 'cron.window.cronservice.content.title'),
