@@ -8,8 +8,7 @@ use QUI\System\Log;
 class CronService
 {
 
-    const CRONSERVICE_URL = "http://server.local"; // TODO DEBUG REMOVE
-    //const CRONSERVICE_URL = "https://cron.quiqqer.com";
+    const CRONSERVICE_URL = "https://cron.quiqqer.com";
 
     private $domain;
     private $https;
