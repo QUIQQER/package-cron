@@ -69,17 +69,16 @@ define('package/quiqqer/cron/bin/CronServiceWindow', [
             this.Loader.show();
 
             QUIAjax.get('package_quiqqer_cron_ajax_cronservice_getStatus', function (result) {
-                console.log(result);
                 var status = result;
 
                 var statusText = QUILocale.get(lg, 'cron.window.cronservice.status.text.unregistered');
-
                 if (status['status'] == 1) {
                     statusText = QUILocale.get(lg, 'cron.window.cronservice.status.text.registered');
                 }
                 if (status['status'] == 2) {
                     statusText = QUILocale.get(lg, 'cron.window.cronservice.status.text.inactive');
                 }
+                console.log(status);
 
                 Content.set('html', Mustache.render(template, {
                     cron_window_cronservice_content_title                           : QUILocale.get(lg, 'cron.window.cronservice.content.title'),
@@ -94,7 +93,7 @@ define('package/quiqqer/cron/bin/CronServiceWindow', [
                     cron_window_cronservice_content_register_lbl_stats_lastExecution: QUILocale.get(lg, 'cron.window.cronservice.content.register.lbl.stats.lastExecution'),
                     statusText                                                      : statusText,
                     status                                                          : status['status'],
-                    statusErrors                                                    : status['errors'],
+                    statusErrors                                                    : status['current_failures'], //== 0 ? "0": status['errors'].toString(),
                     statusLastExecution                                             : status['last_execution'],
                     registered                                                      : (status['status'] != 0),
                     active                                                          : (status['status'] == 1),
@@ -175,6 +174,8 @@ define('package/quiqqer/cron/bin/CronServiceWindow', [
                             self.register(Email.value).then(function () {
                                 self.refresh();
                                 Sheet.destroy();
+                            }).catch(function () {
+                                self.Loader.hide();
                             });
                         });
                     },

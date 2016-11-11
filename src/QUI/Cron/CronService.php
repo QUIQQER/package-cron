@@ -8,7 +8,8 @@ use QUI\System\Log;
 class CronService
 {
 
-    const CRONSERVICE_URL = "https://cron.quiqqer.com";
+    const CRONSERVICE_URL = "http://server.local"; // TODO DEBUG REMOVE
+    //const CRONSERVICE_URL = "https://cron.quiqqer.com";
 
     private $domain;
     private $https;
@@ -56,7 +57,9 @@ class CronService
      *       'status'           => 0,  (0=unregistered; 1=active; 2=inactive)
      *       'current_failures' => int,
      *       'total_failures'   => int,
-     *       'last_execution'   => string (mysql dateformat)
+     *       'last_execution'   => string (mysql dateformat | Localized 'never')
+     * )
+     *
      * @return mixed
      */
     public function getStatus()
@@ -64,6 +67,13 @@ class CronService
         $status = $this->makeServerAjaxCall('package_pcsg_cronservice_ajax_getStatus', array(
             'domain' => $this->domain
         ));
+
+        if (empty($status['last_execution'])) {
+            $status['last_execution'] = QUI::getLocale()->get(
+                'quiqqer/cron',
+                'cron.window.cronservice.status.text.last_execution.never'
+            );
+        }
 
         return $status;
     }
@@ -171,8 +181,6 @@ class CronService
             $url .= '&' . $param . '=' . urlencode($value);
         }
 
-        Log::addDebug("Ajax Request : " . $url);
-
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_RETURNTRANSFER => 1,
@@ -181,8 +189,6 @@ class CronService
         ));
 
         $response = curl_exec($curl);
-
-        Log::addDebug($response);
 
         curl_close($curl);
 
@@ -194,8 +200,6 @@ class CronService
         if (isset($response[$function]['Exception'])) {
             throw new QUI\Exception($response[$function]['Exception']['message']);
         }
-
-        Log::writeRecursive($response);
 
         return $response[$function]['result'];
     }

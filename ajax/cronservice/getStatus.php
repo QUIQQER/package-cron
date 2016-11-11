@@ -9,6 +9,7 @@ QUI::$Ajax->registerFunction(
     'package_quiqqer_cron_ajax_cronservice_getStatus',
     function () {
         $CronService = new \QUI\Cron\CronService();
+
         return $CronService->getStatus();
     },
     array(),
