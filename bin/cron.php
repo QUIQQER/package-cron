@@ -27,7 +27,7 @@ try {
         if ($User->getId()) {
             QUI::getSession()->set('uid', $User->getId());
 
-            QUI\Rights\Permission::setUser($User);
+            QUI\Permissions\Permission::setUser($User);
         }
     }
 } catch (QUI\Exception $Exception) {
@@ -41,7 +41,6 @@ try {
 
     $Response->setStatusCode(Response::HTTP_OK);
     $Response->send();
-
 } catch (QUI\Exception $Exception) {
     QUI\System\Log::addAlert($Exception->getMessage(), array(
         'type' => 'cron execution'

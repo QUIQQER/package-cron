@@ -13,8 +13,8 @@ QUI::$Ajax->registerFunction(
         $params      = json_decode($params, true);
 
         return array(
-            'page' => (int)$params['page'],
-            'data' => $CronManager->getHistoryList($params),
+            'page'  => (int)$params['page'],
+            'data'  => $CronManager->getHistoryList($params),
             'total' => $CronManager->getHistoryCount()
         );
     },

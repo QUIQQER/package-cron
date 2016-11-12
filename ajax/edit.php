@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Add a cron to the cron list
+ * Edit a cron
  *
  * @param String $cronId
  * @param String $cron
@@ -12,7 +12,6 @@
  * @param String $dayOfWeek
  * @param String $params
  */
-
 QUI::$Ajax->registerFunction(
     'package_quiqqer_cron_ajax_edit',
     function ($cronId, $cron, $min, $hour, $day, $month, $dayOfWeek, $params) {
