@@ -1,0 +1,56 @@
+<h1 class="quiqqer-cron-cronservicewindow-title">
+    <span class="fa fa-cloud"></span>
+    <span>{{cron_window_cronservice_content_title}}</span>
+</h1>
+
+<div class="quiqqer-cron-cronservicewindow-section">
+    <h2>{{cron_window_cronservice_content_about_title}}</h2>
+    <p>
+        {{cron_window_cronservice_content_about_text}}
+    </p>
+</div>
+
+<div class="quiqqer-cron-cronservicewindow-section">
+    <h2>{{cron_window_cronservice_content_status_title}}</h2>
+
+    {{cron_window_cronservice_content_status_text}}
+
+    <table class="quiqqer-cron-cronservice-table-stats">
+        <tr>
+            <td>
+                <span class="quiqqer-cron-cronservicewindow-stat-title">
+                    {{cron_window_cronservice_content_register_lbl_stats_status}}
+                </span>
+            </td>
+            <td>
+                <span class="{{#active}}quiqqer-cron-cronservicewindow-stat-positive{{/active}}{{^active}}quiqqer-cron-cronservicewindow-stat-negative{{/active}}">
+                    {{statusText}}
+                </span>
+            </td>
+        </tr>
+        {{#registered}}
+        <tr>
+            <td>
+                <span class="quiqqer-cron-cronservicewindow-stat-title">
+                    {{cron_window_cronservice_content_register_lbl_stats_errors}}
+                </span>
+            </td>
+            <td>
+                {{statusErrors}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span class="quiqqer-cron-cronservicewindow-stat-title">
+                    {{cron_window_cronservice_content_register_lbl_stats_lastExecution}}
+                </span>
+            </td>
+            <td>
+                {{statusLastExecution}}
+            </td>
+        </tr>
+        {{/registered}}
+    </table>
+</div>
+
+<div class="quiqqer-cron-cronservicewindow-buttons"></div>

@@ -176,6 +176,21 @@ define('package/quiqqer/cron/bin/Manager', [
             this.getButtons('delete').disable();
 
 
+            this.addButton(new QUIButtonSeperator());
+            this.addButton(
+                new QUIButton({
+                    name     : 'cronservice',
+                    text     : QUILocale.get(lg, 'cron.panel.manager.btn.cronservice.register'),
+                    textimage: 'fa fa-cloud',
+                    events   : {
+                        onClick: function () {
+                            self.registerCronservice();
+                        }
+                    }
+                })
+            );
+
+
             var Content   = this.getContent(),
 
                 Container = new Element('div', {
@@ -464,6 +479,16 @@ define('package/quiqqer/cron/bin/Manager', [
 
             require(['package/quiqqer/cron/bin/History'], function (Panel) {
                 new Panel().inject(self.getParent());
+            });
+        },
+
+        /**
+         * Opens the Cronservice registration
+         */
+        registerCronservice: function () {
+            require(['package/quiqqer/cron/bin/CronServiceWindow'], function (CronServiceWindow) {
+                var csWindow = new CronServiceWindow();
+                csWindow.open();
             });
         }
     });

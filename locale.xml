@@ -58,6 +58,22 @@
             <de><![CDATA[Der Administrator bekommt eine Nachricht wenn die Crons die letzten 24h nicht liefen.]]></de>
             <en><![CDATA[The administrator receives a message when the Cron did not run the last 24 hours]]></en>
         </locale>
+        <locale name="exception.registration.empty.domain">
+            <de><![CDATA[Es muss eine Domain angegeben sein]]></de>
+            <en><![CDATA[Domain can not be empty]]></en>
+        </locale>
+        <locale name="exception.registration.empty.email">
+            <de><![CDATA[Es muss eine Email angegeben sein.]]></de>
+            <en><![CDATA[An email must be given.]]></en>
+        </locale>
+        <locale name="exception.registration.empty.packageDir">
+            <de><![CDATA[Konnte den "package" Pfad nicht auslesen!]]></de>
+            <en><![CDATA[Could not parse the "package" folder path.]]></en>
+        </locale>
+        <locale name="cron.window.cronservice.status.text.last_execution.never">
+            <de><![CDATA[Nie]]></de>
+            <en><![CDATA[Never]]></en>
+        </locale>
     </groups>
     <groups name="quiqqer/cron" datatype="js">
         <locale name="cron.id">
@@ -146,6 +162,107 @@
             <de><![CDATA[Aufgabenverlauf]]></de>
             <en><![CDATA[Cron history]]></en>
         </locale>
+        <locale name="cron.panel.manager.btn.cronservice.register">
+            <de><![CDATA[Cronservice]]></de>
+            <en><![CDATA[Cronservice]]></en>
+        </locale>
+
+        <locale name="cron.window.cronservice.title">
+            <de><![CDATA[Cronservice]]></de>
+            <en><![CDATA[Cronservice]]></en>
+        </locale>
+        <locale name="cron.window.cronservice.btn.cancel">
+            <de><![CDATA[Abbrechen]]></de>
+            <en><![CDATA[Cancel]]></en>
+        </locale>
+        <locale name="cron.window.cronservice.btn.register">
+            <de><![CDATA[Registrieren]]></de>
+            <en><![CDATA[Register]]></en>
+        </locale>
+        <locale name="cron.window.cronservice.content.title">
+            <de><![CDATA[Cronservice]]></de>
+            <en><![CDATA[Cronservice]]></en>
+        </locale>
+        <locale name="cron.window.cronservice.content.about.title">
+            <de><![CDATA[Was ist das?]]></de>
+            <en><![CDATA[About]]></en>
+        </locale>
+        <locale name="cron.window.cronservice.content.about.text">
+            <de><![CDATA[Der QUIQQER Cronservice ermöglicht es Crons auf Systemen auszuführen, die nativ keine Crons ausführen können.
+Realisiert wird dies durch einen Server, an dem sich QUIQQER-SYteme anmelden können, welcher wiederrum regelmäßig die Crons der angemeldeten Systeme anstoßt.
+Dies kann vorallem auf Shared-Hostings von großem Nutzen sein.]]></de>
+            <en><![CDATA[The QUIQQER cronservice enables systems withou native cronfunctionality to execute the QUIQQER crons anyway.
+This is works with an external server on which QUIQQER systems can register themselves. This server will start the scheduled crons of all registered QUIQQER systems regularely.
+]]></en>
+        </locale>
+        <locale name="cron.window.cronservice.content.status.title">
+            <de><![CDATA[Status]]></de>
+            <en><![CDATA[State]]></en>
+        </locale>
+        <locale name="cron.window.cronservice.content.status.text">
+            <de><![CDATA[Hier können Sie den Status Ihrer Registrierung verfolgen :]]></de>
+            <en><![CDATA[You can check the state of your registration here :]]></en>
+        </locale>
+        <locale name="cron.window.cronservice.content.btn.register">
+            <de><![CDATA[Registrieren]]></de>
+            <en><![CDATA[Register]]></en>
+        </locale>
+        <locale name="cron.window.cronservice.content.register.title">
+            <de><![CDATA[Registrieren]]></de>
+            <en><![CDATA[Register]]></en>
+        </locale>
+        <locale name="cron.window.cronservice.content.register.placeholder.email">
+            <de><![CDATA[Email]]></de>
+            <en><![CDATA[Email]]></en>
+        </locale>
+        <locale name="cron.window.cronservice.registration.title">
+            <de><![CDATA[Registration]]></de>
+            <en><![CDATA[Registration]]></en>
+        </locale>
+        <locale name="cron.window.cronservice.content.register.txt.email.title">
+            <de><![CDATA[Email]]></de>
+            <en><![CDATA[Email]]></en>
+        </locale>
+        <locale name="cron.window.cronservice.content.register.btn.register">
+            <de><![CDATA[Registrieren]]></de>
+            <en><![CDATA[Register]]></en>
+        </locale>
+        <locale name="cron.window.cronservice.content.register.btn.unregister">
+            <de><![CDATA[Abmelden]]></de>
+            <en><![CDATA[Unregister]]></en>
+        </locale>
+        <locale name="cron.window.cronservice.status.text.inactive">
+            <de><![CDATA[Inaktiv]]></de>
+            <en><![CDATA[Inactive]]></en>
+        </locale>
+        <locale name="cron.window.cronservice.status.text.registered">
+            <de><![CDATA[Aktiv]]></de>
+            <en><![CDATA[Active]]></en>
+        </locale>
+        <locale name="cron.window.cronservice.status.text.unregistered">
+            <de><![CDATA[Nicht registriert]]></de>
+            <en><![CDATA[Not registered]]></en>
+        </locale>
+        <locale name="cron.window.cronservice.content.register.lbl.stats.status">
+            <de><![CDATA[Status: ]]></de>
+            <en><![CDATA[Status: ]]></en>
+        </locale>
+        <locale name="cron.window.cronservice.content.register.lbl.stats.errors">
+            <de><![CDATA[Fehlerzahl: ]]></de>
+            <en><![CDATA[Errorcount: ]]></en>
+        </locale>
+        <locale name="cron.window.cronservice.content.register.lbl.stats.lastExecution">
+            <de><![CDATA[Letzte Ausführung: ]]></de>
+            <en><![CDATA[Last execution: ]]></en>
+        </locale>
+        <locale name="cron.window.cronservice.content.btn.unregister.confirm">
+            <de><![CDATA[Sind Sie sicher?]]></de>
+            <en><![CDATA[Are you sure?]]></en>
+        </locale>
+        <locale name="cron.window.cronservice.content.btn.unregister">
+            <de><![CDATA[Registrierung entfernen]]></de>
+            <en><![CDATA[Unregister]]></en>
+        </locale>
 
         <locale name="permission.quiqqer.cron._header">
             <de><![CDATA[Aufgaben / Tasks]]></de>
@@ -175,6 +292,5 @@
             <de><![CDATA[Darf Aufgaben / Tasks deaktivieren.]]></de>
             <en><![CDATA[Can deactivate tasks.]]></en>
         </locale>
-
     </groups>
 </locales>
