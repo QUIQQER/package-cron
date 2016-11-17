@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <locales>
-    <groups name="quiqqer/cron" datatype="php">
-        <locale name="message.cron.succesful.executed">
-            <de><![CDATA[Die Aufgabe wurde erfolgreich ausgeführt]]></de>
-            <en><![CDATA[The Cron ran successfully]]></en>
-        </locale>
+    <groups name="quiqqer/cron" datatype="php,js">
         <locale name="message.cron.admin.info.24h">
             <de><![CDATA[In den letzten 24 Stunden wurde keine geplante Aufgabe ausgeführt.
                 Unter Umständen sind die geplanten Augaben fehlerhaft.]]></de>
             <en><![CDATA[In the past 24 hours no cron was running.
                 It is possible that the Crons will not run properly.]]></en>
+        </locale>
+    </groups>
+    <groups name="quiqqer/cron" datatype="php">
+        <locale name="message.cron.succesful.executed">
+            <de><![CDATA[Die Aufgabe wurde erfolgreich ausgeführt]]></de>
+            <en><![CDATA[The Cron ran successfully]]></en>
         </locale>
         <locale name="message.cron.succesful.added">
             <de><![CDATA[Aufgabe erfolgreich hinzugefügt]]></de>
