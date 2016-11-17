@@ -126,7 +126,7 @@ class EventHandler
     {
         QUI::getMessagesHandler()->sendAttention(
             QUI::getUserBySession(),
-            QUI::getLocale()->get('quiqqer/cron', 'message.cron.admin.info.24h')
+            QUI::getUserBySession()->getLocale()->get('quiqqer/cron', 'message.cron.admin.info.24h')
         );
     }
 }
