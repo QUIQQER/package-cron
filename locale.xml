@@ -2,8 +2,8 @@
 <locales>
     <groups name="quiqqer/cron" datatype="php,js">
         <locale name="message.cron.admin.info.24h">
-            <de><![CDATA[In den letzten 24 Stunden wurde keine geplante Aufgabe ausgeführt.
-                Unter Umständen sind die geplanten Augaben fehlerhaft.]]></de>
+            <de><![CDATA[In den letzten 24 Stunden wurden keine geplanten Aufgaben ausgeführt.
+                Unter Umständen sind die geplanten Aufgaben fehlerhaft.]]></de>
             <en><![CDATA[In the past 24 hours no cron was running.
                 It is possible that the Crons will not run properly.]]></en>
         </locale>
