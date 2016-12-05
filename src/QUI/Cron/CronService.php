@@ -14,7 +14,9 @@ class CronService
     private $https;
     private $packageDir;
 
-
+    /**
+     * CronService constructor.
+     */
     public function __construct()
     {
         $host    = QUI::$Conf->get("globals", "host");
@@ -22,17 +24,30 @@ class CronService
         $opt_dir = QUI::$Conf->get("globals", "opt_dir");
         $url_dir = QUI::$Conf->get("globals", "url_dir");
 
-        // Parse Domain and protocol
-        if (strpos($host, "https://") !== false) {
-            $this->https  = true;
-            $this->domain = str_replace("https://", "", $host);
-        } elseif (strpos($host, "http://") !== false) {
-            $this->https  = false;
-            $this->domain = str_replace("http://", "", $host);
-        } else {
-            $this->https  = false;
-            $this->domain = $host;
+        // VHost Domain
+        $vhost        = QUI::getProjectManager()->getStandard()->getVHost(true, true);
+        $this->domain = $vhost;
+
+        // Check if https should be used.
+        if (substr($vhost, 0, 8) == 'https://') {
+            $this->https = true;
         }
+
+        // Read the domain from the config file if no vhost could be detected.
+        if (empty($vhost)) {
+            // Parse Domain and protocol
+            if (strpos($host, "https://") !== false) {
+                $this->https  = true;
+                $this->domain = str_replace("https://", "", $host);
+            } elseif (strpos($host, "http://") !== false) {
+                $this->https  = false;
+                $this->domain = str_replace("http://", "", $host);
+            } else {
+                $this->https  = false;
+                $this->domain = $host;
+            }
+        }
+
 
         // Parse Package dir
         $this->packageDir = $url_dir . str_replace($cms_dir, "", $opt_dir);
