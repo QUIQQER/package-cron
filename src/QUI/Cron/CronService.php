@@ -26,12 +26,13 @@ class CronService
 
         // VHost Domain
         $vhost        = QUI::getProjectManager()->getStandard()->getVHost(true, true);
-        $this->domain = $vhost;
 
         // Check if https should be used.
         if (substr($vhost, 0, 8) == 'https://') {
             $this->https = true;
         }
+
+        $this->domain = str_replace("https://", "", $vhost);
 
         // Read the domain from the config file if no vhost could be detected.
         if (empty($vhost)) {
