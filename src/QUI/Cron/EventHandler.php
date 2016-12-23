@@ -16,6 +16,35 @@ use QUI;
 class EventHandler
 {
     /**
+     * event: onPackageSetup
+     *
+     * @param QUI\Package\Package $Package
+     */
+    public static function onPackageSetup(QUI\Package\Package $Package)
+    {
+        if ($Package->getName() === 'quiqqer/cron') {
+            self::checkCronTable();
+        }
+    }
+
+    /**
+     * Checks if the table cron is correct
+     *
+     * @return void
+     */
+    protected static function checkCronTable()
+    {
+        $categoryColumn = QUI::getDataBase()->table()->getColumn('cron', 'title');
+
+        if ($categoryColumn['Type'] === 'varchar(1000)') {
+            return;
+        }
+
+        $Stmnt = QUI::getDataBase()->getPDO()->prepare("ALTER TABLE cron MODIFY `title` VARCHAR(1000)");
+        $Stmnt->execute();
+    }
+
+    /**
      * event : on admin header loaded
      */
     public static function onAdminLoad()
@@ -45,7 +74,7 @@ class EventHandler
         // check last cron execution
         $CronManager = new Manager();
         $result      = $CronManager->getHistoryList(array(
-            'page' => 1,
+            'page'    => 1,
             'perPage' => 1
         ));
 
@@ -97,7 +126,7 @@ class EventHandler
     {
         QUI::getMessagesHandler()->sendAttention(
             QUI::getUserBySession(),
-            QUI::getLocale()->get('quiqqer/cron', 'message.cron.admin.info.24h')
+            QUI::getUserBySession()->getLocale()->get('quiqqer/cron', 'message.cron.admin.info.24h')
         );
     }
 }

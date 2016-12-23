@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <events>
-    <event on="onAdminLoad" fire="\QUI\Cron\EventHandler::onAdminLoad" />
-    <event on="onAdminLoadFooter" fire="\QUI\Cron\EventHandler::adminLoadFooter" />
+    <event on="onAdminLoad" fire="\QUI\Cron\EventHandler::onAdminLoad"/>
+    <event on="onAdminLoadFooter" fire="\QUI\Cron\EventHandler::adminLoadFooter"/>
+    <event on="onPackageSetup" fire="\QUI\Cron\EventHandler::onPackageSetup"/>
 </events>

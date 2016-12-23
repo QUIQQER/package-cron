@@ -7,7 +7,7 @@
 namespace QUI\Cron;
 
 use QUI;
-use QUI\Rights\Permission;
+use QUI\Permissions\Permission;
 use Cron\CronExpression;
 
 /**
@@ -51,7 +51,7 @@ class Manager
             $params = array();
         }
 
-        QUI::getDataBase()->insert($this->Table(), array(
+        QUI::getDataBase()->insert($this->table(), array(
             'active'    => 1,
             'exec'      => $cronData['exec'],
             'title'     => $cronData['title'],
@@ -111,12 +111,11 @@ class Manager
             CronExpression::factory(
                 "$min $hour $day $month $dayOfWeek"
             );
-
         } catch (\Exception $Exception) {
             throw new QUI\Exception($Exception->getMessage());
         }
 
-        QUI::getDataBase()->update($this->Table(), array(
+        QUI::getDataBase()->update($this->table(), array(
             'exec'      => $cronData['exec'],
             'title'     => $cronData['title'],
             'min'       => $min,
@@ -147,7 +146,7 @@ class Manager
         Permission::checkPermission('quiqqer.cron.deactivate');
 
         QUI::getDataBase()->update(
-            $this->Table(),
+            $this->table(),
             array('active' => 1),
             array('id' => (int)$cronId)
         );
@@ -163,7 +162,7 @@ class Manager
         Permission::checkPermission('quiqqer.cron.activate');
 
         QUI::getDataBase()->update(
-            $this->Table(),
+            $this->table(),
             array('active' => 0),
             array('id' => (int)$cronId)
         );
@@ -188,7 +187,7 @@ class Manager
                 return;
             }
 
-            $DataBase->delete($this->Table(), array(
+            $DataBase->delete($this->table(), array(
                 'id' => $id
             ));
         }
@@ -237,7 +236,6 @@ class Manager
             // execute cron
             try {
                 $this->executeCron($entry['id']);
-
             } catch (\Exception $Exception) {
                 $message = print_r($entry, true);
                 $message .= "\n" . $Exception->getMessage();
@@ -299,7 +297,7 @@ class Manager
 
 
         QUI::getDataBase()->update(
-            self::Table(),
+            self::table(),
             array('lastexec' => date('Y-m-d H:i:s')),
             array('id' => $cronId)
         );
@@ -346,7 +344,7 @@ class Manager
     public function getCronById($cronId)
     {
         $result = QUI::getDataBase()->fetch(array(
-            'from'  => $this->Table(),
+            'from'  => $this->table(),
             'where' => array(
                 'id' => (int)$cronId
             ),
@@ -406,7 +404,7 @@ class Manager
         ));
 
         $dataOfCron = QUI::getDataBase()->fetch(array(
-            'from' => $this->Table()
+            'from' => $this->table()
         ));
 
         $Users  = QUI::getUsers();
@@ -418,7 +416,6 @@ class Manager
             $crons[$cronData['id']] = $cronData;
         }
 
-
         foreach ($data as $entry) {
             $entry['cronTitle'] = '';
             $entry['username']  = '';
@@ -429,7 +426,6 @@ class Manager
 
             try {
                 $entry['username'] = $Users->get($entry['uid'])->getName();
-
             } catch (QUI\Exception $Exception) {
             }
 
@@ -462,8 +458,27 @@ class Manager
     public function getList()
     {
         return QUI::getDataBase()->fetch(array(
-            'from' => self::Table()
+            'from' => self::table()
         ));
+    }
+
+    /**
+     * Checks if a specific cron is already set up
+     *
+     * @param string $cron - cron title
+     * @return bool
+     */
+    public function isCronSetUp($cron)
+    {
+        $list = $this->getList();
+
+        foreach ($list as $entry) {
+            if ($entry['title'] == $cron) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -487,7 +502,7 @@ class Manager
      *
      * @return string
      */
-    public static function TABLE()
+    public static function table()
     {
         return QUI_DB_PRFX . 'cron';
     }
@@ -515,7 +530,7 @@ class Manager
             return array();
         }
 
-        $Dom   = QUI\Utils\XML::getDomFromXml($file);
+        $Dom   = QUI\Utils\Text\XML::getDomFromXml($file);
         $crons = $Dom->getElementsByTagName('crons');
 
         if (!$crons || !$crons->length) {

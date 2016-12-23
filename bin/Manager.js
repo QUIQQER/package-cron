@@ -41,7 +41,7 @@ define('package/quiqqer/cron/bin/Manager', [
 
         options: {
             title: 'Cron-Manager',
-            icon : 'icon-time'
+            icon : 'fa fa-clock-o'
         },
 
         initialize: function (options) {
@@ -81,7 +81,7 @@ define('package/quiqqer/cron/bin/Manager', [
                 for (var i = 0, len = result.length; i < len; i++) {
                     result[i].status = {
                         title : QUILocale.get(lg, 'cron.panel.manager.btn.toggle'),
-                        icon  : result[i].active == 1 ? 'icon-ok' : 'icon-remove',
+                        icon  : result[i].active == 1 ? 'fa fa-check' : 'fa fa-remove',
                         cronId: result[i].id,
                         events: {
                             onClick: toggleCron
@@ -91,7 +91,7 @@ define('package/quiqqer/cron/bin/Manager', [
                     result[i].play = {
                         name  : 'cron-play-button-' + result[i].id,
                         title : QUILocale.get(lg, 'cron.panel.manager.btn.execute'),
-                        icon  : 'icon-play',
+                        icon  : 'fa fa-play',
                         cronId: result[i].id,
                         events: {
                             onClick: execCron
@@ -120,7 +120,7 @@ define('package/quiqqer/cron/bin/Manager', [
                 new QUIButton({
                     name     : 'add',
                     text     : QUILocale.get(lg, 'cron.panel.manager.btn.add'),
-                    textimage: 'icon-plus',
+                    textimage: 'fa fa-plus',
                     events   : {
                         onClick: function () {
                             self.openAddCronWindow();
@@ -135,7 +135,7 @@ define('package/quiqqer/cron/bin/Manager', [
                 new QUIButton({
                     name     : 'edit',
                     text     : QUILocale.get(lg, 'cron.panel.manager.btn.edit'),
-                    textimage: 'icon-pencil',
+                    textimage: 'fa fa-edit',
                     events   : {
                         onClick: function () {
                             self.editMarkedCron();
@@ -148,7 +148,7 @@ define('package/quiqqer/cron/bin/Manager', [
                 new QUIButton({
                     name     : 'delete',
                     text     : QUILocale.get(lg, 'cron.panel.manager.btn.delete'),
-                    textimage: 'icon-trash',
+                    textimage: 'fa fa-trash',
                     events   : {
                         onClick: function () {
                             self.deleteMarkedCrons();
@@ -163,7 +163,7 @@ define('package/quiqqer/cron/bin/Manager', [
                 new QUIButton({
                     name     : 'history',
                     text     : QUILocale.get(lg, 'cron.panel.manager.btn.history'),
-                    textimage: 'icon-long-arrow-right',
+                    textimage: 'fa fa-long-arrow-right',
                     events   : {
                         onClick: function () {
                             self.showHistory();
@@ -174,6 +174,21 @@ define('package/quiqqer/cron/bin/Manager', [
 
             this.getButtons('edit').disable();
             this.getButtons('delete').disable();
+
+
+            this.addButton(new QUIButtonSeperator());
+            this.addButton(
+                new QUIButton({
+                    name     : 'cronservice',
+                    text     : QUILocale.get(lg, 'cron.panel.manager.btn.cronservice.register'),
+                    textimage: 'fa fa-cloud',
+                    events   : {
+                        onClick: function () {
+                            self.registerCronservice();
+                        }
+                    }
+                })
+            );
 
 
             var Content   = this.getContent(),
@@ -322,7 +337,7 @@ define('package/quiqqer/cron/bin/Manager', [
             });
 
             new QUIConfirm({
-                icon       : 'icon-remove',
+                icon       : 'fa fa-remove',
                 title      : QUILocale.get(lg, 'cron.window.delete.cron.title'),
                 text       : QUILocale.get(lg, 'cron.window.delete.cron.text'),
                 information: QUILocale.get(lg, 'cron.window.delete.cron.information', {
@@ -442,12 +457,12 @@ define('package/quiqqer/cron/bin/Manager', [
             }
 
             for (i = 0, len = buttons.length; i < len; i++) {
-                buttons[i].setAttribute('icon', 'icon-refresh icon-spin');
+                buttons[i].setAttribute('icon', 'fa fa-spinner fa-spin');
             }
 
             Ajax.post('package_quiqqer_cron_ajax_cron_executeCron', function () {
                 for (i = 0, len = buttons.length; i < len; i++) {
-                    buttons[i].setAttribute('icon', 'icon-play');
+                    buttons[i].setAttribute('icon', 'fa fa-play');
                 }
 
             }, {
@@ -464,6 +479,16 @@ define('package/quiqqer/cron/bin/Manager', [
 
             require(['package/quiqqer/cron/bin/History'], function (Panel) {
                 new Panel().inject(self.getParent());
+            });
+        },
+
+        /**
+         * Opens the Cronservice registration
+         */
+        registerCronservice: function () {
+            require(['package/quiqqer/cron/bin/CronServiceWindow'], function (CronServiceWindow) {
+                var csWindow = new CronServiceWindow();
+                csWindow.open();
             });
         }
     });

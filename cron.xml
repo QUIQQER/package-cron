@@ -5,6 +5,11 @@
         <description>Ordner für temporäre Daten leeren</description>
     </cron>
 
+    <cron exec="\QUI\Cron\QuiqqerCrons::clearSessions">
+        <title>Sessions säubern</title>
+        <description>Löscht unnötige / abgelaufene Session Dateien</description>
+    </cron>
+
     <cron exec="\QUI\Cron\QuiqqerCrons::clearCache">
         <title>Cache leeren</title>
         <description>Kompletten Cache leeren</description>
@@ -13,8 +18,10 @@
     <cron exec="\QUI\Cron\QuiqqerCrons::clearAdminMediaCache">
         <title>Media Cache der Administration leeren</title>
         <description>
-            Leert die Cachebilder von der Administration.<br />
-            Dies sind zum Beispiel die Vorschaubilder in der Administration.<br />
+            Leert die Cachebilder von der Administration.
+            <br/>
+            Dies sind zum Beispiel die Vorschaubilder in der Administration.
+            <br/>
             Der öffentliche Mediacache wird nicht geleert
         </description>
     </cron>
@@ -32,8 +39,8 @@
             Durchsucht das Projekt und aktiviert oder deaktiviert Seiten je nach Veröffentlichungsdatum.
         </description>
         <params>
-            <param name="project" type="string" />
-            <param name="lang" type="string" />
+            <param name="project" type="string"/>
+            <param name="lang" type="string"/>
         </params>
     </cron>
 

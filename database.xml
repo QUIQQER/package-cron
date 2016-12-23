@@ -21,6 +21,12 @@
             <field type="INT( 11 ) NOT NULL">uid</field>
             <field type="DATETIME NULL">lastexec</field>
         </table>
+
+        <table name="cron_cronservice">
+            <field type="INT( 3 ) NOT NULL">cronid</field>
+            <field type="INT( 11 ) NOT NULL">uid</field>
+            <field type="DATETIME NULL">lastexec</field>
+        </table>
     </global>
 
 </database>

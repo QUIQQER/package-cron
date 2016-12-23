@@ -43,7 +43,7 @@ define('package/quiqqer/cron/bin/History', [
 
         options: {
             title: 'Cron-History',
-            icon : 'icon-long-arrow-right'
+            icon : 'fa fa-long-arrow-right'
         },
 
         initialize: function (options) {
