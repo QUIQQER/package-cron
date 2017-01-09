@@ -73,7 +73,7 @@ define('package/quiqqer/cron/bin/controls/CronTime', [
             //QUILocale.get(lg, 'controls.crontime.label.interval')
 
             this.$IntervalSelect = new QUISelect({
-                'class': 'quiqqer-cron-crontime-interval-select',
+                'class'  : 'quiqqer-cron-crontime-interval-select',
                 showIcons: false,
                 events   : {
                     onChange: this.$loadIntervalOptions
@@ -404,7 +404,7 @@ define('package/quiqqer/cron/bin/controls/CronTime', [
                                 change: function (event) {
                                     var Input = event.target;
 
-                                    Input.value = Input.value.replace(/[^\d*]/gi, '');
+                                    Input.value = Input.value.replace(/[^\d\*\\\-]/gi, '');
 
                                     switch (Input.getProperty('data-type')) {
                                         case 'minute':
@@ -462,6 +462,24 @@ define('package/quiqqer/cron/bin/controls/CronTime', [
          * @param dayofweek
          */
         setValue: function (minute, hour, day, month, dayofweek) {
+            if (minute.match(/[^\d\*]/gi) ||
+                hour.match(/[^\d\*]/gi) ||
+                day.match(/[^\d\*]/gi) ||
+                month.match(/[^\d\*]/gi) ||
+                dayofweek.match(/[^\d\*]/gi)
+            ) {
+                this.$showCronStyleInput(
+                    minute,
+                    hour,
+                    day,
+                    month,
+                    dayofweek
+                );
+
+                return;
+            }
+
+
             if (minute == '*' &&
                 hour == '*' &&
                 day == '*' &&
@@ -529,7 +547,56 @@ define('package/quiqqer/cron/bin/controls/CronTime', [
                 return;
             }
 
+            this.$showCronStyleInput(
+                minute,
+                hour,
+                day,
+                month,
+                dayofweek
+            );
+        },
+
+        /**
+         * Show cron style type input
+         *
+         * @param {string} m
+         * @param {string} h
+         * @param {string} d
+         * @param {string} mo
+         * @param {string} dw
+         */
+        $showCronStyleInput: function (m, h, d, mo, dw) {
             this.$IntervalSelect.setValue('cron');
+
+            var cronStyleInputs = this.$Elm.getElements(
+                '.quiqqer-cron-crontime-cron-input'
+            );
+
+            for (var i = 0, len = cronStyleInputs.length; i < len; i++) {
+                var Elm = cronStyleInputs[i];
+
+                switch (Elm.getProperty('data-type')) {
+                    case 'minute':
+                        Elm.value = m;
+                        break;
+
+                    case 'hour':
+                        Elm.value = h;
+                        break;
+
+                    case 'day':
+                        Elm.value = d;
+                        break;
+
+                    case 'month':
+                        Elm.value = mo;
+                        break;
+
+                    case 'dayofweek':
+                        Elm.value = dw;
+                        break;
+                }
+            }
         },
 
         /**
