@@ -14,7 +14,11 @@
 .control-cron-add-list {
     float: left;
     margin: 0;
-    width: 230px;
+    width: 500px;
+}
+
+.control-cron-add-list .qui-select {
+    width: 100%;
 }
 
 .control-cron-add-intervall {
@@ -33,6 +37,11 @@
 
 .control-cron-add-intervall-entries {
     float: left;
+}
+
+.control-cron-add-intervall-control {
+    float: left;
+    width: calc(100% - 90px);
 }
 
 .control-cron-add-intervall-entry {
