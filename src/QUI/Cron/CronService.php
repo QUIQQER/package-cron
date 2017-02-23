@@ -287,12 +287,10 @@ class CronService
         }
 
         $token = file_get_contents($fileName);
-
         if ($token === false) {
             throw new Exception("Could not read tokenfile.");
         }
 
         return $token;
     }
-
 }
