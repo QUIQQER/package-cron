@@ -8,7 +8,7 @@ use QUI\System\Log;
 class CronService
 {
 
-    const CRONSERVICE_URL = "https://cron.quiqqer.com";
+    const CRONSERVICE_URL = "http://server.cronservice.flo.pcsg";
 
     private $domain;
     private $https;
@@ -112,7 +112,6 @@ class CronService
      */
     public function resendActivationMail()
     {
-
         if (!isset($this->domain) || empty($this->domain)) {
             throw new Exception("Could not get the instances domain.");
         }
@@ -125,6 +124,24 @@ class CronService
         );
     }
 
+    /**
+     * Attempts to cancel the registration on the server
+     * @throws Exception
+     */
+    public function cancelRegistration()
+    {
+        Log::addDebug("");
+        if (!isset($this->domain) || empty($this->domain)) {
+            throw new Exception("Could not get the instances domain.");
+        }
+
+        $this->makeServerAjaxCall(
+            "package_pcsg_cronservice_ajax_cancelRegistration",
+            array(
+                "domain" => $this->domain
+            )
+        );
+    }
 
     /**
      * Sends an ajax request to the cronservice server.
@@ -277,4 +294,5 @@ class CronService
 
         return $token;
     }
+
 }

@@ -108,9 +108,7 @@ define('package/quiqqer/cron/bin/CronServiceWindow', [
 
 
                 // Register/Unregister Button
-                if (self.status)
-                // Get the button text : register or unregister
-                {
+                if (self.status) {
                     var btnText = QUILocale.get(lg, 'cron.window.cronservice.content.btn.register');
                 }
                 if (self.registered) {
@@ -119,20 +117,41 @@ define('package/quiqqer/cron/bin/CronServiceWindow', [
 
                 var Button = null;
                 if (self.status == 2) {
+                    // Resend Activation Button
                     Button = new QUIButton({
                         text     : QUILocale.get(lg, 'cron.window.cronservice.content.btn.resend.activation.mail'),
                         textimage: 'fa fa-envelope-o',
                         events   : {
-                            onClick: function (Button) {
+                            onClick: function () {
                                 self.resendActivationMail();
                             }
                         },
                         styles   : {
                             'float': 'none',
-                            margin : '0 auto',
-                            width  : 200
+                            width  : 'calc(50% - 5px)'
                         }
                     });
+
+                    // Cancel Registration Button
+                    new QUIButton({
+                        text  : '<span class="quiqqer-cron-cronservicewindow-registration-success-btn-cancel-text">' + QUILocale.get(lg, 'cron.window.cronservice.registration.button.text.cancel') + '</span>',
+                        events: {
+                            onClick: function (Button) {
+                                Button.setAttribute('text', QUILocale.get('quiqqer/cron', 'cron.window.cronservice.content.btn.unregister.confirm'));
+                                if (Button.getAttribute('clickcnt') == 1) {
+                                    self.cancelRegistration().then(function () {
+                                        self.refresh();
+                                    });
+                                }
+                                Button.setAttribute('clickcnt', 1);
+                            }
+                        },
+                        styles: {
+                            'float': 'none',
+                            margin : '0 10px 0 0',
+                            width  : 'calc(50% - 5px)'
+                        }
+                    }).inject(Buttons);
                 } else {
                     Button = new QUIButton({
                         text     : btnText,
@@ -216,9 +235,12 @@ define('package/quiqqer/cron/bin/CronServiceWindow', [
             }).inject(this.$Elm).show();
         },
 
+        /**
+         * Shows the registration success sheet, which contains information about the activation email
+         */
         showRegistrationSuccess: function () {
             var self = this;
-            
+
             new QUISheets({
                 header : true,
                 icon   : 'fa fa-cloud',
@@ -281,6 +303,23 @@ define('package/quiqqer/cron/bin/CronServiceWindow', [
             });
         },
 
+        /**
+         * Cancels the registration
+         * @returns {*}
+         */
+        cancelRegistration: function () {
+            return new Promise(function (resolve, reject) {
+                QUIAjax.get('package_quiqqer_cron_ajax_cronservice_cancelRegistration', resolve, {
+                    'package': lg,
+                    onError  : reject
+                });
+            });
+        },
+
+        /**
+         * Sends the activation mail again
+         * @returns {*}
+         */
         resendActivationMail: function () {
             return new Promise(function (resolve, reject) {
                 QUIAjax.get('package_quiqqer_cron_ajax_cronservice_resendActivation', resolve, {
