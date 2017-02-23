@@ -440,5 +440,13 @@ This is works with an external server on which QUIQQER systems can register them
             <en>
                 <![CDATA[The registration was successfull. Please check your email inbox and confirm the registration. <br /> Bear in mind that the email could have been marked as spam.]]></en>
         </locale>
+        <locale name="cron.window.cronservice.content.btn.resend.activation.mail">
+            <de><![CDATA[Mail erneut senden]]></de>
+            <en><![CDATA[Resend activationmail]]></en>
+        </locale>
+        <locale name="cron.window.cronservice.registration.success.btn.confirm.text">
+            <de><![CDATA[Verstanden]]></de>
+            <en><![CDATA[Okay]]></en>
+        </locale>
     </groups>
 </locales>
