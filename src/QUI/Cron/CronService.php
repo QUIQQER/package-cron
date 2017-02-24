@@ -8,7 +8,7 @@ use QUI\System\Log;
 class CronService
 {
 
-    const CRONSERVICE_URL = "http://server.cronservice.flo.pcsg";
+    const CRONSERVICE_URL = "https://cron.quiqqer.com";
 
     private $domain;
     private $https;
