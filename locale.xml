@@ -164,6 +164,171 @@
             <de><![CDATA[Aufgabenverlauf]]></de>
             <en><![CDATA[Cron history]]></en>
         </locale>
+
+
+        <locale name="permission.quiqqer.cron._header">
+            <de><![CDATA[Aufgaben / Tasks]]></de>
+            <en><![CDATA[Tasks]]></en>
+        </locale>
+        <locale name="permission.quiqqer.cron.execute">
+            <de><![CDATA[Darf Aufgaben / Tasks ausführen.]]></de>
+            <en><![CDATA[Can execute tasks.]]></en>
+        </locale>
+        <locale name="permission.quiqqer.cron.add">
+            <de><![CDATA[Darf Aufgaben / Tasks hinzufügen.]]></de>
+            <en><![CDATA[Can add tasks.]]></en>
+        </locale>
+        <locale name="permission.quiqqer.cron.edit">
+            <de><![CDATA[Darf Aufgaben / Tasks bearbeiten.]]></de>
+            <en><![CDATA[Can edit tasks.]]></en>
+        </locale>
+        <locale name="permission.quiqqer.cron.delete">
+            <de><![CDATA[Darf Aufgaben / Tasks löschen.]]></de>
+            <en><![CDATA[Can delete tasks.]]></en>
+        </locale>
+        <locale name="permission.quiqqer.cron.activate">
+            <de><![CDATA[Darf Aufgaben / Tasks aktivieren.]]></de>
+            <en><![CDATA[Can activate tasks.]]></en>
+        </locale>
+        <locale name="permission.quiqqer.cron.deactivate">
+            <de><![CDATA[Darf Aufgaben / Tasks deaktivieren.]]></de>
+            <en><![CDATA[Can deactivate tasks.]]></en>
+        </locale>
+
+        <locale name="controls.crontime.intervalselect.option.everyminute">
+            <de><![CDATA[Jede Minute]]></de>
+            <en><![CDATA[Every minute]]></en>
+        </locale>
+        <locale name="controls.crontime.intervalselect.option.hourly">
+            <de><![CDATA[Stündlich]]></de>
+            <en><![CDATA[Hourly]]></en>
+        </locale>
+        <locale name="controls.crontime.intervalselect.option.daily">
+            <de><![CDATA[Täglich]]></de>
+            <en><![CDATA[Daily]]></en>
+        </locale>
+        <locale name="controls.crontime.intervalselect.option.weekly">
+            <de><![CDATA[Wöchentlich]]></de>
+            <en><![CDATA[Weekly]]></en>
+        </locale>
+        <locale name="controls.crontime.intervalselect.option.monthly">
+            <de><![CDATA[Monatlich]]></de>
+            <en><![CDATA[Monthly]]></en>
+        </locale>
+        <locale name="controls.crontime.intervalselect.option.yearly">
+            <de><![CDATA[Jährlich]]></de>
+            <en><![CDATA[Yearly]]></en>
+        </locale>
+        <locale name="controls.crontime.intervalselect.option.cron">
+            <de><![CDATA[Cron-Stil]]></de>
+            <en><![CDATA[Cron style]]></en>
+        </locale>
+        <locale name="controls.crontime.dayofweek.su">
+            <de><![CDATA[Sonntag]]></de>
+            <en><![CDATA[Sunday]]></en>
+        </locale>
+        <locale name="controls.crontime.dayofweek.mo">
+            <de><![CDATA[Montag]]></de>
+            <en><![CDATA[Monday]]></en>
+        </locale>
+        <locale name="controls.crontime.dayofweek.tu">
+            <de><![CDATA[Dienstag]]></de>
+            <en><![CDATA[Tuesday]]></en>
+        </locale>
+        <locale name="controls.crontime.dayofweek.we">
+            <de><![CDATA[Mittwoch]]></de>
+            <en><![CDATA[Wednesday]]></en>
+        </locale>
+        <locale name="controls.crontime.dayofweek.th">
+            <de><![CDATA[Donnerstag]]></de>
+            <en><![CDATA[Thursday]]></en>
+        </locale>
+        <locale name="controls.crontime.dayofweek.fr">
+            <de><![CDATA[Freitag]]></de>
+            <en><![CDATA[Friday]]></en>
+        </locale>
+        <locale name="controls.crontime.dayofweek.sa">
+            <de><![CDATA[Samstag]]></de>
+            <en><![CDATA[Saturday]]></en>
+        </locale>
+        <locale name="controls.crontime.month.1">
+            <de><![CDATA[Januar]]></de>
+            <en><![CDATA[January]]></en>
+        </locale>
+        <locale name="controls.crontime.month.2">
+            <de><![CDATA[Februar]]></de>
+            <en><![CDATA[February]]></en>
+        </locale>
+        <locale name="controls.crontime.month.3">
+            <de><![CDATA[März]]></de>
+            <en><![CDATA[March]]></en>
+        </locale>
+        <locale name="controls.crontime.month.4">
+            <de><![CDATA[April]]></de>
+            <en><![CDATA[April]]></en>
+        </locale>
+        <locale name="controls.crontime.month.5">
+            <de><![CDATA[Mai]]></de>
+            <en><![CDATA[May]]></en>
+        </locale>
+        <locale name="controls.crontime.month.6">
+            <de><![CDATA[Juni]]></de>
+            <en><![CDATA[June]]></en>
+        </locale>
+        <locale name="controls.crontime.month.7">
+            <de><![CDATA[Juli]]></de>
+            <en><![CDATA[July]]></en>
+        </locale>
+        <locale name="controls.crontime.month.8">
+            <de><![CDATA[August]]></de>
+            <en><![CDATA[August]]></en>
+        </locale>
+        <locale name="controls.crontime.month.9">
+            <de><![CDATA[September]]></de>
+            <en><![CDATA[September]]></en>
+        </locale>
+        <locale name="controls.crontime.month.10">
+            <de><![CDATA[Oktober]]></de>
+            <en><![CDATA[October]]></en>
+        </locale>
+        <locale name="controls.crontime.month.11">
+            <de><![CDATA[November]]></de>
+            <en><![CDATA[November]]></en>
+        </locale>
+        <locale name="controls.crontime.month.12">
+            <de><![CDATA[Dezember]]></de>
+            <en><![CDATA[December]]></en>
+        </locale>
+        <locale name="controls.crontime.label.minute">
+            <de><![CDATA[Minute]]></de>
+            <en><![CDATA[minute]]></en>
+        </locale>
+        <locale name="controls.crontime.label.hour">
+            <de><![CDATA[Stunde]]></de>
+            <en><![CDATA[hour]]></en>
+        </locale>
+        <locale name="controls.crontime.label.day">
+            <de><![CDATA[Tag]]></de>
+            <en><![CDATA[day]]></en>
+        </locale>
+        <locale name="controls.crontime.label.month">
+            <de><![CDATA[Monat]]></de>
+            <en><![CDATA[month]]></en>
+        </locale>
+        <locale name="controls.crontime.label.dayofweek">
+            <de><![CDATA[Tag d. Woche]]></de>
+            <en><![CDATA[Day of week]]></en>
+        </locale>
+        <locale name="controls.crontime.label.at">
+            <de><![CDATA[Um]]></de>
+            <en><![CDATA[At]]></en>
+        </locale>
+        <locale name="controls.crontime.label.interval">
+            <de><![CDATA[Intervall]]></de>
+            <en><![CDATA[Interval]]></en>
+        </locale>
+
+        <!-- Cronservice -->
         <locale name="cron.panel.manager.btn.cronservice.register">
             <de><![CDATA[Cronservice]]></de>
             <en><![CDATA[Cronservice]]></en>
@@ -265,34 +430,27 @@ This is works with an external server on which QUIQQER systems can register them
             <de><![CDATA[Registrierung entfernen]]></de>
             <en><![CDATA[Unregister]]></en>
         </locale>
-
-        <locale name="permission.quiqqer.cron._header">
-            <de><![CDATA[Aufgaben / Tasks]]></de>
-            <en><![CDATA[Tasks]]></en>
+        <locale name="cron.window.cronservice.registration.success.title">
+            <de><![CDATA[Registrierung erfolgreich]]></de>
+            <en><![CDATA[Registration successfull]]></en>
         </locale>
-        <locale name="permission.quiqqer.cron.execute">
-            <de><![CDATA[Darf Aufgaben / Tasks ausführen.]]></de>
-            <en><![CDATA[Can execute tasks.]]></en>
+        <locale name="cron.window.cronservice.registration.success.text" html="true">
+            <de>
+                <![CDATA[Die Registrierung war erfolgreich! <br /> Bitte überprüfen Sie nun das angegebene Email Postfach und bestätigen Sie die Registrierung. <br /> Bitte bedenken Sie, dass die Email im Spamordner gelandet sein könnte.]]></de>
+            <en>
+                <![CDATA[The registration was successfull. Please check your email inbox and confirm the registration. <br /> Bear in mind that the email could have been marked as spam.]]></en>
         </locale>
-        <locale name="permission.quiqqer.cron.add">
-            <de><![CDATA[Darf Aufgaben / Tasks hinzufügen.]]></de>
-            <en><![CDATA[Can add tasks.]]></en>
+        <locale name="cron.window.cronservice.content.btn.resend.activation.mail">
+            <de><![CDATA[Mail erneut senden]]></de>
+            <en><![CDATA[Resend activationmail]]></en>
         </locale>
-        <locale name="permission.quiqqer.cron.edit">
-            <de><![CDATA[Darf Aufgaben / Tasks bearbeiten.]]></de>
-            <en><![CDATA[Can edit tasks.]]></en>
+        <locale name="cron.window.cronservice.registration.success.btn.confirm.text">
+            <de><![CDATA[Verstanden]]></de>
+            <en><![CDATA[Okay]]></en>
         </locale>
-        <locale name="permission.quiqqer.cron.delete">
-            <de><![CDATA[Darf Aufgaben / Tasks löschen.]]></de>
-            <en><![CDATA[Can delete tasks.]]></en>
-        </locale>
-        <locale name="permission.quiqqer.cron.activate">
-            <de><![CDATA[Darf Aufgaben / Tasks aktivieren.]]></de>
-            <en><![CDATA[Can activate tasks.]]></en>
-        </locale>
-        <locale name="permission.quiqqer.cron.deactivate">
-            <de><![CDATA[Darf Aufgaben / Tasks deaktivieren.]]></de>
-            <en><![CDATA[Can deactivate tasks.]]></en>
+        <locale name="cron.window.cronservice.registration.button.text.cancel">
+            <de><![CDATA[Registrierung abbrechen]]></de>
+            <en><![CDATA[Cancel registration]]></en>
         </locale>
     </groups>
 </locales>

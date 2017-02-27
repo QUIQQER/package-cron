@@ -217,8 +217,8 @@ class Manager
             $month     = $entry['month'];
             $dayOfWeek = '*';
 
-            if (isset($entry['dayOfMonth']) && !empty($entry['dayOfMonth'])) {
-                $dayOfWeek = $entry['dayOfMonth'];
+            if (isset($entry['dayOfWeek']) && !empty($entry['dayOfWeek'])) {
+                $dayOfWeek = $entry['dayOfWeek'];
             }
 
 

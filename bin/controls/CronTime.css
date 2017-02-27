@@ -1,0 +1,53 @@
+.quiqqer-cron-crontime {
+    float: left;
+    width: 100%;
+}
+
+.quiqqer-cron-crontime-interval {
+    float: left;
+    width: 20%;
+}
+
+.quiqqer-cron-crontime-interval-select {
+    width: 110px;
+}
+
+.quiqqer-cron-crontime-options {
+    float: left;
+    padding-left: 15px;
+    width: 80%;
+}
+
+.quiqqer-cron-crontime-options span {
+    float: left;
+    line-height: 28px;
+    padding-right: 5px;
+}
+
+.quiqqer-cron-crontime-options span:not(:first-of-type) {
+    padding-left: 10px;
+}
+
+.quiqqer-cron-crontime-number-select {
+    width: 50px;
+}
+
+.quiqqer-cron-crontime-month-select {
+    width: 100px;
+}
+
+.quiqqer-cron-crontime-dayofweek-select {
+    width: 120px;
+}
+
+.quiqqer-cron-crontime-cron-label {
+    float: left;
+    margin: 0 !important;
+    padding-right: 10px;
+    width: 20% !important;
+}
+
+.quiqqer-cron-crontime-cron-label input {
+    float: left;
+    width: 100%;
+}

@@ -25,7 +25,7 @@ class CronService
         $url_dir = QUI::$Conf->get("globals", "url_dir");
 
         // VHost Domain
-        $vhost        = QUI::getProjectManager()->getStandard()->getVHost(true, true);
+        $vhost = QUI::getProjectManager()->getStandard()->getVHost(true, true);
 
         // Check if https should be used.
         if (substr($vhost, 0, 8) == 'https://') {
@@ -104,6 +104,43 @@ class CronService
             'domain' => $this->domain,
             'token'  => $token
         ));
+    }
+
+    /**
+     * Requests the cronservice to resend the activation email
+     * @throws Exception
+     */
+    public function resendActivationMail()
+    {
+        if (!isset($this->domain) || empty($this->domain)) {
+            throw new Exception("Could not get the instances domain.");
+        }
+
+        $this->makeServerAjaxCall(
+            "package_pcsg_cronservice_ajax_resendActivationMail",
+            array(
+                "domain" => $this->domain
+            )
+        );
+    }
+
+    /**
+     * Attempts to cancel the registration on the server
+     * @throws Exception
+     */
+    public function cancelRegistration()
+    {
+        Log::addDebug("");
+        if (!isset($this->domain) || empty($this->domain)) {
+            throw new Exception("Could not get the instances domain.");
+        }
+
+        $this->makeServerAjaxCall(
+            "package_pcsg_cronservice_ajax_cancelRegistration",
+            array(
+                "domain" => $this->domain
+            )
+        );
     }
 
     /**
@@ -250,7 +287,6 @@ class CronService
         }
 
         $token = file_get_contents($fileName);
-
         if ($token === false) {
             throw new Exception("Could not read tokenfile.");
         }
