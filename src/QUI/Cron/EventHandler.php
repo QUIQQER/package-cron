@@ -80,6 +80,7 @@ class EventHandler
 
         if (!isset($result[0])) {
             self::sendAdminInfoCronError();
+
             return;
         }
 
@@ -128,5 +129,116 @@ class EventHandler
             QUI::getUserBySession(),
             QUI::getUserBySession()->getLocale()->get('quiqqer/cron', 'message.cron.admin.info.24h')
         );
+    }
+
+
+    /**
+     * Event: onPackageInstall => Add default crons
+     */
+    public static function onPackageInstall()
+    {
+        self::createDefaultCrons();
+    }
+
+    /**
+     * Creates the default crons, if they do not exist yet
+     *
+     */
+    public static function createDefaultCrons()
+    {
+        $CronManager = new Manager();
+
+        $defaultCrons = array(
+            // Clear temp folder
+            "quiqqer/cron:0" => array(
+                "min"   => "0",
+                "hour"  => "0",
+                "day"   => "*",
+                "month" => "*",
+                "dow"   => "*"
+            ),
+            // Clear sessions
+            "quiqqer/cron:1" => array(
+                "min"   => "0",
+                "hour"  => "*",
+                "day"   => "*",
+                "month" => "*",
+                "dow"   => "*"
+            ),
+            // Process mail queue
+            "quiqqer/cron:6" => array(
+                "min"   => "*/5",
+                "hour"  => "0",
+                "day"   => "*",
+                "month" => "*",
+                "dow"   => "*"
+            )
+        );
+
+        // Parse the installed crons
+        $installedCrons = array();
+        foreach ($CronManager->getList() as $row) {
+            $installedCrons[] = strtolower(trim($row['exec']));
+        }
+
+
+        // add the simple default crons, if they dont exist yet
+        foreach ($defaultCrons as $identifier => $time) {
+            $data = $CronManager->getCronData($identifier);
+
+            $exec  = trim($data['exec']);
+            $title = trim($data['title']);
+
+            if (in_array(strtolower($exec), $installedCrons)) {
+                continue;
+            }
+
+            $CronManager->add($title, $time['min'], $time['hour'], $time['day'], $time['month'], $time['dow']);
+        }
+    }
+
+    /**
+     * Event: onCreateProject => Add the publish cron for this project
+     * @param QUI\Projects\Project $Project
+     */
+    public static function onCreateProject(QUI\Projects\Project $Project)
+    {
+        $CronManager     = new Manager();
+        $publishCronData = $CronManager->getCronData("quiqqer/cron:5");
+
+        $languages      = $Project->getLanguages();
+        $installedCrons = $CronManager->getList();
+
+        foreach ($languages as $lang) {
+            // Check that no cron with the same parameters exists yet
+            foreach ($installedCrons as $installedCronData) {
+                $installedParams  = json_decode($installedCronData['params'], true);
+                $installedProject = "";
+                $installedLang    = "";
+
+                foreach ($installedParams as $name => $value) {
+                    if ($name == "project") {
+                        $installedProject = strtolower(trim($value));
+                    }
+
+                    if ($name == "lang") {
+                        $installedLang = strtolower(trim($value));
+                    }
+                }
+
+                // Cron for this project & lang combination exists => skip
+                if ($installedProject == strtolower(trim($Project->getName())) &&
+                    $installedLang == strtolower(trim($lang))
+                ) {
+                    continue 2;
+                }
+            }
+
+            // Add the cron
+            $CronManager->add($publishCronData['title'], "0", "*", "*", "*", "*", array(
+                "project" => $Project->getName(),
+                "lang"    => $lang
+            ));
+        }
     }
 }
