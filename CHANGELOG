@@ -1,0 +1,17 @@
+QUIQQER Cron Changelog
+======
+
+Version 1.4
+------
+
+- feat: Cronservice will now display a message regarding the activation email and will allow the user to resend the activation mail.
+- feat: Added new events to create default crons when the package gets installed or a project gets created
+- feat: The user can now cancel the registration process
+- feat: Benutzerfreundliche Cron Intervall Controls
+
+- fix: quiqqer/package-cron#14 -> Identifier
+- fix: conflict solved + merge dev
+- fix: Corrected wrong cronservice url.
+- fix: Added 2 missing locale variables
+- fix: Verwechslung von Woche und Tag
+- fix: Cron-Darstellung von Spezial-Cron-Angaben
