@@ -3,4 +3,6 @@
     <event on="onAdminLoad" fire="\QUI\Cron\EventHandler::onAdminLoad"/>
     <event on="onAdminLoadFooter" fire="\QUI\Cron\EventHandler::adminLoadFooter"/>
     <event on="onPackageSetup" fire="\QUI\Cron\EventHandler::onPackageSetup"/>
+    <event on="onPackageInstall" fire="\QUI\Cron\EventHandler::onPackageInstall"/>
+    <event on="onCreateProject" fire="\QUI\Cron\EventHandler::onCreateProject"/>
 </events>

@@ -362,15 +362,36 @@ class Manager
      * Return the data of a specific cron from the available cron list
      * This cron is not in the cron list
      *
-     * @param string $cron - Name of the Cron
-     *
+     * @param string $cron - Cron-Identifier (package/package:NO) or name of the Cron
      * @return array|false - Cron Data
      */
     public function getCronData($cron)
     {
         $availableCrons = $this->getAvailableCrons();
 
-        // check if cron is available
+        // cron by package Identifier package/package:NO
+        $cronParts = explode(':', $cron);
+
+        try {
+            $Package  = QUI::getPackage($cronParts[0]);
+            $cronFile = $Package->getXMLFile('cron.xml');
+
+            if ($Package->isQuiqqerPackage()
+                && $cronFile
+                && isset($cronParts[1])
+                && is_numeric($cronParts[1])
+            ) {
+                $cronNo   = (int)$cronParts[1];
+                $cronList = $this->getCronsFromFile($cronFile);
+
+                if (isset($cronList[$cronNo])) {
+                    return $cronList[$cronNo];
+                }
+            }
+        } catch (QUI\Exception $Exception) {
+        }
+
+        // search cron via title
         foreach ($availableCrons as $entry) {
             if ($entry['title'] == $cron) {
                 return $entry;
