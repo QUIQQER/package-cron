@@ -111,7 +111,7 @@ class QuiqqerCrons
          */
         $Statment = $PDO->prepare("
             SELECT id
-            FROM {$Project->getAttribute('db_table')}
+            FROM {$Project->table()}
             WHERE active = 1 AND
                   release_from != :empty AND
                   release_to != :empty AND
@@ -143,7 +143,7 @@ class QuiqqerCrons
          */
         $Statment = $PDO->prepare("
             SELECT id
-            FROM {$Project->getAttribute('db_table')}
+            FROM {$Project->table()}
             WHERE active = 0 AND
                   release_from != :empty AND
                   release_to != :empty AND
