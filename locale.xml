@@ -356,10 +356,10 @@
         </locale>
         <locale name="cron.window.cronservice.content.about.text">
             <de><![CDATA[Der QUIQQER Cronservice ermöglicht es Crons auf Systemen auszuführen, die nativ keine Crons ausführen können.
-Realisiert wird dies durch einen Server, an dem sich QUIQQER-SYteme anmelden können, welcher wiederrum regelmäßig die Crons der angemeldeten Systeme anstoßt.
-Dies kann vorallem auf Shared-Hostings von großem Nutzen sein.]]></de>
-            <en><![CDATA[The QUIQQER cronservice enables systems withou native cronfunctionality to execute the QUIQQER crons anyway.
-This is works with an external server on which QUIQQER systems can register themselves. This server will start the scheduled crons of all registered QUIQQER systems regularely.
+Realisiert wird dies durch einen Server, an dem sich QUIQQER-Systeme anmelden können, welcher regelmäßig die Crons der angemeldeten Systeme anstoßt.
+Dies kann besonders bei  Shared-Hosting von großem Nutzen sein.]]></de>
+            <en><![CDATA[The QUIQQER cronservice enables systems without native cron functionality to execute the QUIQQER crons anyway.
+This is realized with an external server on which QUIQQER systems can register themselves. This server will start the scheduled crons of all registered QUIQQER systems regularly.
 ]]></en>
         </locale>
         <locale name="cron.window.cronservice.content.status.title">
