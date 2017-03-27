@@ -452,5 +452,13 @@ This is realized with an external server on which QUIQQER systems can register t
             <de><![CDATA[Registrierung abbrechen]]></de>
             <en><![CDATA[Cancel registration]]></en>
         </locale>
+        <locale name="cron.window.cronservice.content.status.unavailable">
+            <de><![CDATA[Der Cronservice ist momentan nicht verfügbar.]]></de>
+            <en><![CDATA[The cronservice is currently not available.]]></en>
+        </locale>
+        <locale name="cron.window.cronservice.content.button.message.sent.success">
+            <de><![CDATA[Nachricht versendet.]]></de>
+            <en><![CDATA[Message sent]]></en>
+        </locale>
     </groups>
 </locales>
