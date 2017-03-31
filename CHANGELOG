@@ -1,6 +1,16 @@
 QUIQQER Cron Changelog
 ======
 
+Version 1.5
+------
+
+- feat: Further improvements to the cronservice.
+- feat: Cronservice will now try to register with the ip of the webserver. Closes pcsg/cronservice#19
+
+- fix: Typos closes pcsg/cronservice#17
+- fix: external cron execution via SystemUser
+- fix: Table Prefix
+
 Version 1.4
 ------
 
