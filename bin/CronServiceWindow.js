@@ -115,6 +115,17 @@ define('package/quiqqer/cron/bin/CronServiceWindow', [
                     btnText = QUILocale.get(lg, 'cron.window.cronservice.content.btn.unregister');
                 }
 
+
+                if (typeof self.status == 'undefined') {
+                    document.getElement(".quiqqer-cron-cronservicewindow-section-status").innerHTML =
+                        "<h2>" +
+                        QUILocale.get(lg, 'cron.window.cronservice.content.status.title') +
+                        "</h2><br />" +
+                        QUILocale.get(lg, 'cron.window.cronservice.content.status.unavailable');
+                    self.Loader.hide();
+                    return;
+                }
+
                 var Button = null;
                 if (self.status == 2) {
                     // Resend Activation Button
@@ -123,7 +134,7 @@ define('package/quiqqer/cron/bin/CronServiceWindow', [
                         textimage: 'fa fa-envelope-o',
                         events   : {
                             onClick: function () {
-                                self.resendActivationMail();
+                                self.resendActivationMail(this);
                             }
                         },
                         styles   : {
@@ -178,7 +189,6 @@ define('package/quiqqer/cron/bin/CronServiceWindow', [
                         }
                     });
                 }
-
 
                 Button.inject(Buttons);
 
@@ -320,9 +330,15 @@ define('package/quiqqer/cron/bin/CronServiceWindow', [
          * Sends the activation mail again
          * @returns {*}
          */
-        resendActivationMail: function () {
+        resendActivationMail: function (Button) {
             return new Promise(function (resolve, reject) {
-                QUIAjax.get('package_quiqqer_cron_ajax_cronservice_resendActivation', resolve, {
+                Button.setAttribute("text", "<span class='fa fa-spinner fa-spin'></span>");
+                QUIAjax.get('package_quiqqer_cron_ajax_cronservice_resendActivation', function (result) {
+                    Button.setAttribute("textimage", "fa fa-check");
+                    Button.setAttribute("text", QUILocale.get(lg, "cron.window.cronservice.content.button.message.sent.success"));
+                    Button.disable();
+                    resolve();
+                }, {
                     'package': lg,
                     onError  : reject
                 });

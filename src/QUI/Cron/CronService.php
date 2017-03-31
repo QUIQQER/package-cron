@@ -185,6 +185,10 @@ class CronService
             CURLOPT_USERAGENT      => 'QUIQQER'
         ));
 
+        if (isset($_SERVER['SERVER_ADDR'])) {
+            curl_setopt($curl, CURLOPT_INTERFACE, $_SERVER['SERVER_ADDR']);
+        }
+
         $response = curl_exec($curl);
         $response = substr($response, 9, -10);
         $data     = json_decode($response, true);
