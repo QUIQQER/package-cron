@@ -8,7 +8,7 @@
  * @require qui/controls/desktop/Panel
  * @require qui/controls/windows/Confirm
  * @require qui/controls/buttons/Button
- * @require qui/controls/buttons/Seperator
+ * @require qui/controls/buttons/Separator
  * @require controls/grid/Grid
  * @require Ajax
  * @require Locale
@@ -20,12 +20,12 @@ define('package/quiqqer/cron/bin/History', [
     'qui/controls/desktop/Panel',
     'qui/controls/windows/Confirm',
     'qui/controls/buttons/Button',
-    'qui/controls/buttons/Seperator',
+    'qui/controls/buttons/Separator',
     'controls/grid/Grid',
     'Ajax',
     'Locale'
 
-], function (QUI, QUIPanel, QUIConfirm, QUIButton, QUIButtonSeperator, Grid, Ajax, QUILocale) {
+], function (QUI, QUIPanel, QUIConfirm, QUIButton, QUIButtonSeparator, Grid, Ajax, QUILocale) {
     "use strict";
 
     var lg = 'quiqqer/cron';
