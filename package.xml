@@ -1,0 +1,13 @@
+<quiqqer>
+    <package>
+
+        <title>
+            <locale group="quiqqer/cron" var="package.title"/>
+        </title>
+
+        <description>
+            <locale group="quiqqer/cron" var="package.description"/>
+        </description>
+
+    </package>
+</quiqqer>
