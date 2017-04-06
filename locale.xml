@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <locales>
     <groups name="quiqqer/cron" datatype="php,js">
+        <locale name="package.title">
+            <de><![CDATA[QUIQQER - Cron]]></de>
+            <en><![CDATA[QUIQQER - Cron]]></en>
+        </locale>
+        <locale name="package.description" html="true">
+            <de><![CDATA[
+            Cron-Paket erweitert QUIQQER um eine Aufgabenverwaltung. Crons sind sich wiederhohlende Aufgaben.<br />
+            Jedes Plugin kann eigene Crons / Tasks zur Verfügung stellen.<br />
+            Mit dem Cron Manager können diese Tasks in intervallen ausgeführt werden.
+            ]]></de>
+            <en><![CDATA[
+            Cron package enhances QUIQQER with task management. Crons are repetitive tasks. <br />
+            Each plugin can provide its own Crons / Tasks. <br />
+            With the Cron Manager, these tasks can be executed in intervals.
+            ]]></en>
+        </locale>
+
         <locale name="message.cron.admin.info.24h">
             <de><![CDATA[In den letzten 24 Stunden wurden keine geplanten Aufgaben ausgeführt.
                 Unter Umständen sind die geplanten Aufgaben fehlerhaft.]]></de>
