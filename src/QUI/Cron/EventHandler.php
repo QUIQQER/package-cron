@@ -168,7 +168,7 @@ class EventHandler
             // Process mail queue
             "quiqqer/cron:6" => array(
                 "min"   => "*/5",
-                "hour"  => "0",
+                "hour"  => "*",
                 "day"   => "*",
                 "month" => "*",
                 "dow"   => "*"
