@@ -168,7 +168,7 @@ class EventHandler
             // Process mail queue
             "quiqqer/cron:6" => array(
                 "min"   => "*/5",
-                "hour"  => "0",
+                "hour"  => "*",
                 "day"   => "*",
                 "month" => "*",
                 "dow"   => "*"
@@ -199,6 +199,7 @@ class EventHandler
 
     /**
      * Event: onCreateProject => Add the publish cron for this project
+     *
      * @param QUI\Projects\Project $Project
      */
     public static function onCreateProject(QUI\Projects\Project $Project)
@@ -234,11 +235,20 @@ class EventHandler
                 }
             }
 
+            # Prepare parameter array
+            $params = array(
+                array(
+                    "name"  => "project",
+                    "value" => $Project->getName()
+                ),
+                array(
+                    "name"  => "lang",
+                    "value" => $lang
+                )
+            );
+
             // Add the cron
-            $CronManager->add($publishCronData['title'], "0", "*", "*", "*", "*", array(
-                "project" => $Project->getName(),
-                "lang"    => $lang
-            ));
+            $CronManager->add($publishCronData['title'], "0", "*", "*", "*", "*", $params);
         }
     }
 }

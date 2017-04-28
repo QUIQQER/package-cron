@@ -36,7 +36,7 @@ define('package/quiqqer/cron/bin/CronServiceWindow', [
             title    : QUILocale.get(lg, 'cron.window.cronservice.title'),
             icon     : 'fa fa-cloud',
             maxWidth : 400,
-            maxHeight: 600,
+            maxHeight: 625,
             autoclose: false,
             buttons  : false
         },
@@ -82,23 +82,25 @@ define('package/quiqqer/cron/bin/CronServiceWindow', [
 
 
                 Content.set('html', Mustache.render(template, {
-                    cron_window_cronservice_content_title                           : QUILocale.get(lg, 'cron.window.cronservice.content.title'),
-                    cron_window_cronservice_content_about_title                     : QUILocale.get(lg, 'cron.window.cronservice.content.about.title'),
-                    cron_window_cronservice_content_about_text                      : QUILocale.get(lg, 'cron.window.cronservice.content.about.text'),
-                    cron_window_cronservice_content_status_title                    : QUILocale.get(lg, 'cron.window.cronservice.content.status.title'),
-                    cron_window_cronservice_content_status_text                     : QUILocale.get(lg, 'cron.window.cronservice.content.status.text'),
-                    cron_window_cronservice_content_btn_unregister                  : QUILocale.get(lg, 'cron.window.cronservice.content.register.btn.unregister'),
-                    cron_window_cronservice_content_btn_register                    : QUILocale.get(lg, 'cron.window.cronservice.content.btn.register'),
-                    cron_window_cronservice_content_register_lbl_stats_status       : QUILocale.get(lg, 'cron.window.cronservice.content.register.lbl.stats.status'),
-                    cron_window_cronservice_content_register_lbl_stats_errors       : QUILocale.get(lg, 'cron.window.cronservice.content.register.lbl.stats.errors'),
-                    cron_window_cronservice_content_register_lbl_stats_lastExecution: QUILocale.get(lg, 'cron.window.cronservice.content.register.lbl.stats.lastExecution'),
-                    statusText                                                      : statusText,
-                    status                                                          : status['status'],
-                    statusErrors                                                    : status['current_failures'], //== 0 ? "0": status['errors'].toString(),
-                    statusLastExecution                                             : status['last_execution'],
-                    registered                                                      : (status['status'] != 0),
-                    active                                                          : (status['status'] == 1),
-                    inactive                                                        : (status['status'] == 2)
+                    cron_window_cronservice_content_title                                : QUILocale.get(lg, 'cron.window.cronservice.content.title'),
+                    cron_window_cronservice_content_about_title                          : QUILocale.get(lg, 'cron.window.cronservice.content.about.title'),
+                    cron_window_cronservice_content_about_text                           : QUILocale.get(lg, 'cron.window.cronservice.content.about.text'),
+                    cron_window_cronservice_content_status_title                         : QUILocale.get(lg, 'cron.window.cronservice.content.status.title'),
+                    cron_window_cronservice_content_status_text                          : QUILocale.get(lg, 'cron.window.cronservice.content.status.text'),
+                    cron_window_cronservice_content_btn_unregister                       : QUILocale.get(lg, 'cron.window.cronservice.content.register.btn.unregister'),
+                    cron_window_cronservice_content_btn_register                         : QUILocale.get(lg, 'cron.window.cronservice.content.btn.register'),
+                    cron_window_cronservice_content_register_lbl_stats_status            : QUILocale.get(lg, 'cron.window.cronservice.content.register.lbl.stats.status'),
+                    cron_window_cronservice_content_register_lbl_stats_errors            : QUILocale.get(lg, 'cron.window.cronservice.content.register.lbl.stats.errors'),
+                    cron_window_cronservice_content_register_lbl_stats_lastExecution     : QUILocale.get(lg, 'cron.window.cronservice.content.register.lbl.stats.lastExecution'),
+                    cron_window_cronservice_content_register_lbl_stats_lastLocalExecution: QUILocale.get(lg, 'cron.window.cronservice.content.register.lbl.stats.lastLocalExecution'),
+                    statusText                                                           : statusText,
+                    status                                                               : status['status'],
+                    statusErrors                                                         : status['current_failures'], //== 0 ? "0": status['errors'].toString(),
+                    statusLastExecution                                                  : status['last_execution'],
+                    statusLastLocalExecution                                             : status['last_local_execution'],
+                    registered                                                           : (status['status'] != 0),
+                    active                                                               : (status['status'] == 1),
+                    inactive                                                             : (status['status'] == 2)
                 }));
 
                 self.registered = (status['status'] != 0);

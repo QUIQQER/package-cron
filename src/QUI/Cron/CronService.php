@@ -90,6 +90,28 @@ class CronService
             );
         }
 
+
+        # Get local last execution
+        $CronManager = new Manager();
+        $history     = $CronManager->getHistoryList();
+
+
+        $status['last_local_execution'] = QUI::getLocale()->get(
+            'quiqqer/cron',
+            'cron.window.cronservice.status.text.last_execution.never'
+        );
+
+        if (empty($history) || !isset($history[0])) {
+            return $status;
+        }
+
+        if (!isset($history[0]['lastexec']) || empty($history[0]['lastexec'])) {
+            return $status;
+        }
+
+        $lastLocalExecution             = $history[0]['lastexec'];
+        $status['last_local_execution'] = $lastLocalExecution;
+
         return $status;
     }
 
@@ -108,6 +130,7 @@ class CronService
 
     /**
      * Requests the cronservice to resend the activation email
+     *
      * @throws Exception
      */
     public function resendActivationMail()
@@ -126,6 +149,7 @@ class CronService
 
     /**
      * Attempts to cancel the registration on the server
+     *
      * @throws Exception
      */
     public function cancelRegistration()
@@ -146,10 +170,11 @@ class CronService
     /**
      * Sends an ajax request to the cronservice server.
      *
-     * @param $domain - The domain to be registered. Example : example.org
-     * @param $email - The Email that should be used for communication.
+     * @param $domain     - The domain to be registered. Example : example.org
+     * @param $email      - The Email that should be used for communication.
      * @param $packageDir - The package url dir
-     * @param $https - wether or not http secure should be used to call the cron.php
+     * @param $https      - wether or not http secure should be used to call the cron.php
+     *
      * @throws Exception
      */
     private function sendRegistrationRequest($domain, $email, $packageDir, $https)
@@ -221,8 +246,10 @@ class CronService
 
     /**
      * Calls the given ajax function on the Cronservice server and returns its output
+     *
      * @param $function - Ajax function name
-     * @param $params - Params to pass
+     * @param $params   - Params to pass
+     *
      * @return mixed
      * @throws QUI\Exception
      */
@@ -262,6 +289,7 @@ class CronService
 
     /**
      * Saves the revoke token into a file
+     *
      * @param $token
      */
     private function saveRevokeToken($token)
@@ -278,6 +306,7 @@ class CronService
 
     /**
      * Reads the revoke token from the filesystem
+     *
      * @return string
      * @throws Exception
      */
