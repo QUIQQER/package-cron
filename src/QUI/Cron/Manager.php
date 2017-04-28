@@ -210,8 +210,10 @@ class Manager
             }
 
             $lastexec = $entry['lastexec'];
+
             if (empty($lastexec)) {
-                $lastexec = 0;
+                $lastexec = new \DateTime();
+                $lastexec->setTimestamp(0);
             }
 
             $min       = $entry['min'];
@@ -223,7 +225,6 @@ class Manager
             if (isset($entry['dayOfWeek']) && !empty($entry['dayOfWeek'])) {
                 $dayOfWeek = $entry['dayOfWeek'];
             }
-
 
             $Cron = CronExpression::factory(
                 "$min $hour $day $month $dayOfWeek"
