@@ -23,14 +23,14 @@ class Manager
     /**
      * Add a cron
      *
-     * @param string $cron - Name of the Cron
-     * @param string $min - On which minute should it start
-     * @param string $hour - On which hour should it start
-     * @param string $day - On which day should it start
-     * @param string $month - On which month should it start
+     * @param string $cron      - Name of the Cron
+     * @param string $min       - On which minute should it start
+     * @param string $hour      - On which hour should it start
+     * @param string $day       - On which day should it start
+     * @param string $month     - On which month should it start
      * @param string $dayOfWeek - day of week (0 - 6) (0 to 6 are Sunday to Saturday,
-     *        or use names; 7 is Sunday, the same as 0)
-     * @param array $params - Cron Parameter
+     *                          or use names; 7 is Sunday, the same as 0)
+     * @param array  $params    - Cron Parameter
      *
      * @throws QUI\Exception
      */
@@ -74,14 +74,14 @@ class Manager
     /**
      * Edit the cron
      *
-     * @param string $cron - Name of the Cron
+     * @param string  $cron - Name of the Cron
      * @param integer $cronId
-     * @param string $min
-     * @param string $hour
-     * @param string $day
-     * @param string $month
-     * @param string $dayOfWeek
-     * @param array $params
+     * @param string  $min
+     * @param string  $hour
+     * @param string  $day
+     * @param string  $month
+     * @param string  $dayOfWeek
+     * @param array   $params
      *
      * @throws QUI\Exception
      */
@@ -210,6 +210,9 @@ class Manager
             }
 
             $lastexec = $entry['lastexec'];
+            if (empty($lastexec)) {
+                $lastexec = 0;
+            }
 
             $min       = $entry['min'];
             $hour      = $entry['hour'];
@@ -240,7 +243,9 @@ class Manager
                 $message = print_r($entry, true);
                 $message .= "\n" . $Exception->getMessage();
 
-                self::log($message);
+                QUI\System\Log::addError($message);
+
+                #self::log($message);
                 QUI::getMessagesHandler()->addError($message);
             }
         }
@@ -363,6 +368,7 @@ class Manager
      * This cron is not in the cron list
      *
      * @param string $cron - Cron-Identifier (package/package:NO) or name of the Cron
+     *
      * @return array|false - Cron Data
      */
     public function getCronData($cron)
@@ -487,6 +493,7 @@ class Manager
      * Checks if a specific cron is already set up
      *
      * @param string $cron - cron title
+     *
      * @return bool
      */
     public function isCronSetUp($cron)
