@@ -30,7 +30,8 @@ define('package/quiqqer/cron/bin/controls/CronTime', [
 
         Binds: [
             '$loadIntervalOptions',
-            '$change'
+            '$change',
+            '$showCronStyleInput'
         ],
 
         initialize: function (options) {
@@ -404,7 +405,7 @@ define('package/quiqqer/cron/bin/controls/CronTime', [
                                 change: function (event) {
                                     var Input = event.target;
 
-                                    Input.value = Input.value.replace(/[^\d\*\\\-]/gi, '');
+                                    Input.value = Input.value.replace(/[^\d\*\/\-]/gi, '');
 
                                     switch (Input.getProperty('data-type')) {
                                         case 'minute':
@@ -446,6 +447,9 @@ define('package/quiqqer/cron/bin/controls/CronTime', [
          * Fires change event with current value
          */
         $change: function () {
+
+            console.log(this.$minute + " " + this.$hour + " " + this.$day + " " + this.$month + " " + this.$dayofweek);
+
             this.fireEvent(
                 'change',
                 [this.$minute, this.$hour, this.$day, this.$month, this.$dayofweek, this]
@@ -462,23 +466,21 @@ define('package/quiqqer/cron/bin/controls/CronTime', [
          * @param dayofweek
          */
         setValue: function (minute, hour, day, month, dayofweek) {
+            this.$minute    = minute;
+            this.$hour      = hour;
+            this.$day       = day;
+            this.$month     = month;
+            this.$dayofweek = dayofweek;
+
             if (minute.match(/[^\d\*]/gi) ||
                 hour.match(/[^\d\*]/gi) ||
                 day.match(/[^\d\*]/gi) ||
                 month.match(/[^\d\*]/gi) ||
                 dayofweek.match(/[^\d\*]/gi)
             ) {
-                this.$showCronStyleInput(
-                    minute,
-                    hour,
-                    day,
-                    month,
-                    dayofweek
-                );
-
+                this.$showCronStyleInput();
                 return;
             }
-
 
             if (minute == '*' &&
                 hour == '*' &&
@@ -547,30 +549,25 @@ define('package/quiqqer/cron/bin/controls/CronTime', [
                 return;
             }
 
-            this.$showCronStyleInput(
-                minute,
-                hour,
-                day,
-                month,
-                dayofweek
-            );
+            this.$showCronStyleInput();
         },
 
         /**
          * Show cron style type input
-         *
-         * @param {string} m
-         * @param {string} h
-         * @param {string} d
-         * @param {string} mo
-         * @param {string} dw
          */
-        $showCronStyleInput: function (m, h, d, mo, dw) {
+        $showCronStyleInput: function () {
+            var m  = this.$minute,
+                h  = this.$hour,
+                d  = this.$day,
+                mo = this.$month,
+                dw = this.$dayofweek;
+
             this.$IntervalSelect.setValue('cron');
 
             var cronStyleInputs = this.$Elm.getElements(
                 '.quiqqer-cron-crontime-cron-input'
             );
+
 
             for (var i = 0, len = cronStyleInputs.length; i < len; i++) {
                 var Elm = cronStyleInputs[i];
@@ -597,6 +594,12 @@ define('package/quiqqer/cron/bin/controls/CronTime', [
                         break;
                 }
             }
+
+            this.$minute    = m;
+            this.$hour      = h;
+            this.$day       = d;
+            this.$month     = mo;
+            this.$dayofweek = dw;
         },
 
         /**
