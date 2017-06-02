@@ -447,9 +447,6 @@ define('package/quiqqer/cron/bin/controls/CronTime', [
          * Fires change event with current value
          */
         $change: function () {
-
-            console.log(this.$minute + " " + this.$hour + " " + this.$day + " " + this.$month + " " + this.$dayofweek);
-
             this.fireEvent(
                 'change',
                 [this.$minute, this.$hour, this.$day, this.$month, this.$dayofweek, this]
