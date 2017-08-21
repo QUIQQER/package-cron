@@ -22,4 +22,12 @@
     >
         Cron-History
     </item>
+
+    <item parent="/extras/crons/"
+          name="cronservice"
+          require="package/quiqqer/cron/bin/CronServiceWindow"
+          icon="fa fa-cloud"
+    >
+        Cronservice
+    </item>
 </menu>
