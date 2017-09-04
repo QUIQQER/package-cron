@@ -340,6 +340,10 @@
             <de><![CDATA[Um]]></de>
             <en><![CDATA[At]]></en>
         </locale>
+        <locale name="controls.crontime.label.on">
+            <de><![CDATA[Am]]></de>
+            <en><![CDATA[On]]></en>
+        </locale>
         <locale name="controls.crontime.label.interval">
             <de><![CDATA[Intervall]]></de>
             <en><![CDATA[Interval]]></en>

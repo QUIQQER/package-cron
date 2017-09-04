@@ -1,3 +1,4 @@
+![QUIQQER Blog](bin/images/Readme.jpg)
 
 QUIQQER Cron (Aufgaben)
 ========
