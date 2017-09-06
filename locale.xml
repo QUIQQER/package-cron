@@ -7,14 +7,10 @@
         </locale>
         <locale name="package.description" html="true">
             <de><![CDATA[
-            Cron-Paket erweitert QUIQQER um eine Aufgabenverwaltung. Crons sind sich wiederhohlende Aufgaben.<br />
-            Jedes Plugin kann eigene Crons / Tasks zur Verfügung stellen.<br />
-            Mit dem Cron Manager können diese Tasks in intervallen ausgeführt werden.
+            Dieses Paket bietet QUIQQER eine Cron-Funktionalität. Crons sind wiederhohlende Aufgaben.
             ]]></de>
             <en><![CDATA[
-            Cron package enhances QUIQQER with task management. Crons are repetitive tasks. <br />
-            Each plugin can provide its own Crons / Tasks. <br />
-            With the Cron Manager, these tasks can be executed in intervals.
+           This Package provided a cron functionality to QUIQQER. Crons are tasks which to be repeated in intervals.
             ]]></en>
         </locale>
 
