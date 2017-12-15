@@ -208,6 +208,10 @@
             <en><![CDATA[Can deactivate tasks.]]></en>
         </locale>
 
+        <locale name="controls.crontime.label.on">
+            <de><![CDATA[Am]]></de>
+            <en><![CDATA[On]]></en>
+        </locale>
         <locale name="controls.crontime.intervalselect.option.everyminute">
             <de><![CDATA[Jede Minute]]></de>
             <en><![CDATA[Every minute]]></en>
