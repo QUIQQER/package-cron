@@ -6,7 +6,7 @@
             <section name="settings">
                 <conf name="executeOnAdminLogin">
                     <type><![CDATA[bool]]></type>
-                    <defaultvalue>0</defaultvalue>
+                    <defaultvalue>1</defaultvalue>
                 </conf>
                 <conf name="showAdminMessageIfCronNotRun">
                     <type><![CDATA[bool]]></type>
