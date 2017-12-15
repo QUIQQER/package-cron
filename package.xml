@@ -10,6 +10,14 @@
         </description>
 
         <image src="URL_OPT_DIR/quiqqer/package-cron/bin/images/Logo.jpg"/>
+        <preview>
+            <image src="URL_OPT_DIR/quiqqer/cron/bin/images/preview/panel.png"/>
+            <image src="URL_OPT_DIR/quiqqer/cron/bin/images/preview/add.png"/>
+            <image src="URL_OPT_DIR/quiqqer/cron/bin/images/preview/parameter.png"/>
+            <image src="URL_OPT_DIR/quiqqer/cron/bin/images/preview/cronstil.png"/>
+
+        </preview>
+
 
         <support>
             <email><![CDATA[support@pcsg.de]]></email>
