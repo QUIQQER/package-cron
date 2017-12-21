@@ -8,25 +8,10 @@
         <locale name="package.description" html="true">
             <de><![CDATA[
             Das Cron Modul ermöglicht die einfach Verwaltung und Ausführung wiederkehrender Aufgaben.
-            Diese Aufgaben können beispielsweise Wartungsaufgaben sein oder dafür Sorgen bestimmte Seiten erst zu einem späteren Zeitpunkt zu veröffentlichen.
-            
-            Das Modul fügt dem QUIQQER-System ein Verwaltungspanel zu, mit welchem ganz einfach Aufgaben angesetzt werden können.
-            Andere Module können ihrerseits Aufgaben für dieses Panel bereit stellen.
-            
-            Für Systeme ohne eigene CRON Funktionalität wird eine Schnittstelle zu QUIQQERs Cronservice bereitgestellt.
-            Der Cronservice kann die Ausführung der angesetzten Aufgaben aus der Ferne anstoßen.
-            
-            ]]></de>
+            Diese Aufgaben können beispielsweise Wartungsaufgaben sein oder dafür Sorgen bestimmte Seiten erst zu einem späteren Zeitpunkt zu veröffentlichen.]]></de>
             <en><![CDATA[
           This package provides the user with an easy interface to schedule, manage and execute crons.
-          Crons are recurring tasks e.G. maintenance tasks or publishing certain pages at a later moment in time.
-          
-          The module will add a panel to manage the crons.
-          Other modules can provide their own tasks to be used in the cron manager panel.
-          
-          Furthermore an interface to  QUIQQERs cronservice is available.
-          Systems without cron functionality on their own can use the cronservice to trigger the crons execution remotely.
-            ]]></en>
+          Crons are recurring tasks e.G. maintenance tasks or publishing certain pages at a later moment in time.]]></en>
         </locale>
 
         <locale name="message.cron.admin.info.24h">
