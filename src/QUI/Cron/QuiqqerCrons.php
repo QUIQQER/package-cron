@@ -189,7 +189,7 @@ class QuiqqerCrons
     {
         $MailQueue = new QUI\Mail\Queue();
 
-        if ($MailQueue->count()) {
+        while ($MailQueue->count()) {
             $MailQueue->send();
         }
     }
