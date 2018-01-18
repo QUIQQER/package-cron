@@ -126,6 +126,10 @@ class CronService
             'domain' => $this->domain,
             'token'  => $token
         ));
+
+        $Config = QUI::getPackage("quiqqer/cron")->getConfig();
+        $Config->set("settings", "executeOnAdminLogin", 1);
+        $Config->save();
     }
 
     /**
@@ -165,6 +169,10 @@ class CronService
                 "domain" => $this->domain
             )
         );
+
+        $Config = QUI::getPackage("quiqqer/cron")->getConfig();
+        $Config->set("settings", "executeOnAdminLogin", 1);
+        $Config->save();
     }
 
     /**
@@ -242,6 +250,10 @@ class CronService
         $this->saveRevokeToken($revokeCode);
 
         curl_close($curl);
+        
+        $Config = QUI::getPackage("quiqqer/cron")->getConfig();
+        $Config->set("settings", "executeOnAdminLogin", 0);
+        $Config->save();
     }
 
     /**

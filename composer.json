@@ -1,9 +1,9 @@
 {
   "name": "quiqqer\/cron",
   "type": "quiqqer-module",
-  "description": "Prodives cron API and execution of registered crons",
+  "description": "This Package provided a cron functionality to QUIQQER. Crons are tasks which to be repeated in intervals.",
   "version": "dev-master",
-  "license": "GPL-2.0+",
+  "license": "GPL-3.0+",
   "authors": [
     {
       "name": "Henning Leutz",

@@ -9,5 +9,28 @@
             <locale group="quiqqer/cron" var="package.description"/>
         </description>
 
+        <image src="URL_OPT_DIR/quiqqer/package-cron/bin/images/Logo.jpg"/>
+        <preview>
+            <image src="URL_OPT_DIR/quiqqer/cron/bin/images/preview/panel.png"/>
+            <image src="URL_OPT_DIR/quiqqer/cron/bin/images/preview/add.png"/>
+            <image src="URL_OPT_DIR/quiqqer/cron/bin/images/preview/parameter.png"/>
+            <image src="URL_OPT_DIR/quiqqer/cron/bin/images/preview/cronstil.png"/>
+
+        </preview>
+
+
+        <support>
+            <email><![CDATA[support@pcsg.de]]></email>
+            <forum><![CDATA[https://community.quiqqer.com]]></forum>
+            <source><![CDATA[https://dev.quiqqer.com/quiqqer/package-cron]]></source>
+            <issues><![CDATA[https://dev.quiqqer.com/quiqqer/package-cron/issues]]></issues>
+            <wiki><![CDATA[https://dev.quiqqer.com/quiqqer/package-cron/wikis/home]]></wiki>
+        </support>
+
+        <copyright>
+            <name><![CDATA[PCSG - Computer & Internet Service OHG]]></name>
+            <license><![CDATA[GPL-3.0+]]></license>
+        </copyright>
+
     </package>
 </quiqqer>

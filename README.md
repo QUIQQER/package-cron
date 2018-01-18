@@ -1,15 +1,14 @@
 ![QUIQQER Blog](bin/images/Readme.jpg)
 
-QUIQQER Cron (Aufgaben)
-========
+QUIQQER Cron (Recurring tasks)
+==============================
 
-Cron-Paket erweitert QUIQQER um eine Aufgabenverwaltung.
-Crons sind sich wiederhohlende Aufgaben.
+The Cron-module extends QUIQQER by a cron manager.
+The manager can schedule, manage and run recurring tasks.
 
-Jedes Plugin kann eigene Crons / Tasks zur Verfügung stellen.
-Mit dem Cron Manager können diese Tasks in intervallen ausgeführt werden.
+Other plugins can use the cron modules API to provide their own recurring tasks.
 
-Paketname:
+Packagename:
 
     quiqqer/cron
 
@@ -17,17 +16,19 @@ Paketname:
 Features
 --------
 
-- Cron-Verwaltung
+- Cron-management
 - Cron API
 
 
 Installation
 ------------
 
-Der Paketname ist: quiqqer/cron
+```
+composer require "quiqqer/cron" "dev-master"
+```
 
 
-Mitwirken
+Contribute
 ----------
 
 - Source Code: https://dev.quiqqer.com/quiqqer/package-cron/tree/master
@@ -37,11 +38,12 @@ Mitwirken
 Support
 -------
 
-Falls Sie Fehler gefunden, Wünsche oder Verbesserungsvorschläge haben, 
-können Sie uns gern per Mail an support@pcsg.de darüber informieren.  
-Wir werden versuchen auf Ihre Wünsche einzugehen bzw. diese an die 
-zuständigen Entwickler des Projektes weiterleiten.
+You can contact us by mail `support@pcsg.de `,
+if you have encountered an error or want to express a wish or feature request.  
+We will try to fulfill your wishes and will redirect them to the according developers.
+
 
 
 License
 -------
+GPL-3.0+
