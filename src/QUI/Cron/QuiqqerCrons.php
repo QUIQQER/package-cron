@@ -188,9 +188,6 @@ class QuiqqerCrons
     public static function mailQueue($params, $CronManager)
     {
         $MailQueue = new QUI\Mail\Queue();
-
-        while ($MailQueue->count()) {
-            $MailQueue->send();
-        }
+        $MailQueue->sendAll();
     }
 }
