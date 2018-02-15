@@ -217,19 +217,19 @@ class EventHandler
                 $installedProject = "";
                 $installedLang    = "";
 
-                foreach ($installedParams as $name => $value) {
-                    if ($name == "project") {
-                        $installedProject = strtolower(trim($value));
+                foreach ($installedParams as $param) {
+                    if ($param['name'] == "project") {
+                        $installedProject = mb_strtolower(trim($param['value']));
                     }
 
-                    if ($name == "lang") {
-                        $installedLang = strtolower(trim($value));
+                    if ($param['name'] == "lang") {
+                        $installedLang = mb_strtolower(trim($param['value']));
                     }
                 }
 
                 // Cron for this project & lang combination exists => skip
-                if ($installedProject == strtolower(trim($Project->getName())) &&
-                    $installedLang == strtolower(trim($lang))
+                if ($installedProject == mb_strtolower(trim($Project->getName())) &&
+                    $installedLang == mb_strtolower(trim($lang))
                 ) {
                     continue 2;
                 }
