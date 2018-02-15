@@ -226,11 +226,22 @@ class Manager
                 $dayOfWeek = $entry['dayOfWeek'];
             }
 
-            $Cron = CronExpression::factory(
-                "$min $hour $day $month $dayOfWeek"
-            );
+            try {
+                $Cron = CronExpression::factory(
+                    "$min $hour $day $month $dayOfWeek"
+                );
 
-            $next = $Cron->getNextRunDate($lastexec)->getTimestamp();
+                $next = $Cron->getNextRunDate($lastexec)->getTimestamp();
+            } catch (\Exception $Exception) {
+                QUI\System\Log::addError(
+                    'Could not evaluate cron run date (Cron "' . $entry['title'] . '" #' . $entry['id'] . ').'
+                    . ' Cron is deleted. Error :: ' . $Exception->getMessage()
+                );
+
+                $this->deleteCronIds(array($entry['id']));
+
+                continue;
+            }
 
             // no execute
             if ($next > $time) {
