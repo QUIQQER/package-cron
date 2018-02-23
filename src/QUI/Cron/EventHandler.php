@@ -135,8 +135,12 @@ class EventHandler
     /**
      * Event: onPackageInstall => Add default crons
      */
-    public static function onPackageInstall()
+    public static function onPackageInstall(QUI\Package\Package $Package)
     {
+        if ($Package->getName() !== 'quiqqer/cron') {
+            return;
+        }
+
         self::createDefaultCrons();
     }
 
