@@ -9,7 +9,7 @@
             <locale group="quiqqer/cron" var="package.description"/>
         </description>
 
-        <image src="URL_OPT_DIR/quiqqer/package-cron/bin/images/Logo.jpg"/>
+        <image src="URL_OPT_DIR/quiqqer/cron/bin/images/Logo.jpg"/>
         <preview>
             <image src="URL_OPT_DIR/quiqqer/cron/bin/images/preview/panel.png"/>
             <image src="URL_OPT_DIR/quiqqer/cron/bin/images/preview/add.png"/>
