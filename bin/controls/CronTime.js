@@ -104,6 +104,8 @@ define('package/quiqqer/cron/bin/controls/CronTime', [
                 );
             }
 
+            this.$IntervalSelect.setValue('everyminute');
+
             this.$SelectMinute = new QUISelect({
                 'class'  : 'quiqqer-cron-crontime-number-select',
                 showIcons: false
@@ -192,22 +194,7 @@ define('package/quiqqer/cron/bin/controls/CronTime', [
          * Load option inputs depending on interval
          */
         $loadIntervalOptions: function () {
-            var self = this;
-
             this.$OptionsElm.set('html', '');
-
-            //this.$minute    = '*';
-            //this.$hour      = '*';
-            //this.$day       = '*';
-            //this.$month     = '*';
-            //this.$dayofweek = '*';
-
-            console.log("===== " + this.$interval + " =====");
-            console.log("minute: " + this.$minute);
-            console.log("hour: " + this.$hour);
-            console.log("day: " + this.$day);
-            console.log("month: " + this.$month);
-            console.log("dayofweek: " + this.$dayofweek);
 
             switch (this.$interval) {
                 case 'everyminute':

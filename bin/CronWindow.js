@@ -139,7 +139,7 @@ define('package/quiqqer/cron/bin/CronWindow', [
                 for (var i = 0, len = result.length; i < len; i++) {
                     self.$List.appendChild(
                         '<b>' + result[i].title + '</b> - ' + result[i].description,
-                        result[i].title,
+                        result[i].exec,
                         false
                     );
                 }
@@ -152,7 +152,7 @@ define('package/quiqqer/cron/bin/CronWindow', [
                 }
 
                 Ajax.get('package_quiqqer_cron_ajax_cron_get', function (result) {
-                    self.$List.setValue(result.title);
+                    self.$List.setValue(result.exec);
 
                     self.$CronTimeControl.setValue(
                         result.min,

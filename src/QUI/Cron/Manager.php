@@ -408,7 +408,7 @@ class Manager
      * Return the data of a specific cron from the available cron list
      * This cron is not in the cron list
      *
-     * @param string $cron - Cron-Identifier (package/package:NO) or name of the Cron
+     * @param string $cron - Cron-Identifier (package/package:NO) or name of the Cron or exec path of cron
      *
      * @return array|false - Cron Data
      */
@@ -440,7 +440,7 @@ class Manager
 
         // search cron via title
         foreach ($availableCrons as $entry) {
-            if ($entry['title'] == $cron) {
+            if ($entry['title'] == $cron || $entry['exec'] == $cron) {
                 return $entry;
             }
         }

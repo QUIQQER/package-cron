@@ -17,6 +17,9 @@ QUI::$Ajax->registerFunction(
         $params = json_decode($params, true);
 
         $Manager = new QUI\Cron\Manager();
+
+
+
         $Manager->add($cron, $min, $hour, $day, $month, $dayOfWeek, $params);
     },
     array('cron', 'min', 'hour', 'day', 'month', 'dayOfWeek', 'params'),
