@@ -50,4 +50,14 @@
             Arbeitet die Mail Queue ab und sendet die Mails.
         </description>
     </cron>
+
+    <cron exec="\QUI\Cron\QuiqqerCrons::calculateMediaFolderSizes">
+        <title>
+            <locale group="quiqqer/cron" var="cron.calculateMediaFolderSizes.title"/>
+        </title>
+
+        <description>
+            <locale group="quiqqer/cron" var="cron.calculateMediaFolderSizes.description"/>
+        </description>
+    </cron>
 </crons>

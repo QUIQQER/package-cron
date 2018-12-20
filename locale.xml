@@ -89,6 +89,15 @@
             <de><![CDATA[Nie]]></de>
             <en><![CDATA[Never]]></en>
         </locale>
+
+        <locale name="cron.calculateMediaFolderSizes.title">
+            <de><![CDATA[Media Ordner Größen berechnen]]></de>
+            <en><![CDATA[Calculate Media Folder Sizes]]></en>
+        </locale>
+        <locale name="cron.calculateMediaFolderSizes.description">
+            <de><![CDATA[Berechnet die Größe der Media Ordner.]]></de>
+            <en><![CDATA[Calculates the size of the media folders.]]></en>
+        </locale>
     </groups>
     <groups name="quiqqer/cron" datatype="js">
         <locale name="cron.id">
