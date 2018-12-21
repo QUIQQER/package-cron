@@ -184,6 +184,14 @@ class EventHandler
                 "day"   => "*",
                 "month" => "*",
                 "dow"   => "*"
+            ),
+            // Calculate Package Folder Size
+            "quiqqer/cron:8" => array(
+                "min"   => "0",
+                "hour"  => "3",
+                "day"   => "*",
+                "month" => "*",
+                "dow"   => "*"
             )
         );
 

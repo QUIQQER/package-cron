@@ -60,4 +60,14 @@
             <locale group="quiqqer/cron" var="cron.calculateMediaFolderSizes.description"/>
         </description>
     </cron>
+
+    <cron exec="\QUI\Cron\QuiqqerCrons::calculatePackageFolderSize">
+        <title>
+            <locale group="quiqqer/cron" var="cron.calculatePackageFolderSize.title"/>
+        </title>
+
+        <description>
+            <locale group="quiqqer/cron" var="cron.calculatePackageFolderSize.description"/>
+        </description>
+    </cron>
 </crons>

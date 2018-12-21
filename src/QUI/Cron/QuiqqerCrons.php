@@ -213,4 +213,17 @@ class QuiqqerCrons
             QUI\Projects\Media\Utils::getMediaCacheFolderSizeForProject($Project, true);
         }
     }
+
+
+    /**
+     * Calculate and caches the sizes of the package-folder.
+     * The cached value is used by some system functions.
+     *
+     * @param $params
+     * @param Manager $CronManager
+     */
+    public static function calculatePackageFolderSize($params, Manager $CronManager)
+    {
+        QUI::getPackageManager()->getPackageFolderSize(true);
+    }
 }
