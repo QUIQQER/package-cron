@@ -226,4 +226,17 @@ class QuiqqerCrons
     {
         QUI::getPackageManager()->getPackageFolderSize(true);
     }
+
+
+    /**
+     * Calculate and caches the sizes of the package-folder.
+     * The cached value is used by some system functions.
+     *
+     * @param $params
+     * @param Manager $CronManager
+     */
+    public static function calculateCacheFolderSize($params, Manager $CronManager)
+    {
+        QUI\Cache\Manager::getCacheFolderSize(true);
+    }
 }

@@ -192,6 +192,14 @@ class EventHandler
                 "day"   => "*",
                 "month" => "*",
                 "dow"   => "*"
+            ),
+            // Calculate Cache Folder Size
+            "quiqqer/cron:9" => array(
+                "min"   => "0",
+                "hour"  => "3",
+                "day"   => "*",
+                "month" => "*",
+                "dow"   => "*"
             )
         );
 

@@ -70,4 +70,14 @@
             <locale group="quiqqer/cron" var="cron.calculatePackageFolderSize.description"/>
         </description>
     </cron>
+
+    <cron exec="\QUI\Cron\QuiqqerCrons::calculateCacheFolderSize">
+        <title>
+            <locale group="quiqqer/cron" var="cron.calculateCacheFolderSize.title"/>
+        </title>
+
+        <description>
+            <locale group="quiqqer/cron" var="cron.calculateCacheFolderSize.description"/>
+        </description>
+    </cron>
 </crons>

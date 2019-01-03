@@ -107,6 +107,15 @@
             <de><![CDATA[Berechnet die Größe des Paket-Ordners und speichert diese zwischen. Dieser Wert wird für einige Systemfunktionen verwendet.]]></de>
             <en><![CDATA[Calculates the size of the package-folder and caches it. This value is used by some system functions.]]></en>
         </locale>
+
+        <locale name="cron.calculateCacheFolderSize.title">
+            <de><![CDATA[Cache-Ordner Größe berechnen & zwischenspeichern]]></de>
+            <en><![CDATA[Calculate and cache cache-folder size]]></en>
+        </locale>
+        <locale name="cron.calculateCacheFolderSize.description">
+            <de><![CDATA[Berechnet die Größe des Cache-Ordners und speichert diese zwischen. Dieser Wert wird für einige Systemfunktionen verwendet.]]></de>
+            <en><![CDATA[Calculates the size of the cache-folder and caches it. This value is used by some system functions.]]></en>
+        </locale>
     </groups>
     <groups name="quiqqer/cron" datatype="js">
         <locale name="cron.id">
