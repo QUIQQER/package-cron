@@ -80,4 +80,14 @@
             <locale group="quiqqer/cron" var="cron.calculateCacheFolderSize.description"/>
         </description>
     </cron>
+
+    <cron exec="\QUI\Cron\QuiqqerCrons::calculateWholeInstallationFolderSize">
+        <title>
+            <locale group="quiqqer/cron" var="cron.calculateWholeInstallationFolderSize.title"/>
+        </title>
+
+        <description>
+            <locale group="quiqqer/cron" var="cron.calculateWholeInstallationFolderSize.description"/>
+        </description>
+    </cron>
 </crons>
