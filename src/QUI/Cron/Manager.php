@@ -338,7 +338,7 @@ class Manager
         QUI::getDataBase()->insert(self::tableHistory(), [
             'cronid'   => $cronId,
             'lastexec' => date('Y-m-d H:i:s'),
-            'uid'      => QUI::getUserBySession()->getId()
+            'uid'      => QUI::getUserBySession()->getId() ?: 0
         ]);
 
 
@@ -484,6 +484,9 @@ class Manager
             $crons[$cronData['id']] = $cronData;
         }
 
+        $Nobody         = new QUI\Users\Nobody();
+        $nobodyUsername = $Nobody->getUsername();
+
         foreach ($data as $entry) {
             $entry['cronTitle'] = '';
             $entry['username']  = '';
@@ -493,7 +496,13 @@ class Manager
             }
 
             try {
-                $entry['username'] = $Users->get($entry['uid'])->getName();
+                if (!empty($entry['uid'])) {
+                    $username = $Users->get($entry['uid'])->getName();
+                } else {
+                    $username = $nobodyUsername;
+                }
+
+                $entry['username'] = $username;
             } catch (QUI\Exception $Exception) {
             }
 
