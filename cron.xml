@@ -90,4 +90,14 @@
             <locale group="quiqqer/cron" var="cron.calculateWholeInstallationFolderSize.description"/>
         </description>
     </cron>
+
+    <cron exec="\QUI\Cron\QuiqqerCrons::countAllFilesInInstallation">
+        <title>
+            <locale group="quiqqer/cron" var="cron.countAllFilesInInstallation.title"/>
+        </title>
+
+        <description>
+            <locale group="quiqqer/cron" var="cron.countAllFilesInInstallation.description"/>
+        </description>
+    </cron>
 </crons>

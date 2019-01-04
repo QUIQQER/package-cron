@@ -252,4 +252,17 @@ class QuiqqerCrons
     {
         QUI\Utils\Installation::getWholeFolderSize(true);
     }
+
+
+    /**
+     * Counts and caches the amount of files in the QUIQQER installation folder.
+     * The cached value is used by some system functions.
+     *
+     * @param $params
+     * @param Manager $CronManager
+     */
+    public static function countAllFilesInInstallation($params, Manager $CronManager)
+    {
+        QUI\Utils\Installation::getAllFileCount(true);
+    }
 }

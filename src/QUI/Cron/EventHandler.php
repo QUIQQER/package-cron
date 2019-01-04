@@ -208,6 +208,14 @@ class EventHandler
                 "day"   => "*",
                 "month" => "*",
                 "dow"   => "*"
+            ),
+            // Count All Files In Installation
+            "quiqqer/cron:11" => array(
+                "min"   => "0",
+                "hour"  => "3",
+                "day"   => "*",
+                "month" => "*",
+                "dow"   => "*"
             )
         );
 
