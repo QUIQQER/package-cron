@@ -134,6 +134,15 @@
             <de><![CDATA[Zählt die Dateien im QUIQQER Installations-Ordner und speichert das Ergebnis zwischen. Dieser Wert wird für einige Systemfunktionen verwendet.]]></de>
             <en><![CDATA[Counts the files in the QUIQQER installation folder and caches the result. This value is used by some system functions.]]></en>
         </locale>
+
+        <locale name="cron.calculateVarFolderSize.title">
+            <de><![CDATA[VAR-Ordner Größe berechnen & zwischenspeichern]]></de>
+            <en><![CDATA[Calculate and cache VAR-folder size]]></en>
+        </locale>
+        <locale name="cron.calculateVarFolderSize.description">
+            <de><![CDATA[Berechnet die Größe des VAR-Ordners und speichert diese zwischen. Dieser Wert wird für einige Systemfunktionen verwendet.]]></de>
+            <en><![CDATA[Calculates the size of the VAR-folder and caches it. This value is used by some system functions.]]></en>
+        </locale>
     </groups>
     <groups name="quiqqer/cron" datatype="js">
         <locale name="cron.id">

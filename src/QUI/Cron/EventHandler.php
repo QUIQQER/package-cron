@@ -216,6 +216,14 @@ class EventHandler
                 "day"   => "*",
                 "month" => "*",
                 "dow"   => "*"
+            ),
+            // Calculate VAR folder size
+            "quiqqer/cron:12" => array(
+                "min"   => "0",
+                "hour"  => "3",
+                "day"   => "*",
+                "month" => "*",
+                "dow"   => "*"
             )
         );
 

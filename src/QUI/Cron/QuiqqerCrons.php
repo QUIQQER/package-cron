@@ -265,4 +265,17 @@ class QuiqqerCrons
     {
         QUI\Utils\Installation::getAllFileCount(true);
     }
+
+
+    /**
+     * Calculate and caches the sizes of the VAR-folder.
+     * The cached value is used by some system functions.
+     *
+     * @param $params
+     * @param Manager $CronManager
+     */
+    public static function calculateVarFolderSize($params, Manager $CronManager)
+    {
+        QUI\Utils\Installation::getVarFolderSize(false, true);
+    }
 }
