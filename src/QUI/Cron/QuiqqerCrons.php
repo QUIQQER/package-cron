@@ -190,4 +190,92 @@ class QuiqqerCrons
         $MailQueue = new QUI\Mail\Queue();
         $MailQueue->sendAll();
     }
+
+
+    /**
+     * Calculate the sizes of the media folders of each project
+     *
+     * @param $params
+     * @param Manager $CronManager
+     */
+    public static function calculateMediaFolderSizes($params, Manager $CronManager)
+    {
+        try {
+            $projects = QUI::getProjectManager()::getProjects(true);
+        } catch (QUI\Exception $Exception) {
+            QUI\System\Log::addError('Something went wrong getting all projects to calculate the media folder sizes');
+            QUI\System\Log::writeException($Exception);
+            return;
+        }
+
+        foreach ($projects as $Project) {
+            QUI\Projects\Media\Utils::getMediaFolderSizeForProject($Project, true);
+            QUI\Projects\Media\Utils::getMediaCacheFolderSizeForProject($Project, true);
+        }
+    }
+
+
+    /**
+     * Calculate and caches the sizes of the package-folder.
+     * The cached value is used by some system functions.
+     *
+     * @param $params
+     * @param Manager $CronManager
+     */
+    public static function calculatePackageFolderSize($params, Manager $CronManager)
+    {
+        QUI::getPackageManager()->getPackageFolderSize(true);
+    }
+
+
+    /**
+     * Calculate and caches the sizes of the package-folder.
+     * The cached value is used by some system functions.
+     *
+     * @param $params
+     * @param Manager $CronManager
+     */
+    public static function calculateCacheFolderSize($params, Manager $CronManager)
+    {
+        QUI\Cache\Manager::getCacheFolderSize(true);
+    }
+
+
+    /**
+     * Calculate and caches the sizes of the package-folder.
+     * The cached value is used by some system functions.
+     *
+     * @param $params
+     * @param Manager $CronManager
+     */
+    public static function calculateWholeInstallationFolderSize($params, Manager $CronManager)
+    {
+        QUI\Utils\Installation::getWholeFolderSize(true);
+    }
+
+
+    /**
+     * Counts and caches the amount of files in the QUIQQER installation folder.
+     * The cached value is used by some system functions.
+     *
+     * @param $params
+     * @param Manager $CronManager
+     */
+    public static function countAllFilesInInstallation($params, Manager $CronManager)
+    {
+        QUI\Utils\Installation::getAllFileCount(true);
+    }
+
+
+    /**
+     * Calculate and caches the sizes of the VAR-folder.
+     * The cached value is used by some system functions.
+     *
+     * @param $params
+     * @param Manager $CronManager
+     */
+    public static function calculateVarFolderSize($params, Manager $CronManager)
+    {
+        QUI\Utils\Installation::getVarFolderSize(false, true);
+    }
 }
