@@ -201,7 +201,7 @@ class QuiqqerCrons
     public static function calculateMediaFolderSizes($params, Manager $CronManager)
     {
         try {
-            $projects = QUI::getProjectManager()::getProjects(true);
+            $projects = QUI::getProjectManager()->getProjects(true);
         } catch (QUI\Exception $Exception) {
             QUI\System\Log::addError('Something went wrong getting all projects to calculate the media folder sizes');
             QUI\System\Log::writeException($Exception);
