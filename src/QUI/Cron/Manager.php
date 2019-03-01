@@ -338,7 +338,7 @@ class Manager
         QUI::getDataBase()->insert(self::tableHistory(), [
             'cronid'   => $cronId,
             'lastexec' => date('Y-m-d H:i:s'),
-            'uid'      => QUI::getUserBySession()->getId()
+            'uid'      => QUI::getUserBySession()->getId() ?: 0
         ]);
 
 
@@ -408,7 +408,7 @@ class Manager
      * Return the data of a specific cron from the available cron list
      * This cron is not in the cron list
      *
-     * @param string $cron - Cron-Identifier (package/package:NO) or name of the Cron
+     * @param string $cron - Cron-Identifier (package/package:NO) or name of the Cron or exec path of cron
      *
      * @return array|false - Cron Data
      */
@@ -440,7 +440,7 @@ class Manager
 
         // search cron via title
         foreach ($availableCrons as $entry) {
-            if ($entry['title'] == $cron) {
+            if ($entry['title'] == $cron || $entry['exec'] == $cron) {
                 return $entry;
             }
         }
@@ -484,6 +484,9 @@ class Manager
             $crons[$cronData['id']] = $cronData;
         }
 
+        $Nobody         = new QUI\Users\Nobody();
+        $nobodyUsername = $Nobody->getUsername();
+
         foreach ($data as $entry) {
             $entry['cronTitle'] = '';
             $entry['username']  = '';
@@ -493,7 +496,13 @@ class Manager
             }
 
             try {
-                $entry['username'] = $Users->get($entry['uid'])->getName();
+                if (!empty($entry['uid'])) {
+                    $username = $Users->get($entry['uid'])->getName();
+                } else {
+                    $username = $nobodyUsername;
+                }
+
+                $entry['username'] = $username;
             } catch (QUI\Exception $Exception) {
             }
 

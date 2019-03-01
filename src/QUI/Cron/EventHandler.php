@@ -176,6 +176,54 @@ class EventHandler
                 "day"   => "*",
                 "month" => "*",
                 "dow"   => "*"
+            ),
+            // Calculate Media Folder Sizes
+            "quiqqer/cron:7" => array(
+                "min"   => "0",
+                "hour"  => "3",
+                "day"   => "*",
+                "month" => "*",
+                "dow"   => "*"
+            ),
+            // Calculate Package Folder Size
+            "quiqqer/cron:8" => array(
+                "min"   => "0",
+                "hour"  => "3",
+                "day"   => "*",
+                "month" => "*",
+                "dow"   => "*"
+            ),
+            // Calculate Cache Folder Size
+            "quiqqer/cron:9" => array(
+                "min"   => "0",
+                "hour"  => "3",
+                "day"   => "*",
+                "month" => "*",
+                "dow"   => "*"
+            ),
+            // Calculate Whole Installation Folder Size
+            "quiqqer/cron:10" => array(
+                "min"   => "0",
+                "hour"  => "3",
+                "day"   => "*",
+                "month" => "*",
+                "dow"   => "*"
+            ),
+            // Count All Files In Installation
+            "quiqqer/cron:11" => array(
+                "min"   => "0",
+                "hour"  => "3",
+                "day"   => "*",
+                "month" => "*",
+                "dow"   => "*"
+            ),
+            // Calculate VAR folder size
+            "quiqqer/cron:12" => array(
+                "min"   => "0",
+                "hour"  => "3",
+                "day"   => "*",
+                "month" => "*",
+                "dow"   => "*"
             )
         );
 

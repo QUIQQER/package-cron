@@ -50,4 +50,64 @@
             Arbeitet die Mail Queue ab und sendet die Mails.
         </description>
     </cron>
+
+    <cron exec="\QUI\Cron\QuiqqerCrons::calculateMediaFolderSizes">
+        <title>
+            <locale group="quiqqer/cron" var="cron.calculateMediaFolderSizes.title"/>
+        </title>
+
+        <description>
+            <locale group="quiqqer/cron" var="cron.calculateMediaFolderSizes.description"/>
+        </description>
+    </cron>
+
+    <cron exec="\QUI\Cron\QuiqqerCrons::calculatePackageFolderSize">
+        <title>
+            <locale group="quiqqer/cron" var="cron.calculatePackageFolderSize.title"/>
+        </title>
+
+        <description>
+            <locale group="quiqqer/cron" var="cron.calculatePackageFolderSize.description"/>
+        </description>
+    </cron>
+
+    <cron exec="\QUI\Cron\QuiqqerCrons::calculateCacheFolderSize">
+        <title>
+            <locale group="quiqqer/cron" var="cron.calculateCacheFolderSize.title"/>
+        </title>
+
+        <description>
+            <locale group="quiqqer/cron" var="cron.calculateCacheFolderSize.description"/>
+        </description>
+    </cron>
+
+    <cron exec="\QUI\Cron\QuiqqerCrons::calculateWholeInstallationFolderSize">
+        <title>
+            <locale group="quiqqer/cron" var="cron.calculateWholeInstallationFolderSize.title"/>
+        </title>
+
+        <description>
+            <locale group="quiqqer/cron" var="cron.calculateWholeInstallationFolderSize.description"/>
+        </description>
+    </cron>
+
+    <cron exec="\QUI\Cron\QuiqqerCrons::countAllFilesInInstallation">
+        <title>
+            <locale group="quiqqer/cron" var="cron.countAllFilesInInstallation.title"/>
+        </title>
+
+        <description>
+            <locale group="quiqqer/cron" var="cron.countAllFilesInInstallation.description"/>
+        </description>
+    </cron>
+
+    <cron exec="\QUI\Cron\QuiqqerCrons::calculateVarFolderSize">
+        <title>
+            <locale group="quiqqer/cron" var="cron.calculateVarFolderSize.title"/>
+        </title>
+
+        <description>
+            <locale group="quiqqer/cron" var="cron.calculateVarFolderSize.description"/>
+        </description>
+    </cron>
 </crons>

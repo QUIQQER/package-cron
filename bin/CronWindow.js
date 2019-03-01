@@ -112,7 +112,7 @@ define('package/quiqqer/cron/bin/CronWindow', [
                     params        = [];
 
                 for (i = 0, len = available.length; i < len; i++) {
-                    if (available[i].title != val) {
+                    if (available[i].exec != val) {
                         continue;
                     }
 
@@ -133,13 +133,12 @@ define('package/quiqqer/cron/bin/CronWindow', [
             );
 
             Ajax.get('package_quiqqer_cron_ajax_getAvailableCrons', function (result) {
-
                 self.$available = result;
 
                 for (var i = 0, len = result.length; i < len; i++) {
                     self.$List.appendChild(
                         '<b>' + result[i].title + '</b> - ' + result[i].description,
-                        result[i].title,
+                        result[i].exec,
                         false
                     );
                 }
@@ -152,7 +151,7 @@ define('package/quiqqer/cron/bin/CronWindow', [
                 }
 
                 Ajax.get('package_quiqqer_cron_ajax_cron_get', function (result) {
-                    self.$List.setValue(result.title);
+                    self.$List.setValue(result.exec);
 
                     self.$CronTimeControl.setValue(
                         result.min,
