@@ -63,8 +63,13 @@ class EventHandler
             return;
         }
 
-        $Package = QUI::getPackageManager()->getInstalledPackage('quiqqer/cron');
-        $Config  = $Package->getConfig();
+        try {
+            $Package = QUI::getPackageManager()->getInstalledPackage('quiqqer/cron');
+            $Config  = $Package->getConfig();
+        } catch (QUI\Exception $Exception) {
+            return;
+        }
+
 
         // send admin info
         if (!$Config->get('settings', 'showAdminMessageIfCronNotRun')) {
@@ -73,10 +78,10 @@ class EventHandler
 
         // check last cron execution
         $CronManager = new Manager();
-        $result      = $CronManager->getHistoryList(array(
+        $result      = $CronManager->getHistoryList([
             'page'    => 1,
             'perPage' => 1
-        ));
+        ]);
 
         if (!isset($result[0])) {
             self::sendAdminInfoCronError();
@@ -97,8 +102,12 @@ class EventHandler
      */
     public static function adminLoadFooter()
     {
-        $Package = QUI::getPackageManager()->getInstalledPackage('quiqqer/cron');
-        $Config  = $Package->getConfig();
+        try {
+            $Package = QUI::getPackageManager()->getInstalledPackage('quiqqer/cron');
+            $Config  = $Package->getConfig();
+        } catch (QUI\Exception $Exception) {
+            return;
+        }
 
         // execute cron ?
         if ($Config->get('settings', 'executeOnAdminLogin')) {
@@ -131,9 +140,10 @@ class EventHandler
         );
     }
 
-
     /**
      * Event: onPackageInstall => Add default crons
+     *
+     * @param QUI\Package\Package $Package
      */
     public static function onPackageInstall(QUI\Package\Package $Package)
     {
@@ -145,6 +155,14 @@ class EventHandler
     }
 
     /**
+     * Event: onQuiqqerInstallFinish => Add default crons
+     */
+    public static function onQuiqqerInstallFinish()
+    {
+        self::createDefaultCrons();
+    }
+
+    /**
      * Creates the default crons, if they do not exist yet
      *
      */
@@ -152,83 +170,84 @@ class EventHandler
     {
         $CronManager = new Manager();
 
-        $defaultCrons = array(
+        $defaultCrons = [
             // Clear temp folder
-            "quiqqer/cron:0" => array(
+            "quiqqer/cron:0"  => [
                 "min"   => "0",
                 "hour"  => "0",
                 "day"   => "*",
                 "month" => "*",
                 "dow"   => "*"
-            ),
+            ],
             // Clear sessions
-            "quiqqer/cron:1" => array(
+            "quiqqer/cron:1"  => [
                 "min"   => "0",
                 "hour"  => "*",
                 "day"   => "*",
                 "month" => "*",
                 "dow"   => "*"
-            ),
+            ],
             // Process mail queue
-            "quiqqer/cron:6" => array(
+            "quiqqer/cron:6"  => [
                 "min"   => "*/5",
                 "hour"  => "*",
                 "day"   => "*",
                 "month" => "*",
                 "dow"   => "*"
-            ),
+            ],
             // Calculate Media Folder Sizes
-            "quiqqer/cron:7" => array(
+            "quiqqer/cron:7"  => [
                 "min"   => "0",
                 "hour"  => "3",
                 "day"   => "*",
                 "month" => "*",
                 "dow"   => "*"
-            ),
+            ],
             // Calculate Package Folder Size
-            "quiqqer/cron:8" => array(
+            "quiqqer/cron:8"  => [
                 "min"   => "0",
                 "hour"  => "3",
                 "day"   => "*",
                 "month" => "*",
                 "dow"   => "*"
-            ),
+            ],
             // Calculate Cache Folder Size
-            "quiqqer/cron:9" => array(
+            "quiqqer/cron:9"  => [
                 "min"   => "0",
                 "hour"  => "3",
                 "day"   => "*",
                 "month" => "*",
                 "dow"   => "*"
-            ),
+            ],
             // Calculate Whole Installation Folder Size
-            "quiqqer/cron:10" => array(
+            "quiqqer/cron:10" => [
                 "min"   => "0",
                 "hour"  => "3",
                 "day"   => "*",
                 "month" => "*",
                 "dow"   => "*"
-            ),
+            ],
             // Count All Files In Installation
-            "quiqqer/cron:11" => array(
+            "quiqqer/cron:11" => [
                 "min"   => "0",
                 "hour"  => "3",
                 "day"   => "*",
                 "month" => "*",
                 "dow"   => "*"
-            ),
+            ],
             // Calculate VAR folder size
-            "quiqqer/cron:12" => array(
+            "quiqqer/cron:12" => [
                 "min"   => "0",
                 "hour"  => "3",
                 "day"   => "*",
                 "month" => "*",
                 "dow"   => "*"
-            )
-        );
+            ]
+        ];
 
         // Parse the installed crons
-        $installedCrons = array();
+        $installedCrons = [];
+
         foreach ($CronManager->getList() as $row) {
             $installedCrons[] = strtolower(trim($row['exec']));
         }
@@ -245,7 +264,11 @@ class EventHandler
                 continue;
             }
 
-            $CronManager->add($title, $time['min'], $time['hour'], $time['day'], $time['month'], $time['dow']);
+            try {
+                $CronManager->add($title, $time['min'], $time['hour'], $time['day'], $time['month'], $time['dow']);
+            } catch (QUI\Exception $Exception) {
+                QUI\System\Log::writeException($Exception);
+            }
         }
     }
 
@@ -288,19 +311,23 @@ class EventHandler
             }
 
             # Prepare parameter array
-            $params = array(
-                array(
+            $params = [
+                [
                     "name"  => "project",
                     "value" => $Project->getName()
-                ),
-                array(
+                ],
+                [
                     "name"  => "lang",
                     "value" => $lang
-                )
-            );
+                ]
+            ];
 
-            // Add the cron
-            $CronManager->add($publishCronData['title'], "0", "*", "*", "*", "*", $params);
+            try {
+                // Add the cron
+                $CronManager->add($publishCronData['title'], "0", "*", "*", "*", "*", $params);
+            } catch (QUI\Exception $Exception) {
+                QUI\System\Log::writeException($Exception);
+            }
         }
     }
 }
