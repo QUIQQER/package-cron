@@ -9,7 +9,17 @@ QUI::$Ajax->registerFunction(
     'package_quiqqer_cron_ajax_getList',
     function () {
         $CronManager = new QUI\Cron\Manager();
-        return $CronManager->getList();
+        $list        = $CronManager->getList();
+        $Locale      = QUI::getLocale();
+
+        foreach ($list as $key => $cron) {
+            if ($Locale->isLocaleString($cron['title'])) {
+                $locale        = $Locale->getPartsOfLocaleString($cron['title']);
+                $cron['title'] = $Locale->get($locale[0], $locale[1]);
+            }
+        }
+
+        return $list;
     },
     false,
     'Permission::checkAdminUser'
