@@ -11,6 +11,6 @@ QUI::$Ajax->registerFunction(
         $Manager = new QUI\Cron\Manager();
         $Manager->deactivateCron($cronId);
     },
-    array('cronId'),
+    ['cronId'],
     'Permission::checkAdminUser'
 );

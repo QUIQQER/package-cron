@@ -10,6 +10,6 @@ QUI::$Ajax->registerFunction(
         $CronService = new \QUI\Cron\CronService();
         $CronService->revokeRegistration();
     },
-    array(),
-    ''
+    false,
+    'Permission::checkAdminUser'
 );
