@@ -12,5 +12,5 @@ QUI::$Ajax->registerFunction(
         $CronService->register($email);
     },
     ['email'],
-    ''
+    'Permission::checkAdminUser'
 );
