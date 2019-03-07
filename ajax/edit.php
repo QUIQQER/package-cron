@@ -20,6 +20,6 @@ QUI::$Ajax->registerFunction(
         $Manager = new QUI\Cron\Manager();
         $Manager->edit($cronId, $cron, $min, $hour, $day, $month, $dayOfWeek, $params);
     },
-    array('cronId', 'cron', 'min', 'hour', 'day', 'month', 'dayOfWeek', 'params'),
+    ['cronId', 'cron', 'min', 'hour', 'day', 'month', 'dayOfWeek', 'params'],
     'Permission::checkAdminUser'
 );

@@ -12,12 +12,12 @@ QUI::$Ajax->registerFunction(
         $CronManager = new QUI\Cron\Manager();
         $params      = json_decode($params, true);
 
-        return array(
+        return [
             'page'  => (int)$params['page'],
             'data'  => $CronManager->getHistoryList($params),
             'total' => $CronManager->getHistoryCount()
-        );
+        ];
     },
-    array('params'),
+    ['params'],
     'Permission::checkAdminUser'
 );

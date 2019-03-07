@@ -12,6 +12,6 @@ QUI::$Ajax->registerFunction(
 
         return $CronService->getStatus();
     },
-    array(),
+    [],
     ''
 );

@@ -13,6 +13,6 @@ QUI::$Ajax->registerFunction(
 
         $Manager->deleteCronIds($ids);
     },
-    array('ids'),
+    ['ids'],
     'Permission::checkAdminUser'
 );
