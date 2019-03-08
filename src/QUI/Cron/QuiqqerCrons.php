@@ -10,6 +10,7 @@ use QUI;
 
 /**
  * Cron Manager
+ * - offers the default crons
  *
  * @author www.pcsg.de (Henning Leutz)
  */
@@ -42,6 +43,8 @@ class QuiqqerCrons
 
     /**
      * Clear the media cache of the administration
+     *
+     * @throws QUI\Exception
      */
     public static function clearAdminMediaCache()
     {
@@ -53,7 +56,7 @@ class QuiqqerCrons
      */
     public static function clearSessions()
     {
-        // clear nativ session storage
+        // clear native session storage
         $sessionDir = VAR_DIR.'sessions/';
 
         if (!is_dir($sessionDir)) {
@@ -61,16 +64,16 @@ class QuiqqerCrons
         }
 
         $sessionFiles = QUI\Utils\System\File::readDir($sessionDir);
-        $maxtime      = 1400;
+        $maxTime      = 1400;
 
         if (QUI::conf('session', 'max_life_time')) {
-            $maxtime = (int)QUI::conf('session', 'max_life_time');
+            $maxTime = (int)QUI::conf('session', 'max_life_time');
         }
 
         foreach ($sessionFiles as $sessionFile) {
-            $fmtime = filemtime($sessionDir.$sessionFile);
+            $fmTime = filemtime($sessionDir.$sessionFile);
 
-            if ($fmtime + $maxtime < time()) {
+            if ($fmTime + $maxTime < time()) {
                 unlink($sessionDir.$sessionFile);
             }
         }
@@ -109,7 +112,7 @@ class QuiqqerCrons
         /**
          * deactivate sites
          */
-        $Statment = $PDO->prepare("
+        $Statement = $PDO->prepare("
             SELECT id
             FROM {$Project->table()}
             WHERE active = 1 AND
@@ -120,11 +123,11 @@ class QuiqqerCrons
             ;
         ");
 
-        $Statment->bindValue(':date', $now, \PDO::PARAM_STR);
-        $Statment->bindValue(':empty', '0000-00-00 00:00:00', \PDO::PARAM_STR);
-        $Statment->execute();
+        $Statement->bindValue(':date', $now, \PDO::PARAM_STR);
+        $Statement->bindValue(':empty', '0000-00-00 00:00:00', \PDO::PARAM_STR);
+        $Statement->execute();
 
-        $result = $Statment->fetchAll(\PDO::FETCH_ASSOC);
+        $result = $Statement->fetchAll(\PDO::FETCH_ASSOC);
 
         foreach ($result as $entry) {
             try {
@@ -141,7 +144,7 @@ class QuiqqerCrons
         /**
          * activate sites
          */
-        $Statment = $PDO->prepare("
+        $Statement = $PDO->prepare("
             SELECT id
             FROM {$Project->table()}
             WHERE active = 0 AND
@@ -153,11 +156,11 @@ class QuiqqerCrons
             ;
         ");
 
-        $Statment->bindValue(':date', $now, \PDO::PARAM_STR);
-        $Statment->bindValue(':empty', '0000-00-00 00:00:00', \PDO::PARAM_STR);
-        $Statment->execute();
+        $Statement->bindValue(':date', $now, \PDO::PARAM_STR);
+        $Statement->bindValue(':empty', '0000-00-00 00:00:00', \PDO::PARAM_STR);
+        $Statement->execute();
 
-        $result = $Statment->fetchAll(\PDO::FETCH_ASSOC);
+        $result = $Statement->fetchAll(\PDO::FETCH_ASSOC);
 
         foreach ($result as $entry) {
             try {
@@ -207,7 +210,6 @@ class QuiqqerCrons
         $MailQueue->sendAll();
     }
 
-
     /**
      * Calculate the sizes of the media folders of each project
      *
@@ -231,7 +233,6 @@ class QuiqqerCrons
         }
     }
 
-
     /**
      * Calculate and caches the sizes of the package-folder.
      * The cached value is used by some system functions.
@@ -243,7 +244,6 @@ class QuiqqerCrons
     {
         QUI::getPackageManager()->getPackageFolderSize(true);
     }
-
 
     /**
      * Calculate and caches the sizes of the package-folder.
@@ -257,7 +257,6 @@ class QuiqqerCrons
         QUI\Cache\Manager::getCacheFolderSize(true);
     }
 
-
     /**
      * Calculate and caches the sizes of the package-folder.
      * The cached value is used by some system functions.
@@ -270,7 +269,6 @@ class QuiqqerCrons
         QUI\Utils\Installation::getWholeFolderSize(true);
     }
 
-
     /**
      * Counts and caches the amount of files in the QUIQQER installation folder.
      * The cached value is used by some system functions.
@@ -282,7 +280,6 @@ class QuiqqerCrons
     {
         QUI\Utils\Installation::getAllFileCount(true);
     }
-
 
     /**
      * Calculate and caches the sizes of the VAR-folder.
