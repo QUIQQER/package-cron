@@ -45,7 +45,7 @@ class QuiqqerCrons
      */
     public static function clearAdminMediaCache()
     {
-        QUI\Utils\System\File::unlink(VAR_DIR . 'cache/admin/media/');
+        QUI\Utils\System\File::unlink(VAR_DIR.'cache/admin/media/');
     }
 
     /**
@@ -54,7 +54,7 @@ class QuiqqerCrons
     public static function clearSessions()
     {
         // clear nativ session storage
-        $sessionDir = VAR_DIR . 'sessions/';
+        $sessionDir = VAR_DIR.'sessions/';
 
         if (!is_dir($sessionDir)) {
             return;
@@ -68,10 +68,10 @@ class QuiqqerCrons
         }
 
         foreach ($sessionFiles as $sessionFile) {
-            $fmtime = filemtime($sessionDir . $sessionFile);
+            $fmtime = filemtime($sessionDir.$sessionFile);
 
             if ($fmtime + $maxtime < time()) {
-                unlink($sessionDir . $sessionFile);
+                unlink($sessionDir.$sessionFile);
             }
         }
     }
@@ -102,8 +102,8 @@ class QuiqqerCrons
         // search sites with release dates
         $PDO = QUI::getDataBase()->getPDO();
 
-        $deactivate = array();
-        $activate   = array();
+        $deactivate = [];
+        $activate   = [];
 
 
         /**
@@ -170,13 +170,29 @@ class QuiqqerCrons
             }
         }
 
-        QUI\System\Log::addInfo(
-            'Folgende Seiten wurden deaktiviert: ' . implode(',', $deactivate)
-        );
+        if (!empty($deactivate)) {
+            QUI\System\Log::addInfo(
+                QUI::getLocale()->get(
+                    'quiqqer/cron',
+                    'cron.release.date.log.message.deactivate',
+                    ['list' => implode(',', $deactivate)]
+                ),
+                [],
+                'cron'
+            );
+        }
 
-        QUI\System\Log::addInfo(
-            'Folgende Seiten wurden aktiviert: ' . implode(',', $activate)
-        );
+        if ($activate) {
+            QUI\System\Log::addInfo(
+                QUI::getLocale()->get(
+                    'quiqqer/cron',
+                    'cron.release.date.log.message.activate',
+                    ['list' => implode(',', $activate)]
+                ),
+                [],
+                'cron'
+            );
+        }
     }
 
     /**
@@ -205,6 +221,7 @@ class QuiqqerCrons
         } catch (QUI\Exception $Exception) {
             QUI\System\Log::addError('Something went wrong getting all projects to calculate the media folder sizes');
             QUI\System\Log::writeException($Exception);
+
             return;
         }
 

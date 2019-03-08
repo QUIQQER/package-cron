@@ -143,6 +143,15 @@
             <de><![CDATA[Berechnet die Größe des VAR-Ordners und speichert diese zwischen. Dieser Wert wird für einige Systemfunktionen verwendet.]]></de>
             <en><![CDATA[Calculates the size of the VAR-folder and caches it. This value is used by some system functions.]]></en>
         </locale>
+
+        <locale name="cron.release.date.log.message.deactivate">
+            <de><![CDATA[Folgende Seiten wurden deaktiviert: [list]]]></de>
+            <en><![CDATA[The following pages have been deactivated: [list]]]></en>
+        </locale>
+        <locale name="cron.release.date.log.message.activate">
+            <de><![CDATA[Folgende Seiten wurden aktiviert: [list]]]></de>
+            <en><![CDATA[The following pages have been activated: [list]]]></en>
+        </locale>
     </groups>
     <groups name="quiqqer/cron" datatype="js">
         <locale name="cron.id">
