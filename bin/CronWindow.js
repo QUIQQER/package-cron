@@ -89,7 +89,8 @@ define('package/quiqqer/cron/bin/CronWindow', [
             // data
             //this.$List   = Content.getElement('.control-cron-add-list');
             this.$List = new QUISelect({
-                showIcons: false
+                showIcons : false,
+                searchable: true
             }).inject(
                 Content.getElement('.control-cron-add-list')
             );
