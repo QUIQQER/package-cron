@@ -209,7 +209,7 @@ class Manager
         try {
             $Package = QUI::getPackage('quiqqer/cron');
 
-            if (QUI\Lock\Locker::isLocked($Package, $lockKey)) {
+            if (QUI\Lock\Locker::isLocked($Package, $lockKey, null, false)) {
                 return;
             }
 
