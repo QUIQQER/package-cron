@@ -90,6 +90,66 @@
             <en><![CDATA[Never]]></en>
         </locale>
 
+        <!-- region Cleanup-Crons -->
+        <!-- region Cleanup Temp-Folder -->
+        <locale name="cron.cleanup.temp.title">
+            <de><![CDATA[System-Bereinigung: Temporäre Daten löschen]]></de>
+            <en><![CDATA[System Cleanup: Remove temporary data]]></en>
+        </locale>
+        <locale name="cron.cleanup.temp.description">
+            <de><![CDATA[Leert den Ordner für temporäre Daten.]]></de>
+            <en><![CDATA[Clears the temporary data folder.]]></en>
+        </locale>
+        <!-- endregion -->
+
+        <!-- region Cleanup Sessions -->
+        <locale name="cron.cleanup.sessions.title">
+            <de><![CDATA[System-Bereinigung: Sitzungen bereinigen]]></de>
+            <en><![CDATA[System Cleanup: Session Cleanup]]></en>
+        </locale>
+        <locale name="cron.cleanup.sessions.description">
+            <de><![CDATA[Löscht entbehrliche/abgelaufene Sitzungsdateien.]]></de>
+            <en><![CDATA[Deletes dispensable/expired session files.]]></en>
+        </locale>
+        <!-- endregion -->
+
+        <!-- region Clear Cache -->
+        <locale name="cron.cleanup.cache.clear.title">
+            <de><![CDATA[System-Bereinigung: Cache leeren]]></de>
+            <en><![CDATA[System Cleanup: Clear Cache]]></en>
+        </locale>
+        <locale name="cron.cleanup.cache.clear.description">
+            <de><![CDATA[Leert den gesamten Cache.]]></de>
+            <en><![CDATA[Empties the entire cache.]]></en>
+        </locale>
+        <!-- endregion -->
+
+        <!-- region Clear Admin Media Cache -->
+        <locale name="cron.cleanup.cache.admin.media.clear.title">
+            <de><![CDATA[System-Bereinigung: Media-Cache der Administration leeren]]></de>
+            <en><![CDATA[System Cleanup: Empty Administration's Media Cache]]></en>
+        </locale>
+        <locale name="cron.cleanup.cache.admin.media.clear.description">
+            <de><![CDATA[Leert den Cache der Bilder für die Administration. Dies sind beispielsweise Vorschaubilder in der Administration. Der öffentliche Media-Cache wird nicht geleert.]]></de>
+            <en><![CDATA[Cleans the cache of images for the administration. These are for example thumbnails for the administration. The public media cache is not cleared.]]></en>
+        </locale>
+        <!-- endregion -->
+
+        <!-- region Purge Cache -->
+        <locale name="cron.cleanup.cache.purge.title">
+            <de><![CDATA[System-Bereinigung: Cache Säubern]]></de>
+            <en><![CDATA[System Cleanup: Cache Cleanup]]></en>
+        </locale>
+        <locale name="cron.cleanup.cache.purge.description">
+            <de><![CDATA[Entfernt veraltete Daten aus dem Cache, während die aktuellen Daten intakt bleiben.]]></de>
+            <en><![CDATA[Removes stale data from the cache while leaving current data intact.]]></en>
+        </locale>
+        <!-- endregion -->
+        <!-- endregion -->
+
+
+        <!-- region System-Info-Crons -->
+        <!-- region Media Folder Sizes -->
         <locale name="cron.calculateMediaFolderSizes.title">
             <de><![CDATA[System-Info: Media Ordner Größen berechnen]]></de>
             <en><![CDATA[System Info: Calculate Media Folder Sizes]]></en>
@@ -98,7 +158,9 @@
             <de><![CDATA[Berechnet die Größe der Media Ordner.]]></de>
             <en><![CDATA[Calculates the size of the media folders.]]></en>
         </locale>
+        <!-- endregion -->
 
+        <!-- region Calculate Package Folder Size -->
         <locale name="cron.calculatePackageFolderSize.title">
             <de><![CDATA[System-Info: Paket-Ordner Größe berechnen & zwischenspeichern]]></de>
             <en><![CDATA[System Info: Calculate and cache package-folder size]]></en>
@@ -107,7 +169,9 @@
             <de><![CDATA[Berechnet die Größe des Paket-Ordners und speichert diese zwischen. Dieser Wert wird für einige Systemfunktionen verwendet.]]></de>
             <en><![CDATA[Calculates the size of the package-folder and caches it. This value is used by some system functions.]]></en>
         </locale>
+        <!-- endregion -->
 
+        <!-- region Calculate Cache Folder Size -->
         <locale name="cron.calculateCacheFolderSize.title">
             <de><![CDATA[System-Info: Cache-Ordner Größe berechnen & zwischenspeichern]]></de>
             <en><![CDATA[System Info: Calculate and cache cache-folder size]]></en>
@@ -116,7 +180,9 @@
             <de><![CDATA[Berechnet die Größe des Cache-Ordners und speichert diese zwischen. Dieser Wert wird für einige Systemfunktionen verwendet.]]></de>
             <en><![CDATA[Calculates the size of the cache-folder and caches it. This value is used by some system functions.]]></en>
         </locale>
+        <!-- endregion -->
 
+        <!-- region Calculate Whole Installation Folder Size -->
         <locale name="cron.calculateWholeInstallationFolderSize.title">
             <de><![CDATA[System-Info: QUIQQER Installations-Ordner Größe berechnen & zwischenspeichern]]></de>
             <en><![CDATA[System Info: Calculate and cache the QUIQQER installation folder size]]></en>
@@ -125,7 +191,9 @@
             <de><![CDATA[Berechnet die Größe des gesamten QUIQQER Installations-Ordners und speichert diese zwischen. Dieser Wert wird für einige Systemfunktionen verwendet.]]></de>
             <en><![CDATA[Calculates the size of the whole QUIQQER installation folder and caches it. This value is used by some system functions.]]></en>
         </locale>
+        <!-- endregion -->
 
+        <!-- region Count All Files In Installation -->
         <locale name="cron.countAllFilesInInstallation.title">
             <de><![CDATA[System-Info: Dateien im QUIQQER Installations-Ordner zählen & zwischenspeichern]]></de>
             <en><![CDATA[System Info: Count and cache the files in the QUIQQER installation folder]]></en>
@@ -134,7 +202,9 @@
             <de><![CDATA[Zählt die Dateien im QUIQQER Installations-Ordner und speichert das Ergebnis zwischen. Dieser Wert wird für einige Systemfunktionen verwendet.]]></de>
             <en><![CDATA[Counts the files in the QUIQQER installation folder and caches the result. This value is used by some system functions.]]></en>
         </locale>
+        <!-- endregion -->
 
+        <!-- region Calculate Var Folder Size -->
         <locale name="cron.calculateVarFolderSize.title">
             <de><![CDATA[System-Info: VAR-Ordner Größe berechnen & zwischenspeichern]]></de>
             <en><![CDATA[System Info: Calculate and cache VAR-folder size]]></en>
@@ -143,7 +213,18 @@
             <de><![CDATA[Berechnet die Größe des VAR-Ordners und speichert diese zwischen. Dieser Wert wird für einige Systemfunktionen verwendet.]]></de>
             <en><![CDATA[Calculates the size of the VAR-folder and caches it. This value is used by some system functions.]]></en>
         </locale>
+        <!-- endregion -->
+        <!-- endregion -->
 
+        <!-- region Release-Date-Cron -->
+        <locale name="cron.release.date.title">
+            <de><![CDATA[System: Seiten-Veröffentlichung]]></de>
+            <en><![CDATA[System: Site Publishing]]></en>
+        </locale>
+        <locale name="cron.release.date.description">
+            <de><![CDATA[Durchsucht das Projekt und aktiviert oder deaktiviert Seiten je nach Veröffentlichungsdatum.]]></de>
+            <en><![CDATA[Searches the project and activates or deactivates pages depending on the publication date.]]></en>
+        </locale>
         <locale name="cron.release.date.log.message.deactivate">
             <de><![CDATA[Folgende Seiten wurden deaktiviert: [list]]]></de>
             <en><![CDATA[The following pages have been deactivated: [list]]]></en>
@@ -152,6 +233,18 @@
             <de><![CDATA[Folgende Seiten wurden aktiviert: [list]]]></de>
             <en><![CDATA[The following pages have been activated: [list]]]></en>
         </locale>
+        <!-- endregion -->
+
+        <!-- region Mail-Queue-Cron -->
+        <locale name="cron.mail.queue.title">
+            <de><![CDATA[System: Mail-Warteschlange abarbeiten]]></de>
+            <en><![CDATA[System: Process Mail-Queue]]></en>
+        </locale>
+        <locale name="cron.mail.queue.description">
+            <de><![CDATA[Versendet Mails aus der Mail-Warteschlange.]]></de>
+            <en><![CDATA[Sends mails from the mail queue.]]></en>
+        </locale>
+        <!-- endregion -->
     </groups>
     <groups name="quiqqer/cron" datatype="js">
         <locale name="cron.id">

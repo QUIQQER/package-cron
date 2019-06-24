@@ -1,56 +1,90 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <crons>
+    <!-- region Cleanup-Crons -->
+    <!-- region Cleanup Temp-Folder -->
     <cron exec="\QUI\Cron\QuiqqerCrons::clearTempFolder">
-        <title>Temp Ordner leeren</title>
-        <description>Ordner für temporäre Daten leeren</description>
+        <title>
+            <locale group="quiqqer/cron" var="cron.cleanup.temp.title"/>
+        </title>
+        <description>
+            <locale group="quiqqer/cron" var="cron.cleanup.temp.description"/>
+        </description>
     </cron>
+    <!-- endregion -->
 
+    <!-- region Cleanup Sessions -->
     <cron exec="\QUI\Cron\QuiqqerCrons::clearSessions">
-        <title>Sessions säubern</title>
-        <description>Löscht unnötige / abgelaufene Session Dateien</description>
+        <title>
+            <locale group="quiqqer/cron" var="cron.cleanup.sessions.title"/>
+        </title>
+        <description>
+            <locale group="quiqqer/cron" var="cron.cleanup.sessions.description"/>
+        </description>
     </cron>
+    <!-- endregion -->
 
+    <!-- region Clear Cache -->
     <cron exec="\QUI\Cron\QuiqqerCrons::clearCache">
-        <title>Cache leeren</title>
-        <description>Kompletten Cache leeren</description>
+        <title>
+            <locale group="quiqqer/cron" var="cron.cleanup.cache.clear.title"/>
+        </title>
+        <description>
+            <locale group="quiqqer/cron" var="cron.cleanup.cache.clear.description"/>
+        </description>
     </cron>
+    <!-- endregion -->
 
+    <!-- region Clear Admin Media Cache -->
     <cron exec="\QUI\Cron\QuiqqerCrons::clearAdminMediaCache">
-        <title>Media Cache der Administration leeren</title>
+        <title>
+            <locale group="quiqqer/cron" var="cron.cleanup.cache.admin.media.clear.title"/>
+        </title>
         <description>
-            Leert die Cachebilder von der Administration.
-            <br/>
-            Dies sind zum Beispiel die Vorschaubilder in der Administration.
-            <br/>
-            Der öffentliche Mediacache wird nicht geleert
+            <locale group="quiqqer/cron" var="cron.cleanup.cache.admin.media.clear.description"/>
         </description>
     </cron>
+    <!-- endregion -->
 
+    <!-- region Purge Cache -->
     <cron exec="\QUI\Cron\QuiqqerCrons::purgeCache">
-        <title>Cache säubern</title>
+        <title>
+            <locale group="quiqqer/cron" var="cron.cleanup.cache.purge.title"/>
+        </title>
         <description>
-            The purge function removes stale data from the cache backends while leaving current data intact
+            <locale group="quiqqer/cron" var="cron.cleanup.cache.purge.description"/>
         </description>
     </cron>
+    <!-- endregion -->
+    <!-- endregion -->
 
+    <!-- region Site-Publishing-Cron -->
     <cron exec="\QUI\Cron\QuiqqerCrons::realeaseDate">
-        <title>Seiten Veröffentlichung</title>
+        <title>
+            <locale group="quiqqer/cron" var="cron.release.date.title"/>
+        </title>
         <description>
-            Durchsucht das Projekt und aktiviert oder deaktiviert Seiten je nach Veröffentlichungsdatum.
+            <locale group="quiqqer/cron" var="cron.release.date.description"/>
         </description>
         <params>
             <param name="project" type="string"/>
             <param name="lang" type="string"/>
         </params>
     </cron>
+    <!-- endregion -->
 
+    <!-- region Mail-Queue-Cron -->
     <cron exec="\QUI\Cron\QuiqqerCrons::mailQueue">
-        <title>Mail Queue ausführen</title>
+        <title>
+            <locale group="quiqqer/cron" var="cron.mail.queue.title"/>
+        </title>
         <description>
-            Arbeitet die Mail Queue ab und sendet die Mails.
+            <locale group="quiqqer/cron" var="cron.mail.queue.description"/>
         </description>
     </cron>
+    <!-- endregion -->
 
+    <!-- region System-Info-Crons -->
+    <!-- region Media Folder Sizes -->
     <cron exec="\QUI\Cron\QuiqqerCrons::calculateMediaFolderSizes">
         <title>
             <locale group="quiqqer/cron" var="cron.calculateMediaFolderSizes.title"/>
@@ -60,7 +94,9 @@
             <locale group="quiqqer/cron" var="cron.calculateMediaFolderSizes.description"/>
         </description>
     </cron>
+    <!-- endregion -->
 
+    <!-- region Calculate Package Folder Size -->
     <cron exec="\QUI\Cron\QuiqqerCrons::calculatePackageFolderSize">
         <title>
             <locale group="quiqqer/cron" var="cron.calculatePackageFolderSize.title"/>
@@ -70,7 +106,9 @@
             <locale group="quiqqer/cron" var="cron.calculatePackageFolderSize.description"/>
         </description>
     </cron>
+    <!-- endregion -->
 
+    <!-- region Calculate Cache Folder Size -->
     <cron exec="\QUI\Cron\QuiqqerCrons::calculateCacheFolderSize">
         <title>
             <locale group="quiqqer/cron" var="cron.calculateCacheFolderSize.title"/>
@@ -80,7 +118,9 @@
             <locale group="quiqqer/cron" var="cron.calculateCacheFolderSize.description"/>
         </description>
     </cron>
+    <!-- endregion -->
 
+    <!-- region Calculate Whole Installation Folder Size -->
     <cron exec="\QUI\Cron\QuiqqerCrons::calculateWholeInstallationFolderSize">
         <title>
             <locale group="quiqqer/cron" var="cron.calculateWholeInstallationFolderSize.title"/>
@@ -90,7 +130,9 @@
             <locale group="quiqqer/cron" var="cron.calculateWholeInstallationFolderSize.description"/>
         </description>
     </cron>
+    <!-- endregion -->
 
+    <!-- region Count All Files In Installation -->
     <cron exec="\QUI\Cron\QuiqqerCrons::countAllFilesInInstallation">
         <title>
             <locale group="quiqqer/cron" var="cron.countAllFilesInInstallation.title"/>
@@ -100,7 +142,9 @@
             <locale group="quiqqer/cron" var="cron.countAllFilesInInstallation.description"/>
         </description>
     </cron>
+    <!-- endregion -->
 
+    <!-- region Calculate Var Folder Size -->
     <cron exec="\QUI\Cron\QuiqqerCrons::calculateVarFolderSize">
         <title>
             <locale group="quiqqer/cron" var="cron.calculateVarFolderSize.title"/>
@@ -110,4 +154,6 @@
             <locale group="quiqqer/cron" var="cron.calculateVarFolderSize.description"/>
         </description>
     </cron>
+    <!-- endregion -->
+    <!-- endregion -->
 </crons>
