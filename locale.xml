@@ -91,8 +91,8 @@
         </locale>
 
         <locale name="cron.calculateMediaFolderSizes.title">
-            <de><![CDATA[Media Ordner Größen berechnen]]></de>
-            <en><![CDATA[Calculate Media Folder Sizes]]></en>
+            <de><![CDATA[System-Info: Media Ordner Größen berechnen]]></de>
+            <en><![CDATA[System Info: Calculate Media Folder Sizes]]></en>
         </locale>
         <locale name="cron.calculateMediaFolderSizes.description">
             <de><![CDATA[Berechnet die Größe der Media Ordner.]]></de>
@@ -100,8 +100,8 @@
         </locale>
 
         <locale name="cron.calculatePackageFolderSize.title">
-            <de><![CDATA[Paket-Ordner Größe berechnen & zwischenspeichern]]></de>
-            <en><![CDATA[Calculate and cache package-folder size]]></en>
+            <de><![CDATA[System-Info: Paket-Ordner Größe berechnen & zwischenspeichern]]></de>
+            <en><![CDATA[System Info: Calculate and cache package-folder size]]></en>
         </locale>
         <locale name="cron.calculatePackageFolderSize.description">
             <de><![CDATA[Berechnet die Größe des Paket-Ordners und speichert diese zwischen. Dieser Wert wird für einige Systemfunktionen verwendet.]]></de>
@@ -109,8 +109,8 @@
         </locale>
 
         <locale name="cron.calculateCacheFolderSize.title">
-            <de><![CDATA[Cache-Ordner Größe berechnen & zwischenspeichern]]></de>
-            <en><![CDATA[Calculate and cache cache-folder size]]></en>
+            <de><![CDATA[System-Info: Cache-Ordner Größe berechnen & zwischenspeichern]]></de>
+            <en><![CDATA[System Info: Calculate and cache cache-folder size]]></en>
         </locale>
         <locale name="cron.calculateCacheFolderSize.description">
             <de><![CDATA[Berechnet die Größe des Cache-Ordners und speichert diese zwischen. Dieser Wert wird für einige Systemfunktionen verwendet.]]></de>
@@ -118,8 +118,8 @@
         </locale>
 
         <locale name="cron.calculateWholeInstallationFolderSize.title">
-            <de><![CDATA[QUIQQER Installations-Ordner Größe berechnen & zwischenspeichern]]></de>
-            <en><![CDATA[Calculate and cache the QUIQQER installation folder size]]></en>
+            <de><![CDATA[System-Info: QUIQQER Installations-Ordner Größe berechnen & zwischenspeichern]]></de>
+            <en><![CDATA[System Info: Calculate and cache the QUIQQER installation folder size]]></en>
         </locale>
         <locale name="cron.calculateWholeInstallationFolderSize.description">
             <de><![CDATA[Berechnet die Größe des gesamten QUIQQER Installations-Ordners und speichert diese zwischen. Dieser Wert wird für einige Systemfunktionen verwendet.]]></de>
@@ -127,8 +127,8 @@
         </locale>
 
         <locale name="cron.countAllFilesInInstallation.title">
-            <de><![CDATA[Dateien im QUIQQER Installations-Ordner zählen & zwischenspeichern]]></de>
-            <en><![CDATA[Count and cache the files in the QUIQQER installation folder]]></en>
+            <de><![CDATA[System-Info: Dateien im QUIQQER Installations-Ordner zählen & zwischenspeichern]]></de>
+            <en><![CDATA[System Info: Count and cache the files in the QUIQQER installation folder]]></en>
         </locale>
         <locale name="cron.countAllFilesInInstallation.description">
             <de><![CDATA[Zählt die Dateien im QUIQQER Installations-Ordner und speichert das Ergebnis zwischen. Dieser Wert wird für einige Systemfunktionen verwendet.]]></de>
@@ -136,8 +136,8 @@
         </locale>
 
         <locale name="cron.calculateVarFolderSize.title">
-            <de><![CDATA[VAR-Ordner Größe berechnen & zwischenspeichern]]></de>
-            <en><![CDATA[Calculate and cache VAR-folder size]]></en>
+            <de><![CDATA[System-Info: VAR-Ordner Größe berechnen & zwischenspeichern]]></de>
+            <en><![CDATA[System Info: Calculate and cache VAR-folder size]]></en>
         </locale>
         <locale name="cron.calculateVarFolderSize.description">
             <de><![CDATA[Berechnet die Größe des VAR-Ordners und speichert diese zwischen. Dieser Wert wird für einige Systemfunktionen verwendet.]]></de>
