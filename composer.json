@@ -19,6 +19,7 @@
     "quiqqer\/quiqqer": "*@dev",
     "quiqqer\/qui": ">=1|dev-master|dev-dev",
     "quiqqer\/utils": ">=1.4|dev-master|dev-dev",
+    "quiqqer/login-logger": "1.*|dev-master|dev-dev",
     "mtdowling\/cron-expression": "1.0.*"
   },
   "autoload": {

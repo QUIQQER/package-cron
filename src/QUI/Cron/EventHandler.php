@@ -242,6 +242,14 @@ class EventHandler
                 "day"   => "*",
                 "month" => "*",
                 "dow"   => "*"
+            ],
+            // Login-Logger purge logs (as decided with mor & hen)
+            "quiqqer/login-logger:0" => [
+                "min"   => "0",
+                "hour"  => "3",
+                "day"   => "*",
+                "month" => "*",
+                "dow"   => "*"
             ]
         ];
 
