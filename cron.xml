@@ -58,7 +58,7 @@
     <!-- endregion -->
 
     <!-- region Site-Publishing-Cron -->
-    <cron exec="\QUI\Cron\QuiqqerCrons::realeaseDate">
+    <cron exec="\QUI\Cron\QuiqqerCrons::releaseDate">
         <title>
             <locale group="quiqqer/cron" var="cron.release.date.title"/>
         </title>
