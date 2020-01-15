@@ -80,6 +80,18 @@ class QuiqqerCrons
     }
 
     /**
+     * alias -> because release was misspelled
+     *
+     * @param $params
+     * @param $CronManager
+     * @throws QUI\Exception
+     */
+    public static function realeaseDate($params, $CronManager)
+    {
+        self::releaseDate($params, $CronManager);
+    }
+
+    /**
      * Check project sites release dates
      * Activate or deactivate sites
      *
@@ -88,113 +100,137 @@ class QuiqqerCrons
      *
      * @throws QUI\Exception
      */
-    public static function realeaseDate($params, $CronManager)
+    public static function releaseDate($params, $CronManager)
     {
-        if (!isset($params['project'])) {
-            throw new QUI\Exception('Need a project parameter to search release dates');
-        }
+        $execCron = function ($project, $lang) {
+            $Project = QUI::getProject($project, $lang);
+            $now     = \date('Y-m-d H:i:s');
 
-        if (!isset($params['lang'])) {
-            throw new QUI\Exception('Need a lang parameter to search release dates');
-        }
+            // search sites with release dates
+            $PDO = QUI::getDataBase()->getPDO();
 
-
-        $Project = QUI::getProject($params['project'], $params['lang']);
-        $now     = date('Y-m-d H:i:s');
-
-        // search sites with release dates
-        $PDO = QUI::getDataBase()->getPDO();
-
-        $deactivate = [];
-        $activate   = [];
+            $deactivate = [];
+            $activate   = [];
 
 
-        /**
-         * deactivate sites
-         */
-        $Statement = $PDO->prepare("
-            SELECT id
-            FROM {$Project->table()}
-            WHERE active = 1 AND
-                  release_from != :empty AND
-                  release_to != :empty AND
+            /**
+             * deactivate sites
+             */
+            $Statement = $PDO->prepare("
+                SELECT id
+                FROM {$Project->table()}
+                WHERE active = 1 AND
+                      release_from != :empty AND
+                      release_to != :empty AND
+    
+                      (release_from > :date OR release_to < :date)
+                ;
+            ");
 
-                  (release_from > :date OR release_to < :date)
-            ;
-        ");
+            $Statement->bindValue(':date', $now, \PDO::PARAM_STR);
+            $Statement->bindValue(':empty', '0000-00-00 00:00:00', \PDO::PARAM_STR);
+            $Statement->execute();
 
-        $Statement->bindValue(':date', $now, \PDO::PARAM_STR);
-        $Statement->bindValue(':empty', '0000-00-00 00:00:00', \PDO::PARAM_STR);
-        $Statement->execute();
+            $result = $Statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        $result = $Statement->fetchAll(\PDO::FETCH_ASSOC);
+            foreach ($result as $entry) {
+                try {
+                    $Site = $Project->get((int)$entry['id']);
+                    $Site->deactivate();
 
-        foreach ($result as $entry) {
-            try {
-                $Site = $Project->get((int)$entry['id']);
-                $Site->deactivate();
-
-                $deactivate[] = (int)$entry['id'];
-            } catch (QUI\Exception $Exception) {
-                QUI\System\Log::writeException($Exception);
+                    $deactivate[] = (int)$entry['id'];
+                } catch (QUI\Exception $Exception) {
+                    QUI\System\Log::writeException($Exception);
+                }
             }
-        }
 
 
-        /**
-         * activate sites
-         */
-        $Statement = $PDO->prepare("
-            SELECT id
-            FROM {$Project->table()}
-            WHERE active = 0 AND
-                  release_from != :empty AND
-                  release_to != :empty AND
+            /**
+             * activate sites
+             */
+            $Statement = $PDO->prepare("
+                SELECT id
+                FROM {$Project->table()}
+                WHERE active = 0 AND
+                      release_from != :empty AND
+                      release_to != :empty AND
+    
+                      release_to >= :date AND
+                      release_from <= :date
+                ;
+            ");
 
-                  release_to >= :date AND
-                  release_from <= :date
-            ;
-        ");
+            $Statement->bindValue(':date', $now, \PDO::PARAM_STR);
+            $Statement->bindValue(':empty', '0000-00-00 00:00:00', \PDO::PARAM_STR);
+            $Statement->execute();
 
-        $Statement->bindValue(':date', $now, \PDO::PARAM_STR);
-        $Statement->bindValue(':empty', '0000-00-00 00:00:00', \PDO::PARAM_STR);
-        $Statement->execute();
+            $result = $Statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        $result = $Statement->fetchAll(\PDO::FETCH_ASSOC);
+            foreach ($result as $entry) {
+                try {
+                    $Site = $Project->get((int)$entry['id']);
+                    $Site->activate();
 
-        foreach ($result as $entry) {
-            try {
-                $Site = $Project->get((int)$entry['id']);
-                $Site->activate();
-
-                $activate[] = (int)$entry['id'];
-            } catch (QUI\Exception $Exception) {
-                QUI\System\Log::writeException($Exception);
+                    $activate[] = (int)$entry['id'];
+                } catch (QUI\Exception $Exception) {
+                    QUI\System\Log::writeException($Exception);
+                }
             }
+
+            if (!empty($deactivate)) {
+                QUI\System\Log::addInfo(
+                    QUI::getLocale()->get(
+                        'quiqqer/cron',
+                        'cron.release.date.log.message.deactivate',
+                        ['list' => implode(',', $deactivate)]
+                    ),
+                    [],
+                    'cron'
+                );
+            }
+
+            if ($activate) {
+                QUI\System\Log::addInfo(
+                    QUI::getLocale()->get(
+                        'quiqqer/cron',
+                        'cron.release.date.log.message.activate',
+                        ['list' => implode(',', $activate)]
+                    ),
+                    [],
+                    'cron'
+                );
+            }
+        };
+
+        $project = false;
+        $lang    = false;
+
+        if (isset($params['project'])) {
+            $project = $params['project'];
         }
 
-        if (!empty($deactivate)) {
-            QUI\System\Log::addInfo(
-                QUI::getLocale()->get(
-                    'quiqqer/cron',
-                    'cron.release.date.log.message.deactivate',
-                    ['list' => implode(',', $deactivate)]
-                ),
-                [],
-                'cron'
-            );
+        if (isset($params['lang'])) {
+            $lang = $params['project'];
         }
 
-        if ($activate) {
-            QUI\System\Log::addInfo(
-                QUI::getLocale()->get(
-                    'quiqqer/cron',
-                    'cron.release.date.log.message.activate',
-                    ['list' => implode(',', $activate)]
-                ),
-                [],
-                'cron'
-            );
+        if ($lang === false && $project) {
+            $Project = QUI::getProject($project);
+            $execCron($Project->getName(), $Project->getLang());
+
+            return;
+        }
+
+        if ($project && $lang) {
+            $Project = QUI::getProject($project, $lang);
+            $execCron($Project->getName(), $Project->getLang());
+
+            return;
+        }
+
+        $projects = QUI::getProjectManager()->getProjectList();
+
+        foreach ($projects as $Project) {
+            $execCron($Project->getName(), $Project->getLang());
         }
     }
 
