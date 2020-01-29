@@ -14,18 +14,26 @@
             <field type="TEXT NOT NULL">exec</field>
             <field type="TEXT NOT NULL">params</field>
             <field type="DATETIME NULL DEFAULT NULL">lastexec</field>
+
+            <primary>id</primary>
         </table>
 
         <table name="cron_history">
             <field type="INT( 3 ) NOT NULL">cronid</field>
             <field type="INT( 11 ) NOT NULL">uid</field>
-            <field type="DATETIME NULL DEFAULT NULL">lastexec</field>
+            <field type="DATETIME NOT NULL">lastexec</field>
+
+            <primary>cronid,lastexec</primary>
+            <index>cronid</index>
         </table>
 
         <table name="cron_cronservice">
             <field type="INT( 3 ) NOT NULL">cronid</field>
             <field type="INT( 11 ) NOT NULL">uid</field>
-            <field type="DATETIME NULL DEFAULT NULL">lastexec</field>
+            <field type="DATETIME NOT NULL">lastexec</field>
+
+            <primary>cronid,lastexec</primary>
+            <index>cronid</index>
         </table>
     </global>
 
