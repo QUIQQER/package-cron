@@ -23,7 +23,6 @@
             <field type="INT( 11 ) NOT NULL">uid</field>
             <field type="DATETIME NOT NULL">lastexec</field>
 
-            <primary>cronid,lastexec</primary>
             <index>cronid</index>
         </table>
 
@@ -32,7 +31,6 @@
             <field type="INT( 11 ) NOT NULL">uid</field>
             <field type="DATETIME NOT NULL">lastexec</field>
 
-            <primary>cronid,lastexec</primary>
             <index>cronid</index>
         </table>
     </global>
