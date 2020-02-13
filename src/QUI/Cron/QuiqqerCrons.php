@@ -210,7 +210,7 @@ class QuiqqerCrons
         }
 
         if (isset($params['lang'])) {
-            $lang = $params['project'];
+            $lang = $params['lang'];
         }
 
         if ($lang === false && $project) {
