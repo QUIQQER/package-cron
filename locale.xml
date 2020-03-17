@@ -91,6 +91,15 @@
         </locale>
 
         <!-- region Cleanup-Crons -->
+        <locale name="cron.cleanupUploads.title">
+            <de><![CDATA[Upload Folder Bereinigung]]></de>
+            <en><![CDATA[Upload Folder Cleanup]]></en>
+        </locale>
+        <locale name="cron.cron.cleanupUploads.description">
+            <de><![CDATA[Räumt den Upload Ordner auf von Dateien auf welche älter als ein Tag sind.]]></de>
+            <en><![CDATA[Clears the upload folder from files older than one day.]]></en>
+        </locale>
+        
         <!-- region Cleanup Temp-Folder -->
         <locale name="cron.cleanup.temp.title">
             <de><![CDATA[System-Bereinigung: Temporäre Daten löschen]]></de>
@@ -130,8 +139,10 @@
             <en><![CDATA[System Cleanup: Empty Administration's Media Cache]]></en>
         </locale>
         <locale name="cron.cleanup.cache.admin.media.clear.description">
-            <de><![CDATA[Leert den Cache der Bilder für die Administration. Dies sind beispielsweise Vorschaubilder in der Administration. Der öffentliche Media-Cache wird nicht geleert.]]></de>
-            <en><![CDATA[Cleans the cache of images for the administration. These are for example thumbnails for the administration. The public media cache is not cleared.]]></en>
+            <de>
+                <![CDATA[Leert den Cache der Bilder für die Administration. Dies sind beispielsweise Vorschaubilder in der Administration. Der öffentliche Media-Cache wird nicht geleert.]]></de>
+            <en>
+                <![CDATA[Cleans the cache of images for the administration. These are for example thumbnails for the administration. The public media cache is not cleared.]]></en>
         </locale>
         <!-- endregion -->
 
@@ -166,8 +177,10 @@
             <en><![CDATA[System Info: Calculate and cache package-folder size]]></en>
         </locale>
         <locale name="cron.calculatePackageFolderSize.description">
-            <de><![CDATA[Berechnet die Größe des Paket-Ordners und speichert diese zwischen. Dieser Wert wird für einige Systemfunktionen verwendet.]]></de>
-            <en><![CDATA[Calculates the size of the package-folder and caches it. This value is used by some system functions.]]></en>
+            <de>
+                <![CDATA[Berechnet die Größe des Paket-Ordners und speichert diese zwischen. Dieser Wert wird für einige Systemfunktionen verwendet.]]></de>
+            <en>
+                <![CDATA[Calculates the size of the package-folder and caches it. This value is used by some system functions.]]></en>
         </locale>
         <!-- endregion -->
 
@@ -177,8 +190,10 @@
             <en><![CDATA[System Info: Calculate and cache cache-folder size]]></en>
         </locale>
         <locale name="cron.calculateCacheFolderSize.description">
-            <de><![CDATA[Berechnet die Größe des Cache-Ordners und speichert diese zwischen. Dieser Wert wird für einige Systemfunktionen verwendet.]]></de>
-            <en><![CDATA[Calculates the size of the cache-folder and caches it. This value is used by some system functions.]]></en>
+            <de>
+                <![CDATA[Berechnet die Größe des Cache-Ordners und speichert diese zwischen. Dieser Wert wird für einige Systemfunktionen verwendet.]]></de>
+            <en>
+                <![CDATA[Calculates the size of the cache-folder and caches it. This value is used by some system functions.]]></en>
         </locale>
         <!-- endregion -->
 
@@ -188,8 +203,10 @@
             <en><![CDATA[System Info: Calculate and cache the QUIQQER installation folder size]]></en>
         </locale>
         <locale name="cron.calculateWholeInstallationFolderSize.description">
-            <de><![CDATA[Berechnet die Größe des gesamten QUIQQER Installations-Ordners und speichert diese zwischen. Dieser Wert wird für einige Systemfunktionen verwendet.]]></de>
-            <en><![CDATA[Calculates the size of the whole QUIQQER installation folder and caches it. This value is used by some system functions.]]></en>
+            <de>
+                <![CDATA[Berechnet die Größe des gesamten QUIQQER Installations-Ordners und speichert diese zwischen. Dieser Wert wird für einige Systemfunktionen verwendet.]]></de>
+            <en>
+                <![CDATA[Calculates the size of the whole QUIQQER installation folder and caches it. This value is used by some system functions.]]></en>
         </locale>
         <!-- endregion -->
 
@@ -199,8 +216,10 @@
             <en><![CDATA[System Info: Count and cache the files in the QUIQQER installation folder]]></en>
         </locale>
         <locale name="cron.countAllFilesInInstallation.description">
-            <de><![CDATA[Zählt die Dateien im QUIQQER Installations-Ordner und speichert das Ergebnis zwischen. Dieser Wert wird für einige Systemfunktionen verwendet.]]></de>
-            <en><![CDATA[Counts the files in the QUIQQER installation folder and caches the result. This value is used by some system functions.]]></en>
+            <de>
+                <![CDATA[Zählt die Dateien im QUIQQER Installations-Ordner und speichert das Ergebnis zwischen. Dieser Wert wird für einige Systemfunktionen verwendet.]]></de>
+            <en>
+                <![CDATA[Counts the files in the QUIQQER installation folder and caches the result. This value is used by some system functions.]]></en>
         </locale>
         <!-- endregion -->
 
@@ -210,8 +229,10 @@
             <en><![CDATA[System Info: Calculate and cache VAR-folder size]]></en>
         </locale>
         <locale name="cron.calculateVarFolderSize.description">
-            <de><![CDATA[Berechnet die Größe des VAR-Ordners und speichert diese zwischen. Dieser Wert wird für einige Systemfunktionen verwendet.]]></de>
-            <en><![CDATA[Calculates the size of the VAR-folder and caches it. This value is used by some system functions.]]></en>
+            <de>
+                <![CDATA[Berechnet die Größe des VAR-Ordners und speichert diese zwischen. Dieser Wert wird für einige Systemfunktionen verwendet.]]></de>
+            <en>
+                <![CDATA[Calculates the size of the VAR-folder and caches it. This value is used by some system functions.]]></en>
         </locale>
         <!-- endregion -->
         <!-- endregion -->
@@ -222,8 +243,10 @@
             <en><![CDATA[System: Site Publishing]]></en>
         </locale>
         <locale name="cron.release.date.description">
-            <de><![CDATA[Durchsucht das Projekt und aktiviert oder deaktiviert Seiten je nach Veröffentlichungsdatum.]]></de>
-            <en><![CDATA[Searches the project and activates or deactivates pages depending on the publication date.]]></en>
+            <de>
+                <![CDATA[Durchsucht das Projekt und aktiviert oder deaktiviert Seiten je nach Veröffentlichungsdatum.]]></de>
+            <en>
+                <![CDATA[Searches the project and activates or deactivates pages depending on the publication date.]]></en>
         </locale>
         <locale name="cron.release.date.log.message.deactivate">
             <de><![CDATA[Folgende Seiten wurden deaktiviert: [list]]]></de>

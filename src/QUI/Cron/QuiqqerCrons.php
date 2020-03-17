@@ -328,4 +328,46 @@ class QuiqqerCrons
     {
         QUI\Utils\Installation::getVarFolderSize(false, true);
     }
+
+    /**
+     * Cleanup all expired uploads
+     * - older than a day
+     */
+    public static function cleanupUploads()
+    {
+        $Upload  = new QUI\Upload\Manager();
+        $dir     = $Upload->getDir();
+        $folders = QUI\Utils\System\File::readDir($dir);
+
+        $now     = \time();
+        $maxTime = 86400; // seconds -> 1 day
+
+        foreach ($folders as $folder) {
+            $files = QUI\Utils\System\File::readDir($dir.$folder);
+
+            foreach ($files as $file) {
+                if (\strpos($file, '.json') === false) {
+                    continue;
+                }
+
+                $fileTime = \filemtime($dir.$folder.'/'.$file);
+
+                if ($now - $fileTime < $maxTime) {
+                    continue;
+                }
+
+                // older than a day, delete
+                $file = $dir.$folder.'/'.$file;
+                $conf = $dir.$folder.'/'.$file.'.json';
+
+                if (!\file_exists($file)) {
+                    unlink($file);
+                }
+
+                if (!\file_exists($conf)) {
+                    unlink($conf);
+                }
+            }
+        }
+    }
 }
