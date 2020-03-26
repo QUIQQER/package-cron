@@ -94,8 +94,13 @@ define('package/quiqqer/cron/bin/History', [
 
             this.$Grid = new Grid(Container, {
                 columnModel: [{
-                    header   : QUILocale.get('quiqqer/system', 'createdate'),
+                    header   : QUILocale.get(lg, 'cron.start_date'),
                     dataIndex: 'lastexec',
+                    dataType : 'date',
+                    width    : 150
+                }, {
+                    header   : QUILocale.get(lg, 'cron.finish_date'),
+                    dataIndex: 'finish',
                     dataType : 'date',
                     width    : 150
                 }, {

@@ -73,6 +73,15 @@
             <de><![CDATA[Der Administrator bekommt eine Nachricht wenn die Crons die letzten 24h nicht liefen.]]></de>
             <en><![CDATA[The administrator receives a message when the Cron did not run the last 24 hours]]></en>
         </locale>
+        <locale name="settings.cron.writeCronLog">
+            <de><![CDATA[Cron Log schreiben]]></de>
+            <en><![CDATA[Write cron log]]></en>
+        </locale>
+        <locale name="settings.cron.writeCronLog.description" html="true">
+            <de><![CDATA[Ausführungszeitpunkte und -dauer für jeden Cron in einer tagesaktuellen <b>cron.log</b> protokollieren]]></de>
+            <en><![CDATA[Log execution time and length in a daily <b>cron.log</b>]]></en>
+        </locale>
+
         <locale name="exception.registration.empty.domain">
             <de><![CDATA[Es muss eine Domain angegeben sein]]></de>
             <en><![CDATA[Domain can not be empty]]></en>
@@ -277,6 +286,14 @@
         <locale name="cron.title">
             <de><![CDATA[Aufgabentitel]]></de>
             <en><![CDATA[Cron title]]></en>
+        </locale>
+        <locale name="cron.start_date">
+            <de><![CDATA[Start]]></de>
+            <en><![CDATA[Start]]></en>
+        </locale>
+        <locale name="cron.finish_date">
+            <de><![CDATA[Ende]]></de>
+            <en><![CDATA[End]]></en>
         </locale>
         <locale name="cron.desc">
             <de><![CDATA[Aufgabenbeschreibung]]></de>
