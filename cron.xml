@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <crons>
     <!-- region Cleanup-Crons -->
+
+    <cron exec="\QUI\Cron\QuiqqerCrons::cleanupUploads">
+        <title>
+            <locale group="quiqqer/cron" var="cron.cleanupUploads.title"/>
+        </title>
+
+        <description>
+            <locale group="quiqqer/cron" var="cron.cleanupUploads.description"/>
+        </description>
+    </cron>
+
     <!-- region Cleanup Temp-Folder -->
     <cron exec="\QUI\Cron\QuiqqerCrons::clearTempFolder">
         <title>

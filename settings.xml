@@ -12,6 +12,10 @@
                     <type><![CDATA[bool]]></type>
                     <defaultvalue>1</defaultvalue>
                 </conf>
+                <conf name="writeCronLog">
+                    <type><![CDATA[bool]]></type>
+                    <defaultvalue>0</defaultvalue>
+                </conf>
             </section>
         </config>
 
@@ -42,12 +46,22 @@
                                 <locale group="quiqqer/cron" var="settings.cron.executeOnAdminLogin.description" />
                             </description>
                         </input>
+
                         <input conf="settings.showAdminMessageIfCronNotRun" type="checkbox">
                             <text>
                                 <locale group="quiqqer/cron" var="settings.cron.showAdminMessageIfCronNotRun" />
                             </text>
                             <description>
                                 <locale group="quiqqer/cron" var="settings.cron.showAdminMessageIfCronNotRun.description" />
+                            </description>
+                        </input>
+
+                        <input conf="settings.writeCronLog" type="checkbox">
+                            <text>
+                                <locale group="quiqqer/cron" var="settings.cron.writeCronLog" />
+                            </text>
+                            <description>
+                                <locale group="quiqqer/cron" var="settings.cron.writeCronLog.description" />
                             </description>
                         </input>
                     </settings>

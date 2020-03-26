@@ -21,6 +21,13 @@ use Cron\CronExpression;
 class Manager
 {
     /**
+     * Flag that indicates if a cron.log is written
+     *
+     * @var bool
+     */
+    protected static $writeCronLog = null;
+
+    /**
      * Add a cron
      *
      * @param string $cron - Name of the Cron
@@ -203,6 +210,8 @@ class Manager
      */
     public function execute()
     {
+        Manager::log('Start cron execution (all crons)');
+
         // locking
         $lockKey = 'cron-execution';
 
@@ -210,6 +219,10 @@ class Manager
             $Package = QUI::getPackage('quiqqer/cron');
 
             if (QUI\Lock\Locker::isLocked($Package, $lockKey, null, false)) {
+                Manager::log(
+                    'Crons cannot be executed because another instance is already executing crons.'
+                );
+
                 return;
             }
 
@@ -217,6 +230,10 @@ class Manager
         } catch (\Exception $Exception) {
             QUI\System\Log::writeDebugException($Exception);
             QUI\System\Log::writeRecursive($Exception->getMessage());
+
+            Manager::log(
+                'Crons cannot be executed due to an error: '.$Exception->getMessage()
+            );
 
             return;
         }
@@ -284,6 +301,7 @@ class Manager
             }
         }
 
+        Manager::log('Finish cron execution (all crons)');
 
         try {
             QUI\Lock\Locker::unlock($Package, $lockKey);
@@ -326,7 +344,14 @@ class Manager
             }
         }
 
+        Manager::log('START cron "'.$cronData['title'].'" (ID: '.$cronId.')');
+        $start    = \microtime(true);
+        $starTime = \time();
+
         call_user_func_array($cronData['exec'], [$params, $this]);
+
+        $end = \round(\microtime(true) - $start, 2);
+        Manager::log('FINISH cron "'.$cronData['title'].'" (ID: '.$cronId.') - time: '.$end.' seconds');
 
         QUI::getMessagesHandler()->addSuccess(
             QUI::getLocale()->get(
@@ -337,7 +362,8 @@ class Manager
 
         QUI::getDataBase()->insert(self::tableHistory(), [
             'cronid'   => $cronId,
-            'lastexec' => date('Y-m-d H:i:s'),
+            'lastexec' => date('Y-m-d H:i:s', $starTime),
+            'finish'   => date('Y-m-d H:i:s'),
             'uid'      => QUI::getUserBySession()->getId() ?: 0
         ]);
 
@@ -673,6 +699,32 @@ class Manager
      */
     public static function log($message)
     {
-        QUI\System\Log::addInfo($message, [], 'cron');
+        if (self::isWriteCronLog()) {
+            QUI\System\Log::addInfo($message, [], 'cron');
+        }
+    }
+
+    /**
+     * Write cron log?
+     *
+     * @return bool
+     */
+    protected static function isWriteCronLog()
+    {
+        if (!\is_null(self::$writeCronLog)) {
+            return self::$writeCronLog;
+        }
+
+        try {
+            self::$writeCronLog = \boolval(QUI::getPackage('quiqqer/cron')->getConfig()->get(
+                'settings',
+                'writeCronLog')
+            );
+        } catch (\Exception $Exception) {
+            QUI\System\Log::writeException($Exception);
+            self::$writeCronLog = false;
+        }
+
+        return self::$writeCronLog;
     }
 }
