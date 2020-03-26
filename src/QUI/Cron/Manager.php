@@ -716,9 +716,11 @@ class Manager
         }
 
         try {
-            self::$writeCronLog = \boolval(QUI::getPackage('quiqqer/cron')->getConfig()->get(
-                'settings',
-                'writeCronLog')
+            self::$writeCronLog = \boolval(
+                QUI::getPackage('quiqqer/cron')->getConfig()->get(
+                    'settings',
+                    'writeCronLog'
+                )
             );
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
