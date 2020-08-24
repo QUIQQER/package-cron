@@ -219,11 +219,15 @@ class Manager
             $Package = QUI::getPackage('quiqqer/cron');
 
             if (QUI\Lock\Locker::isLocked($Package, $lockKey, null, false)) {
-                Manager::log(
-                    'Crons cannot be executed because another instance is already executing crons.'
-                );
+                $time = QUI\Lock\Locker::getLockTime($Package, $lockKey);
 
-                return;
+                if ($time < 0) {
+                    Manager::log(
+                        'Crons cannot be executed because another instance is already executing crons.'
+                    );
+
+                    return;
+                }
             }
 
             QUI\Lock\Locker::lock($Package, $lockKey);
