@@ -3,15 +3,6 @@
  *
  * @module package/quiqqer/cron/bin/Manager
  * @author www.pcsg.de (Henning Leutz)
- *
- * @require qui/QUI
- * @require qui/controls/desktop/Panel
- * @require qui/controls/windows/Confirm
- * @require qui/controls/buttons/Button
- * @require qui/controls/buttons/Separator
- * @require controls/grid/Grid
- * @require Ajax
- * @require Locale
  */
 define('package/quiqqer/cron/bin/Manager', [
 
@@ -81,7 +72,7 @@ define('package/quiqqer/cron/bin/Manager', [
                 for (var i = 0, len = result.length; i < len; i++) {
                     result[i].status = {
                         title : QUILocale.get(lg, 'cron.panel.manager.btn.toggle'),
-                        icon  : result[i].active == 1 ? 'fa fa-check' : 'fa fa-remove',
+                        icon  : parseInt(result[i].active) === 1 ? 'fa fa-check' : 'fa fa-remove',
                         cronId: result[i].id,
                         events: {
                             onClick: toggleCron
@@ -261,6 +252,11 @@ define('package/quiqqer/cron/bin/Manager', [
                 }, {
                     header   : QUILocale.get(lg, 'cron.desc'),
                     dataIndex: 'desc',
+                    dataType : 'string',
+                    width    : 200
+                }, {
+                    header   : QUILocale.get(lg, 'last.exec.time'),
+                    dataIndex: 'lastexec',
                     dataType : 'string',
                     width    : 200
                 }],
