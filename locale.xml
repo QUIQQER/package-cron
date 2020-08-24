@@ -682,5 +682,10 @@ This is realized with an external server on which QUIQQER systems can register t
             <de><![CDATA[Nachricht versendet.]]></de>
             <en><![CDATA[Message sent]]></en>
         </locale>
+
+        <locale name="last.exec.time">
+            <de><![CDATA[Letzte Ausführung]]></de>
+            <en><![CDATA[Last execution]]></en>
+        </locale>
     </groups>
 </locales>
