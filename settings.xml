@@ -16,12 +16,21 @@
                     <type><![CDATA[bool]]></type>
                     <defaultvalue>0</defaultvalue>
                 </conf>
+
+                <conf name="cron_lock_time">
+                    <type><![CDATA[integer]]></type>
+                    <defaultvalue>14000</defaultvalue>
+                </conf>
+                <conf name="cron_lock_timeout_notification">
+                    <type><![CDATA[bool]]></type>
+                    <defaultvalue>1</defaultvalue>
+                </conf>
             </section>
         </config>
 
         <window>
             <title>
-                <locale group="quiqqer/cron" var="settings.title" />
+                <locale group="quiqqer/cron" var="settings.title"/>
             </title>
             <params>
                 <icon>fa fa-clock-o</icon>
@@ -30,38 +39,62 @@
             <categories>
                 <category name="cron_settings">
                     <text>
-                        <locale group="quiqqer/cron" var="settings.title" />
+                        <locale group="quiqqer/cron" var="settings.title"/>
                     </text>
                     <icon>fa fa-clock-o</icon>
 
                     <settings title="settings" name="settings">
                         <title>
-                            <locale group="quiqqer/cron" var="settings.cron.title" />
+                            <locale group="quiqqer/cron" var="settings.cron.title"/>
                         </title>
                         <input conf="settings.executeOnAdminLogin" type="checkbox">
                             <text>
-                                <locale group="quiqqer/cron" var="settings.cron.executeOnAdminLogin" />
+                                <locale group="quiqqer/cron" var="settings.cron.executeOnAdminLogin"/>
                             </text>
                             <description>
-                                <locale group="quiqqer/cron" var="settings.cron.executeOnAdminLogin.description" />
+                                <locale group="quiqqer/cron" var="settings.cron.executeOnAdminLogin.description"/>
                             </description>
                         </input>
 
                         <input conf="settings.showAdminMessageIfCronNotRun" type="checkbox">
                             <text>
-                                <locale group="quiqqer/cron" var="settings.cron.showAdminMessageIfCronNotRun" />
+                                <locale group="quiqqer/cron" var="settings.cron.showAdminMessageIfCronNotRun"/>
                             </text>
                             <description>
-                                <locale group="quiqqer/cron" var="settings.cron.showAdminMessageIfCronNotRun.description" />
+                                <locale group="quiqqer/cron" var="settings.cron.showAdminMessageIfCronNotRun.description"/>
                             </description>
                         </input>
 
                         <input conf="settings.writeCronLog" type="checkbox">
                             <text>
-                                <locale group="quiqqer/cron" var="settings.cron.writeCronLog" />
+                                <locale group="quiqqer/cron" var="settings.cron.writeCronLog"/>
                             </text>
                             <description>
-                                <locale group="quiqqer/cron" var="settings.cron.writeCronLog.description" />
+                                <locale group="quiqqer/cron" var="settings.cron.writeCronLog.description"/>
+                            </description>
+                        </input>
+                    </settings>
+
+                    <settings title="execution" name="execution">
+                        <title>
+                            <locale group="quiqqer/cron" var="settings.execution.title"/>
+                        </title>
+
+                        <input conf="settings.cron_lock_time" type="number" min="1">
+                            <text>
+                                <locale group="quiqqer/cron" var="settings.cron_lock_time.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/cron" var="settings.cron_lock_time.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="settings.cron_lock_timeout_notification" type="checkbox">
+                            <text>
+                                <locale group="quiqqer/cron" var="settings.cron_lock_timeout_notification.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/cron" var="settings.cron_lock_timeout_notification.description"/>
                             </description>
                         </input>
                     </settings>
