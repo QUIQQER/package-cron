@@ -350,7 +350,7 @@ class Manager
         }
 
         Manager::log('Finish cron execution (all crons)');
-        \QUI\System\Log::writeRecursive(self::$runtime);
+        
         try {
             QUI\Lock\Locker::unlock($Package, $lockKey);
         } catch (\Exception $Exception) {
