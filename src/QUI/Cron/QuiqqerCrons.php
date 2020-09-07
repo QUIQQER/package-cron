@@ -120,15 +120,15 @@ class QuiqqerCrons
                 SELECT id
                 FROM {$Project->table()}
                 WHERE active = 1 AND
-                      release_from != :empty AND
-                      release_to != :empty AND
-    
-                      (release_from > :date OR release_to < :date)
+                        release_from IS NOT null AND
+                        release_to IS NOT null AND
+            
+                        (release_from > :date OR release_to < :date)
                 ;
             ");
 
             $Statement->bindValue(':date', $now, \PDO::PARAM_STR);
-            $Statement->bindValue(':empty', '0000-00-00 00:00:00', \PDO::PARAM_STR);
+            //$Statement->bindValue(':empty', '0000-00-00 00:00:00', \PDO::PARAM_STR);
             $Statement->execute();
 
             $result = $Statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -152,16 +152,16 @@ class QuiqqerCrons
                 SELECT id
                 FROM {$Project->table()}
                 WHERE active = 0 AND
-                      release_from != :empty AND
-                      release_to != :empty AND
-    
-                      release_to >= :date AND
-                      release_from <= :date
+                        release_from IS NOT null AND
+                        release_to IS NOT null AND
+            
+                        release_to >= :date AND
+                        release_from <= :date
                 ;
             ");
 
             $Statement->bindValue(':date', $now, \PDO::PARAM_STR);
-            $Statement->bindValue(':empty', '0000-00-00 00:00:00', \PDO::PARAM_STR);
+            //$Statement->bindValue(':empty', '0000-00-00 00:00:00', \PDO::PARAM_STR);
             $Statement->execute();
 
             $result = $Statement->fetchAll(\PDO::FETCH_ASSOC);
