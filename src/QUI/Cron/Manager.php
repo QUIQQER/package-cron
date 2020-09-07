@@ -28,6 +28,26 @@ class Manager
     protected static $writeCronLog = null;
 
     /**
+     * Data about the current runtime
+     *
+     * @var array
+     */
+    protected static $runtime = [
+        'currentCronTitle' => '',
+        'currentCronId'    => 0,
+        'finished'         => 0,
+        'total'            => 0,
+        'startAll'         => false,
+        'startCurrent'     => false,
+        'lockEnd'          => false
+    ];
+
+    /**
+     * @var bool
+     */
+    protected static $lockTimeoutNotificationSent = false;
+
+    /**
      * Add a cron
      *
      * @param string $cron - Name of the Cron
@@ -215,6 +235,9 @@ class Manager
         // locking
         $lockKey = 'cron-execution';
 
+        $Start                     = \date_create();
+        self::$runtime['startAll'] = $Start->format('Y-m-d H:i:s');
+
         try {
             $Package = QUI::getPackage('quiqqer/cron');
 
@@ -230,7 +253,13 @@ class Manager
                 }
             }
 
-            QUI\Lock\Locker::lock($Package, $lockKey);
+            $lockTime = self::getLockTime(); // lock time in seconds
+            $EndTime  = clone $Start;
+            $EndTime  = $EndTime->add(\date_interval_create_from_date_string($lockTime.' seconds'));
+
+            self::$runtime['lockEnd'] = $EndTime->format('Y-m-d H:i:s');
+
+            QUI\Lock\Locker::lock($Package, $lockKey, $lockTime);
         } catch (\Exception $Exception) {
             QUI\System\Log::writeDebugException($Exception);
             QUI\System\Log::writeRecursive($Exception->getMessage());
@@ -247,11 +276,13 @@ class Manager
         $list = $this->getList();
         $time = time();
 
-        foreach ($list as $entry) {
-            if ($entry['active'] != 1) {
-                continue;
-            }
+        $activeList = \array_filter($list, function ($entry) {
+            return $entry['active'] == 1;
+        });
 
+        self::$runtime['total'] = \count($activeList);
+
+        foreach ($activeList as $entry) {
             $lastexec = $entry['lastexec'];
 
             if (empty($lastexec)) {
@@ -288,12 +319,25 @@ class Manager
 
             // no execute
             if ($next > $time) {
+                self::$runtime['finished']++;
                 continue;
             }
 
             // execute cron
             try {
+                self::$runtime['startCurrent']     = \date('Y-m-d H:i:s');
+                self::$runtime['currentCronId']    = $entry['id'];
+                self::$runtime['currentCronTitle'] = $entry['title'];
+
                 $this->executeCron($entry['id']);
+
+                self::$runtime['finished']++;
+
+                $Now = \date_create();
+
+                if ($Now > $EndTime) {
+                    self::sendCronLockTimeoutNotification();
+                }
             } catch (\Exception $Exception) {
                 $message = print_r($entry, true);
                 $message .= "\n".$Exception->getMessage();
@@ -306,7 +350,7 @@ class Manager
         }
 
         Manager::log('Finish cron execution (all crons)');
-
+        
         try {
             QUI\Lock\Locker::unlock($Package, $lockKey);
         } catch (\Exception $Exception) {
@@ -732,5 +776,91 @@ class Manager
         }
 
         return self::$writeCronLog;
+    }
+
+    /**
+     * Send admin notification when cron lock time is exceeded.
+     *
+     * @return void
+     */
+    protected static function sendCronLockTimeoutNotification()
+    {
+        // Check if notification shall be sent
+        if (self::$lockTimeoutNotificationSent) {
+            return;
+        }
+
+        try {
+            $Conf = QUI::getPackage('quiqqer/cron')->getConfig();
+
+            if (empty($Conf->get('settings', 'cron_lock_timeout_notification'))) {
+                return;
+            }
+        } catch (\Exception $Exception) {
+            QUI\System\Log::writeException($Exception);
+            return;
+        }
+
+        $adminMail = QUI::conf('mail', 'admin_mail');
+
+        if (empty($adminMail)) {
+            QUI\System\Log::addWarning(
+                'quiqqer/cron -> Cannot send lock timeout notification since no administrator e-mail is configured in'
+                .' this QUIQQER system.'
+            );
+
+            return;
+        }
+
+        try {
+            $Mailer = new QUI\Mail\Mailer();
+            $Mailer->addRecipient($adminMail);
+
+            $L = QUI::getLocale();
+
+            $Mailer->setSubject(
+                $L->get('quiqqer/cron', 'notification.lock_timeout.subject')
+            );
+
+            $End = \date_create(self::$runtime['lockEnd']);
+            $Now = \date_create();
+
+            $TimeDiff = $End->diff($Now);
+
+            $Mailer->setBody(
+                $L->get('quiqqer/cron', 'notification.lock_timeout.body', \array_merge(self::$runtime, [
+                    'host' => QUI::conf('globals', 'host'),
+                    'diff' => $TimeDiff->format('%H:%M:%S')
+                ]))
+            );
+
+            $Mailer->send();
+
+            self::$lockTimeoutNotificationSent = true;
+        } catch (\Exception $Exception) {
+            QUI\System\Log::writeException($Exception);
+        }
+    }
+
+    /**
+     * Get cron lock time
+     *
+     * @return int - Lock time (seconds)
+     */
+    protected static function getLockTime()
+    {
+        try {
+            $Conf     = QUI::getPackage('quiqqer/cron')->getConfig();
+            $lockTime = $Conf->get('settings', 'cron_lock_time');
+
+            if (empty($lockTime)) {
+                return 1440;
+            }
+
+            return $lockTime;
+        } catch (\Exception $Exception) {
+            QUI\System\Log::writeException($Exception);
+            return 1440;
+        }
     }
 }
