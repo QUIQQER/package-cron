@@ -56,26 +56,55 @@ class QuiqqerCrons
      */
     public static function clearSessions()
     {
-        // clear native session storage
-        $sessionDir = VAR_DIR.'sessions/';
-
-        if (!is_dir($sessionDir)) {
-            return;
-        }
-
-        $sessionFiles = QUI\Utils\System\File::readDir($sessionDir);
-        $maxTime      = 1400;
+        $type    = QUI::conf('session', 'type');
+        $maxTime = 1400;
 
         if (QUI::conf('session', 'max_life_time')) {
             $maxTime = (int)QUI::conf('session', 'max_life_time');
         }
 
-        foreach ($sessionFiles as $sessionFile) {
-            $fmTime = filemtime($sessionDir.$sessionFile);
+        switch ($type) {
+            case 'filesystem':
+            case 'database':
+                break;
 
-            if ($fmTime + $maxTime < time()) {
-                unlink($sessionDir.$sessionFile);
+            default:
+                $type = 'filesystem';
+        }
+
+        // filesystem
+        if ($type === 'filesystem') {
+            // clear native session storage
+            $sessionDir = VAR_DIR.'sessions/';
+
+            if (!\is_dir($sessionDir)) {
+                return;
             }
+
+            $sessionFiles = QUI\Utils\System\File::readDir($sessionDir);
+
+            foreach ($sessionFiles as $sessionFile) {
+                $fmTime = \filemtime($sessionDir.$sessionFile);
+
+                if ($fmTime + $maxTime < \time()) {
+                    \unlink($sessionDir.$sessionFile);
+                }
+            }
+
+            return;
+        }
+
+        // database
+        if ($type === 'database') {
+            $table       = QUI::getDBTableName('sessions');
+            $maxLifetime = \time() - $maxTime;
+
+            QUI::getDataBase()->delete($table, [
+                'session_time' => [
+                    'type'  => '<',
+                    'value' => $maxLifetime
+                ]
+            ]);
         }
     }
 
