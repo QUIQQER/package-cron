@@ -64,8 +64,8 @@ class QuiqqerCrons
         }
 
         switch ($type) {
-            case 'filesystem';
-            case 'database';
+            case 'filesystem':
+            case 'database':
                 break;
 
             default:
