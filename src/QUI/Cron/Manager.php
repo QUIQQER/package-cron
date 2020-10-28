@@ -350,7 +350,7 @@ class Manager
         }
 
         Manager::log('Finish cron execution (all crons)');
-        
+
         try {
             QUI\Lock\Locker::unlock($Package, $lockKey);
         } catch (\Exception $Exception) {
@@ -720,12 +720,19 @@ class Manager
             }
 
             if ($Params->length) {
-                foreach ($Params as $Param) {
+                foreach ($Params as $k => $Param) {
                     /* @var $Param \DOMElement */
-                    $params[] = [
+                    $param = [
                         'name' => $Param->getAttribute('name'),
-                        'type' => $Param->getAttribute('type')
+                        'type' => $Param->getAttribute('type'),
+                        'desc' => false
                     ];
+
+                    if ($Param->childNodes->length) {
+                        $param['desc'] = QUI\Utils\DOM::getTextFromNode($Param);
+                    }
+
+                    $params[] = $param;
                 }
             }
 
@@ -736,7 +743,7 @@ class Manager
                 'params'      => $params
             ];
         }
-
+\QUI\System\Log::writeRecursive($result);
         return $result;
     }
 

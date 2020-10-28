@@ -14,7 +14,7 @@ define('package/quiqqer/cron/bin/CronWindow', [
 
     'qui/controls/windows/Confirm',
     'qui/controls/buttons/Select',
-    'qui/controls/input/Params',
+    'package/quiqqer/cron/bin/controls/Params',
     'Ajax',
     'Locale',
 
@@ -120,7 +120,7 @@ define('package/quiqqer/cron/bin/CronWindow', [
                     params = available[i].params;
 
                     for (p = 0, plen = params.length; p < plen; p++) {
-                        allowedParams.push(params[p].name);
+                        allowedParams.push(params[p]);
                     }
                 }
 
