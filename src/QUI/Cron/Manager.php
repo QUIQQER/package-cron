@@ -743,7 +743,7 @@ class Manager
                 'params'      => $params
             ];
         }
-\QUI\System\Log::writeRecursive($result);
+
         return $result;
     }
 
