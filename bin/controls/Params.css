@@ -43,7 +43,7 @@
 .qui-control-input-param-window label {
     clear: both;
     display: block;
-    max-width : 300px;
+    max-width: 300px;
     width: 100%;
 }
 
@@ -52,7 +52,7 @@
     clear: both;
     display: block;
     margin: 0 auto;
-    max-width : 300px;
+    max-width: 300px;
     width: 100%;
 }
 
@@ -65,5 +65,10 @@
 .qui-control-input-param-window-description {
     margin-top: 10px;
     max-width: 300px;
+    width: 100%;
+}
+
+.qui-control-input-param-window-value {
+    float: left;
     width: 100%;
 }

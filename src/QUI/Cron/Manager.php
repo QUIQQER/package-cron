@@ -723,9 +723,10 @@ class Manager
                 foreach ($Params as $k => $Param) {
                     /* @var $Param \DOMElement */
                     $param = [
-                        'name' => $Param->getAttribute('name'),
-                        'type' => $Param->getAttribute('type'),
-                        'desc' => false
+                        'name'     => $Param->getAttribute('name'),
+                        'type'     => $Param->getAttribute('type'),
+                        'data-qui' => $Param->getAttribute('data-qui'),
+                        'desc'     => false
                     ];
 
                     if ($Param->childNodes->length) {

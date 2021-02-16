@@ -17,10 +17,14 @@ define('package/quiqqer/cron/bin/controls/Params', [
     'qui/controls/buttons/Button',
     'qui/controls/windows/Confirm',
 
+    'Locale',
+
     'css!package/quiqqer/cron/bin/controls/Params.css'
 
-], function (QUI, QUIControl, QUIButton, QUIConfirm) {
+], function (QUI, QUIControl, QUIButton, QUIConfirm, QUILocale) {
     "use strict";
+
+    var lg = 'quiqqer/cron';
 
     /**
      * @class package/quiqqer/cron/bin/controls/Params
@@ -95,7 +99,7 @@ define('package/quiqqer/cron/bin/controls/Params', [
 
             this.$AddButton = new QUIButton({
                 textimage: 'icon-plus fa fa-plus',
-                text     : 'Parameter hinzufügen',
+                text     : QUILocale.get(lg, 'controls.Params.add'),
                 events   : {
                     onClick: function () {
                         self.openAddParamWindow();
@@ -242,17 +246,19 @@ define('package/quiqqer/cron/bin/controls/Params', [
          * @param {HTMLElement} [Param] - optional, edit a param (.qui-control-input-param-entry)
          */
         openAddParamWindow: function (Param) {
-            var self = this;
+            var self         = this,
+                ParamControl = false,
+                ParamValue   = false;
 
             new QUIConfirm({
-                title    : 'Parameter hinzufügen',
+                title    : QUILocale.get(lg, 'controls.Params.add.title'),
                 icon     : 'fa fa-plus',
                 texticon : 'fa fa-plus',
                 maxHeight: this.getAttribute('windowMaxHeight'),
                 maxWidth : this.getAttribute('windowMaxWidth'),
                 autoclose: false,
 
-                text       : 'Geben Sie bitte den Namen und den Wert des Parameters ein.',
+                text       : QUILocale.get(lg, 'controls.Params.add.text'),
                 information: '<div class="qui-control-input-param-window">' +
                     '<label>' +
                     '     <span class="qui-control-input-param-window-label">Name</span>' +
@@ -260,7 +266,7 @@ define('package/quiqqer/cron/bin/controls/Params', [
                     '</label>' +
                     '<label>' +
                     '     <span class="qui-control-input-param-window-label">Wert</span>' +
-                    '     <input type="text" name="paramValue" value="" />' +
+                    '     <div class="qui-control-input-param-window-value"></div>' +
                     '</label>' +
                     '<div class="qui-control-input-param-window-description' +
                     ' messages-message box message-information"></div>' +
@@ -276,26 +282,51 @@ define('package/quiqqer/cron/bin/controls/Params', [
                             var NameSelect,
                                 Content              = Confirm.getContent(),
                                 ParamName            = Content.getElement('[name="paramName"]'),
-                                ParamValue           = Content.getElement('[name="paramValue"]'),
                                 allowedParams        = self.getAttribute('allowedParams'),
-                                DescriptionContainer = Content.getElement('.qui-control-input-param-window-description');
+                                DescriptionContainer = Content.getElement('.qui-control-input-param-window-description'),
+                                ParamValueContainer  = Content.getElement('.qui-control-input-param-window-value'),
+                                initialValueSet      = false;
 
                             var onParamChange = function () {
                                 if (!NameSelect) {
                                     return;
                                 }
 
+                                ParamValueContainer.set('html', '');
+
                                 var Option      = NameSelect.getElement('option[value="' + NameSelect.value + '"]'),
-                                    description = Option.get('data-desc');
+                                    description = Option.get('data-desc'),
+
+                                    ParamValue  = new Element('input', {
+                                        type: 'text',
+                                        name: 'paramValue'
+                                    }).inject(ParamValueContainer);
 
                                 if (!description) {
                                     DescriptionContainer.set('html', '');
                                     DescriptionContainer.setStyle('display', 'none');
+                                } else {
+                                    DescriptionContainer.set('html', description);
+                                    DescriptionContainer.setStyle('display', '');
+                                }
+
+                                if (!initialValueSet && typeOf(Param) === 'element') {
+                                    ParamValue.value = Param.get('data-value');
+                                }
+
+                                initialValueSet = true;
+
+                                if (!Option.get('data-control')) {
                                     return;
                                 }
 
-                                DescriptionContainer.set('html', description);
-                                DescriptionContainer.setStyle('display', '');
+                                Confirm.Loader.show();
+                                ParamValue.set('data-qui', Option.get('data-control'));
+
+                                QUI.parse(Content).then(function () {
+                                    //ParamControl = QUI.Controls.getById(ParamValue.get('dat-quiid'));
+                                    Confirm.Loader.hide();
+                                });
                             };
 
                             if (allowedParams.length) {
@@ -308,9 +339,10 @@ define('package/quiqqer/cron/bin/controls/Params', [
 
                                 for (var i = 0, len = allowedParams.length; i < len; i++) {
                                     new Element('option', {
-                                        value      : allowedParams[i].name,
-                                        html       : allowedParams[i].name,
-                                        'data-desc': allowedParams[i].desc
+                                        value         : allowedParams[i].name,
+                                        html          : allowedParams[i].name,
+                                        'data-desc'   : allowedParams[i].desc,
+                                        'data-control': allowedParams[i]['data-qui']
                                     }).inject(NameSelect);
                                 }
 
@@ -325,9 +357,8 @@ define('package/quiqqer/cron/bin/controls/Params', [
                                 }
                             });
 
-                            if (typeOf(Param) === 'element') {
-                                ParamName.value  = Param.get('data-name');
-                                ParamValue.value = Param.get('data-value');
+                            if (!initialValueSet && typeOf(Param) === 'element') {
+                                ParamName.value = Param.get('data-name');
                             }
 
                             (function () {
