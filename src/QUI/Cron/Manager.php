@@ -78,6 +78,11 @@ class Manager
             $params = [];
         }
 
+        if (!empty($params['exec'])) {
+            $cronData['exec'] = $params['exec'];
+            unset($params['exec']);
+        }
+
         QUI::getDataBase()->insert($this->table(), [
             'active'    => 1,
             'exec'      => $cronData['exec'],
@@ -495,7 +500,7 @@ class Manager
 
         try {
             $Package  = QUI::getPackage($cronParts[0]);
-            $cronFile = $Package->getXMLFile('cron.xml');
+            $cronFile = $Package->getXMLFilePath('cron.xml');
 
             if ($Package->isQuiqqerPackage()
                 && $cronFile
@@ -806,6 +811,7 @@ class Manager
             }
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
+
             return;
         }
 
@@ -868,6 +874,7 @@ class Manager
             return $lockTime;
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
+
             return 1440;
         }
     }

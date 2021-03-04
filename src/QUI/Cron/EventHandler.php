@@ -25,6 +25,8 @@ class EventHandler
         if ($Package->getName() === 'quiqqer/cron') {
             self::checkCronTable();
         }
+
+        self::createDefaultCrons();
     }
 
     /**
@@ -172,84 +174,103 @@ class EventHandler
 
         $defaultCrons = [
             // Clear temp folder
-            "quiqqer/cron:0"  => [
+            "quiqqer/cron:0"         => [
                 "min"   => "0",
                 "hour"  => "0",
                 "day"   => "*",
                 "month" => "*",
-                "dow"   => "*"
+                "dow"   => "*",
+                "exec"  => '\QUI\Cron\QuiqqerCrons::clearTempFolder'
             ],
+
             // Clear sessions
-            "quiqqer/cron:1"  => [
+            "quiqqer/cron:1"         => [
                 "min"   => "0",
                 "hour"  => "*",
                 "day"   => "*",
                 "month" => "*",
-                "dow"   => "*"
+                "dow"   => "*",
+                'exec'  => '\QUI\Cron\QuiqqerCrons::clearSessions'
             ],
+
             // Process mail queue
-            "quiqqer/cron:6"  => [
+            "quiqqer/cron:6"         => [
                 "min"   => "*/5",
                 "hour"  => "*",
                 "day"   => "*",
                 "month" => "*",
-                "dow"   => "*"
+                "dow"   => "*",
+                "exec"  => '\QUI\Cron\QuiqqerCrons::mailQueue'
             ],
+
             // Calculate Media Folder Sizes
-            "quiqqer/cron:7"  => [
+            "quiqqer/cron:7"         => [
                 "min"   => "0",
                 "hour"  => "3",
                 "day"   => "*",
                 "month" => "*",
-                "dow"   => "*"
+                "dow"   => "*",
+                'exec'  => '\QUI\Cron\QuiqqerCrons::calculateMediaFolderSizes'
             ],
+
             // Calculate Package Folder Size
-            "quiqqer/cron:8"  => [
+            "quiqqer/cron:8"         => [
                 "min"   => "0",
                 "hour"  => "3",
                 "day"   => "*",
                 "month" => "*",
-                "dow"   => "*"
+                "dow"   => "*",
+                'exec'  => '\QUI\Cron\QuiqqerCrons::calculatePackageFolderSize'
             ],
+
             // Calculate Cache Folder Size
-            "quiqqer/cron:9"  => [
+            "quiqqer/cron:9"         => [
                 "min"   => "0",
                 "hour"  => "3",
                 "day"   => "*",
                 "month" => "*",
-                "dow"   => "*"
+                "dow"   => "*",
+                'exec'  => '\QUI\Cron\QuiqqerCrons::calculateCacheFolderSize'
             ],
+
             // Calculate Whole Installation Folder Size
-            "quiqqer/cron:10" => [
+            "quiqqer/cron:10"        => [
                 "min"   => "0",
                 "hour"  => "3",
                 "day"   => "*",
                 "month" => "*",
-                "dow"   => "*"
+                "dow"   => "*",
+                'exec'  => '\QUI\Cron\QuiqqerCrons::calculateWholeInstallationFolderSize'
             ],
+
             // Count All Files In Installation
-            "quiqqer/cron:11" => [
+            "quiqqer/cron:11"        => [
                 "min"   => "0",
                 "hour"  => "3",
                 "day"   => "*",
                 "month" => "*",
-                "dow"   => "*"
+                "dow"   => "*",
+                'exec'  => '\QUI\Cron\QuiqqerCrons::countAllFilesInInstallation'
             ],
+
             // Calculate VAR folder size
-            "quiqqer/cron:12" => [
+            "quiqqer/cron:12"        => [
                 "min"   => "0",
                 "hour"  => "3",
                 "day"   => "*",
                 "month" => "*",
-                "dow"   => "*"
+                "dow"   => "*",
+                'exec'  => '\QUI\Cron\QuiqqerCrons::calculateVarFolderSize'
             ],
+
             // Login-Logger purge logs (as decided with mor & hen)
             "quiqqer/login-logger:0" => [
                 "min"   => "0",
                 "hour"  => "3",
                 "day"   => "*",
                 "month" => "*",
-                "dow"   => "*"
+                "dow"   => "*",
+                'exec'  => '\QUI\LoginLogger\Cron::purgeLog'
             ]
         ];
 
@@ -260,20 +281,32 @@ class EventHandler
             $installedCrons[] = strtolower(trim($row['exec']));
         }
 
+        $available   = $CronManager->getAvailableCrons();
+        $getCronData = function ($exec) use ($available) {
+            foreach ($available as $data) {
+                if ($data['exec'] === $exec) {
+                    return $data;
+                }
+            }
+
+            return false;
+        };
+
 
         // add the simple default crons, if they dont exist yet
         foreach ($defaultCrons as $identifier => $time) {
-            $data = $CronManager->getCronData($identifier);
+            $exec  = \trim($time['exec']);
+            $data  = $getCronData($exec);
+            $title = \trim($data['title']);
 
-            $exec  = trim($data['exec']);
-            $title = trim($data['title']);
-
-            if (in_array(strtolower($exec), $installedCrons)) {
+            if (\in_array(\strtolower($exec), $installedCrons)) {
                 continue;
             }
 
             try {
-                $CronManager->add($title, $time['min'], $time['hour'], $time['day'], $time['month'], $time['dow']);
+                $CronManager->add($title, $time['min'], $time['hour'], $time['day'], $time['month'], $time['dow'], [
+                    'exec' => $exec
+                ]);
             } catch (QUI\Exception $Exception) {
                 QUI\System\Log::writeException($Exception);
             }
