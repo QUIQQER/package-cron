@@ -25,8 +25,6 @@ class EventHandler
         if ($Package->getName() === 'quiqqer/cron') {
             self::checkCronTable();
         }
-
-        self::createDefaultCrons();
     }
 
     /**
