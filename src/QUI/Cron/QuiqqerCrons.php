@@ -149,10 +149,8 @@ class QuiqqerCrons
                 SELECT id
                 FROM {$Project->table()}
                 WHERE active = 1 AND
-                        release_from IS NOT null AND
                         release_to IS NOT null AND
-            
-                        (release_from > :date OR release_to < :date)
+                        release_to < :date
                 ;
             ");
 
@@ -178,13 +176,10 @@ class QuiqqerCrons
              * activate sites
              */
             $Statement = $PDO->prepare("
-                SELECT id
+                SELECT id, release_to
                 FROM {$Project->table()}
                 WHERE active = 0 AND
                         release_from IS NOT null AND
-                        release_to IS NOT null AND
-            
-                        release_to >= :date AND
                         release_from <= :date
                 ;
             ");
@@ -194,9 +189,20 @@ class QuiqqerCrons
             $Statement->execute();
 
             $result = $Statement->fetchAll(\PDO::FETCH_ASSOC);
+            $Now    = \date_create();
 
             foreach ($result as $entry) {
                 try {
+                    // Do not activate sites that have a "release to" date
+                    // that is already reached.
+                    if (!empty($entry['release_to'])) {
+                        $ReleaseTo = \date_create($entry['release_to']);
+
+                        if ($ReleaseTo && $ReleaseTo < $Now) {
+                            continue;
+                        }
+                    }
+
                     $Site = $Project->get((int)$entry['id']);
                     $Site->activate();
 
