@@ -203,10 +203,10 @@ class QuiqqerCrons
                         }
                     }
 
-                    $Site = $Project->get((int)$entry['id']);
+                    $Site = new QUI\Projects\Site\Edit($Project, (int)$entry['id']);
                     $Site->activate();
 
-                    $activate[] = (int)$entry['id'];
+                    $activate[] = $Site->getId();
                 } catch (QUI\Exception $Exception) {
                     QUI\System\Log::writeException($Exception);
                 }
