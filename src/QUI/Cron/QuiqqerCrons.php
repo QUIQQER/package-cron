@@ -150,7 +150,8 @@ class QuiqqerCrons
                 FROM {$Project->table()}
                 WHERE active = 1 AND
                         release_to IS NOT null AND
-                        release_to < :date
+                        release_to < :date AND 
+                        auto_release = 1
                 ;
             ");
 
@@ -180,7 +181,8 @@ class QuiqqerCrons
                 FROM {$Project->table()}
                 WHERE active = 0 AND
                         release_from IS NOT null AND
-                        release_from <= :date
+                        release_from <= :date AND 
+                        auto_release = 1
                 ;
             ");
 
@@ -219,7 +221,10 @@ class QuiqqerCrons
                         'cron.release.date.log.message.deactivate',
                         ['list' => implode(',', $deactivate)]
                     ),
-                    [],
+                    [
+                        'project' => $Project->getName(),
+                        'lang'    => $Project->getLang(),
+                    ],
                     'cron'
                 );
             }
@@ -231,7 +236,10 @@ class QuiqqerCrons
                         'cron.release.date.log.message.activate',
                         ['list' => implode(',', $activate)]
                     ),
-                    [],
+                    [
+                        'project' => $Project->getName(),
+                        'lang'    => $Project->getLang(),
+                    ],
                     'cron'
                 );
             }
