@@ -78,6 +78,11 @@ class Manager
             $params = [];
         }
 
+        if (!empty($params['exec'])) {
+            $cronData['exec'] = $params['exec'];
+            unset($params['exec']);
+        }
+
         QUI::getDataBase()->insert($this->table(), [
             'active'    => 1,
             'exec'      => $cronData['exec'],
@@ -350,7 +355,7 @@ class Manager
         }
 
         Manager::log('Finish cron execution (all crons)');
-        
+
         try {
             QUI\Lock\Locker::unlock($Package, $lockKey);
         } catch (\Exception $Exception) {
@@ -495,7 +500,7 @@ class Manager
 
         try {
             $Package  = QUI::getPackage($cronParts[0]);
-            $cronFile = $Package->getXMLFile('cron.xml');
+            $cronFile = $Package->getXMLFilePath('cron.xml');
 
             if ($Package->isQuiqqerPackage()
                 && $cronFile
@@ -720,12 +725,20 @@ class Manager
             }
 
             if ($Params->length) {
-                foreach ($Params as $Param) {
+                foreach ($Params as $k => $Param) {
                     /* @var $Param \DOMElement */
-                    $params[] = [
-                        'name' => $Param->getAttribute('name'),
-                        'type' => $Param->getAttribute('type')
+                    $param = [
+                        'name'     => $Param->getAttribute('name'),
+                        'type'     => $Param->getAttribute('type'),
+                        'data-qui' => $Param->getAttribute('data-qui'),
+                        'desc'     => false
                     ];
+
+                    if ($Param->childNodes->length) {
+                        $param['desc'] = QUI\Utils\DOM::getTextFromNode($Param);
+                    }
+
+                    $params[] = $param;
                 }
             }
 
@@ -798,6 +811,7 @@ class Manager
             }
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
+
             return;
         }
 
@@ -860,6 +874,7 @@ class Manager
             return $lockTime;
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
+
             return 1440;
         }
     }

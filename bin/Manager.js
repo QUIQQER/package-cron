@@ -194,6 +194,7 @@ define('package/quiqqer/cron/bin/Manager', [
 
 
             this.$Grid = new Grid(Container, {
+                storageKey       : 'quiqqer-cron-manager',
                 columnModel      : [{
                     header   : QUILocale.get('quiqqer/system', 'status'),
                     dataIndex: 'status',

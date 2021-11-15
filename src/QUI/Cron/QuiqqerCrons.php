@@ -56,26 +56,55 @@ class QuiqqerCrons
      */
     public static function clearSessions()
     {
-        // clear native session storage
-        $sessionDir = VAR_DIR.'sessions/';
-
-        if (!is_dir($sessionDir)) {
-            return;
-        }
-
-        $sessionFiles = QUI\Utils\System\File::readDir($sessionDir);
-        $maxTime      = 1400;
+        $type    = QUI::conf('session', 'type');
+        $maxTime = 1400;
 
         if (QUI::conf('session', 'max_life_time')) {
             $maxTime = (int)QUI::conf('session', 'max_life_time');
         }
 
-        foreach ($sessionFiles as $sessionFile) {
-            $fmTime = filemtime($sessionDir.$sessionFile);
+        switch ($type) {
+            case 'filesystem':
+            case 'database':
+                break;
 
-            if ($fmTime + $maxTime < time()) {
-                unlink($sessionDir.$sessionFile);
+            default:
+                $type = 'filesystem';
+        }
+
+        // filesystem
+        if ($type === 'filesystem') {
+            // clear native session storage
+            $sessionDir = VAR_DIR.'sessions/';
+
+            if (!\is_dir($sessionDir)) {
+                return;
             }
+
+            $sessionFiles = QUI\Utils\System\File::readDir($sessionDir);
+
+            foreach ($sessionFiles as $sessionFile) {
+                $fmTime = \filemtime($sessionDir.$sessionFile);
+
+                if ($fmTime + $maxTime < \time()) {
+                    \unlink($sessionDir.$sessionFile);
+                }
+            }
+
+            return;
+        }
+
+        // database
+        if ($type === 'database') {
+            $table       = QUI::getDBTableName('sessions');
+            $maxLifetime = \time() - $maxTime;
+
+            QUI::getDataBase()->delete($table, [
+                'session_time' => [
+                    'type'  => '<',
+                    'value' => $maxLifetime
+                ]
+            ]);
         }
     }
 
@@ -120,15 +149,14 @@ class QuiqqerCrons
                 SELECT id
                 FROM {$Project->table()}
                 WHERE active = 1 AND
-                      release_from != :empty AND
-                      release_to != :empty AND
-    
-                      (release_from > :date OR release_to < :date)
+                        release_to IS NOT null AND
+                        release_to < :date AND 
+                        auto_release = 1
                 ;
             ");
 
             $Statement->bindValue(':date', $now, \PDO::PARAM_STR);
-            $Statement->bindValue(':empty', '0000-00-00 00:00:00', \PDO::PARAM_STR);
+            //$Statement->bindValue(':empty', '0000-00-00 00:00:00', \PDO::PARAM_STR);
             $Statement->execute();
 
             $result = $Statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -149,29 +177,38 @@ class QuiqqerCrons
              * activate sites
              */
             $Statement = $PDO->prepare("
-                SELECT id
+                SELECT id, release_to
                 FROM {$Project->table()}
                 WHERE active = 0 AND
-                      release_from != :empty AND
-                      release_to != :empty AND
-    
-                      release_to >= :date AND
-                      release_from <= :date
+                        release_from IS NOT null AND
+                        release_from <= :date AND 
+                        auto_release = 1
                 ;
             ");
 
             $Statement->bindValue(':date', $now, \PDO::PARAM_STR);
-            $Statement->bindValue(':empty', '0000-00-00 00:00:00', \PDO::PARAM_STR);
+            //$Statement->bindValue(':empty', '0000-00-00 00:00:00', \PDO::PARAM_STR);
             $Statement->execute();
 
             $result = $Statement->fetchAll(\PDO::FETCH_ASSOC);
+            $Now    = \date_create();
 
             foreach ($result as $entry) {
                 try {
-                    $Site = $Project->get((int)$entry['id']);
+                    // Do not activate sites that have a "release to" date
+                    // that is already reached.
+                    if (!empty($entry['release_to'])) {
+                        $ReleaseTo = \date_create($entry['release_to']);
+
+                        if ($ReleaseTo && $ReleaseTo < $Now) {
+                            continue;
+                        }
+                    }
+
+                    $Site = new QUI\Projects\Site\Edit($Project, (int)$entry['id']);
                     $Site->activate();
 
-                    $activate[] = (int)$entry['id'];
+                    $activate[] = $Site->getId();
                 } catch (QUI\Exception $Exception) {
                     QUI\System\Log::writeException($Exception);
                 }
@@ -184,7 +221,10 @@ class QuiqqerCrons
                         'cron.release.date.log.message.deactivate',
                         ['list' => implode(',', $deactivate)]
                     ),
-                    [],
+                    [
+                        'project' => $Project->getName(),
+                        'lang'    => $Project->getLang(),
+                    ],
                     'cron'
                 );
             }
@@ -196,7 +236,10 @@ class QuiqqerCrons
                         'cron.release.date.log.message.activate',
                         ['list' => implode(',', $activate)]
                     ),
-                    [],
+                    [
+                        'project' => $Project->getName(),
+                        'lang'    => $Project->getLang(),
+                    ],
                     'cron'
                 );
             }

@@ -734,5 +734,19 @@ This is realized with an external server on which QUIQQER systems can register t
             <de><![CDATA[Letzte Ausführung]]></de>
             <en><![CDATA[Last execution]]></en>
         </locale>
+
+        <locale name="controls.Params.add">
+            <de><![CDATA[Parameter hinzufügen]]></de>
+            <en><![CDATA[Add parameter]]></en>
+        </locale>
+        <locale name="controls.Params.add.title">
+            <de><![CDATA[Parameter hinzufügen]]></de>
+            <en><![CDATA[Add parameter]]></en>
+        </locale>
+        <locale name="controls.Params.add.text">
+            <de><![CDATA[Bitte legen Sie den Namen und den Wert des Parameters fest.]]></de>
+            <en><![CDATA[Please set the name and the value of the parameter.]]></en>
+        </locale>
+
     </groups>
 </locales>
