@@ -16,19 +16,17 @@ class Update
 {
     /**
      * @return void
-     * @throws QUI\Exception
      */
     public static function check()
     {
         try {
             $Packages = QUI::getPackageManager();
             $packages = $Packages->getOutdated(true);
+            $file = QUI::getPackage('quiqqer/cron')->getVarDir() . 'updates';
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
             return;
         }
-
-        $file = QUI::getPackage('quiqqer/cron')->getVarDir() . 'updates';
 
         if (\count($packages)) {
             file_put_contents($file, json_encode($packages));
@@ -37,6 +35,19 @@ class Update
 
         if (\file_exists($file)) {
             \unlink($file);
+        }
+    }
+
+    /**
+     * @param $packages
+     * @return void
+     */
+    public static function setAvailableUpdates($packages = [])
+    {
+        $file = QUI::getPackage('quiqqer/cron')->getVarDir() . 'updates';
+
+        if (\count($packages)) {
+            file_put_contents($file, json_encode($packages));
         }
     }
 
