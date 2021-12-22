@@ -54,4 +54,19 @@ class Update
 
         return json_decode(file_get_contents($file), true);
     }
+
+    /**
+     * If update file exists, this file will be deleted
+     *
+     * @return void
+     * @throws QUI\Exception
+     */
+    public static function clearUpdateCheck()
+    {
+        $file = QUI::getPackage('quiqqer/cron')->getVarDir() . 'updates';
+
+        if (file_exists($file)) {
+            unlink($file);
+        }
+    }
 }
