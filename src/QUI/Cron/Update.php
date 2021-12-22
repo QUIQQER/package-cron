@@ -28,11 +28,30 @@ class Update
             return;
         }
 
+        $file = QUI::getPackage('quiqqer/cron')->getVarDir() . 'updates';
+
         if (\count($packages)) {
-            file_put_contents(
-                QUI::getPackage('quiqqer/cron')->getVarDir() . 'updates',
-                json_encode($packages)
-            );
+            file_put_contents($file, json_encode($packages));
+            return;
         }
+
+        if (\file_exists($file)) {
+            \unlink($file);
+        }
+    }
+
+    /**
+     * @return array
+     * @throws QUI\Exception
+     */
+    public static function getAvailableUpdates(): array
+    {
+        $file = QUI::getPackage('quiqqer/cron')->getVarDir() . 'updates';
+
+        if (!file_exists($file)) {
+            return [];
+        }
+
+        return json_decode(file_get_contents($file), true);
     }
 }

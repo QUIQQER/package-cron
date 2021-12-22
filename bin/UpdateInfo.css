@@ -1,0 +1,53 @@
+.updates-are-available {
+    background: #fff;
+    border: 1px solid rgba(98, 105, 118, .16);
+    border-left: 0.25rem solid #4299e1;
+    border-radius: 4px;
+    box-shadow: rgb(30 41 59 / 4%) 0 2px 4px 0;
+
+    color: #1e293b;
+    right: 10px;
+    padding: 1rem 1rem;
+    position: absolute;
+    top: 60px;
+    width: 400px;
+    z-index: 1000;
+}
+
+.updates-are-available-text {
+    display: flex;
+    width: 100%;
+}
+
+.updates-are-available h1 {
+    color: #4299e1;
+    flex-grow: 1;
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.4285714;
+    margin-bottom: 0.25rem;
+}
+
+.updates-are-available-icon {
+    color: #4299e1;
+    width: 40px;
+}
+
+.updates-are-available button {
+    float: right;
+
+    align-items: center;
+    background-color: #4299e1;
+    border: 1px solid #4299e1;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    display: inline-flex;
+    font-size: 1rem;
+    justify-content: center;
+    padding: 0.4375rem 1rem;
+}
+
+.updates-are-available button:hover {
+    background: #3b8acb;
+}

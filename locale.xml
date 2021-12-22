@@ -337,7 +337,6 @@
             <de><![CDATA[Prüft ob Updates für QUIQQER verfügbar sind.]]></de>
             <en><![CDATA[Checks if updates for QUIQQER are available.]]></en>
         </locale>
-
     </groups>
     <groups name="quiqqer/cron" datatype="js">
         <locale name="cron.id">
@@ -760,6 +759,21 @@ This is realized with an external server on which QUIQQER systems can register t
         <locale name="controls.Params.add.text">
             <de><![CDATA[Bitte legen Sie den Namen und den Wert des Parameters fest.]]></de>
             <en><![CDATA[Please set the name and the value of the parameter.]]></en>
+        </locale>
+
+        <locale name="message.updates.available">
+            <de><![CDATA[
+                <h1>Updates verfügbar</h1>
+                <p>Es sind Updates für dein QUIQQER System verfügbar. Bitte aktualisiere dein System.</p>
+            ]]></de>
+            <en><![CDATA[
+                <h1>Updates available</h1>
+                <p>Updates are available for the QUIQQER system. Please update your system.</p>
+            ]]></en>
+        </locale>
+        <locale name="message.updates.available.button">
+            <de><![CDATA[Zum Update]]></de>
+            <en><![CDATA[To the update]]></en>
         </locale>
 
     </groups>

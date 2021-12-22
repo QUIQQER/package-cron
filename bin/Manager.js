@@ -180,7 +180,7 @@ define('package/quiqqer/cron/bin/Manager', [
                     }
                 })
             );
-            
+
             const Content   = this.getContent(),
                   Container = new Element('div', {
                       'class': 'box',

@@ -65,7 +65,7 @@ class EventHandler
 
         try {
             $Package = QUI::getPackageManager()->getInstalledPackage('quiqqer/cron');
-            $Config  = $Package->getConfig();
+            $Config = $Package->getConfig();
         } catch (QUI\Exception $Exception) {
             return;
         }
@@ -78,7 +78,7 @@ class EventHandler
 
         // check last cron execution
         $CronManager = new Manager();
-        $result      = $CronManager->getHistoryList([
+        $result = $CronManager->getHistoryList([
             'page'    => 1,
             'perPage' => 1
         ]);
@@ -104,15 +104,24 @@ class EventHandler
     {
         try {
             $Package = QUI::getPackageManager()->getInstalledPackage('quiqqer/cron');
-            $Config  = $Package->getConfig();
+            $Config = $Package->getConfig();
         } catch (QUI\Exception $Exception) {
             return;
         }
 
+        echo '
+            <script>
+            window.addEvent("load", function() {
+                require(["package/quiqqer/cron/bin/UpdateInfo"]);
+            });
+            </script>
+        ';
+
         // execute cron ?
         if ($Config->get('settings', 'executeOnAdminLogin')) {
             echo '
-            <script>window.addEvent("load", function()
+            <script>
+            window.addEvent("load", function()
             {
                 require(["Ajax"], function(QUIAjax)
                 {
@@ -289,7 +298,7 @@ class EventHandler
             $installedCrons[] = strtolower(trim($row['exec']));
         }
 
-        $available   = $CronManager->getAvailableCrons();
+        $available = $CronManager->getAvailableCrons();
         $getCronData = function ($exec) use ($available) {
             foreach ($available as $data) {
                 if ($data['exec'] === $exec) {
@@ -303,8 +312,8 @@ class EventHandler
 
         // add the simple default crons, if they dont exist yet
         foreach ($defaultCrons as $identifier => $time) {
-            $exec  = \trim($time['exec']);
-            $data  = $getCronData($exec);
+            $exec = \trim($time['exec']);
+            $data = $getCronData($exec);
             $title = \trim($data['title']);
 
             if (\in_array(\strtolower($exec), $installedCrons)) {
@@ -328,18 +337,18 @@ class EventHandler
      */
     public static function onCreateProject(QUI\Projects\Project $Project)
     {
-        $CronManager     = new Manager();
+        $CronManager = new Manager();
         $publishCronData = $CronManager->getCronData("quiqqer/cron:5");
 
-        $languages      = $Project->getLanguages();
+        $languages = $Project->getLanguages();
         $installedCrons = $CronManager->getList();
 
         foreach ($languages as $lang) {
             // Check that no cron with the same parameters exists yet
             foreach ($installedCrons as $installedCronData) {
-                $installedParams  = json_decode($installedCronData['params'], true);
+                $installedParams = json_decode($installedCronData['params'], true);
                 $installedProject = "";
-                $installedLang    = "";
+                $installedLang = "";
 
                 foreach ($installedParams as $param) {
                     if ($param['name'] == "project") {
