@@ -7,6 +7,7 @@
 namespace QUI\Cron;
 
 use QUI;
+use QUI\Exception;
 
 /**
  * Cron Main Events
@@ -25,6 +26,15 @@ class EventHandler
         if ($Package->getName() === 'quiqqer/cron') {
             self::checkCronTable();
         }
+    }
+
+    /**
+     * @return void
+     * @throws Exception
+     */
+    public static function updateEnd()
+    {
+        QUI\Cron\Update::clearUpdateCheck();
     }
 
     /**
