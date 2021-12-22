@@ -165,7 +165,7 @@
         </description>
     </cron>
     <!-- endregion -->
-
+ 
     <cron exec="\QUI\Cron\Update::check">
         <title>
             <locale group="quiqqer/cron" var="cron.updateCheck.title"/>

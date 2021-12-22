@@ -775,6 +775,10 @@ This is realized with an external server on which QUIQQER systems can register t
             <de><![CDATA[Zum Update]]></de>
             <en><![CDATA[To the update]]></en>
         </locale>
+        <locale name="message.updates.available.cancel.button">
+            <de><![CDATA[Nicht jetzt]]></de>
+            <en><![CDATA[Not yet]]></en>
+        </locale>
 
     </groups>
 </locales>
