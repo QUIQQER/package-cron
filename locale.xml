@@ -78,7 +78,8 @@
             <en><![CDATA[Write cron log]]></en>
         </locale>
         <locale name="settings.cron.writeCronLog.description" html="true">
-            <de><![CDATA[Ausführungszeitpunkte und -dauer für jeden Cron in einer tagesaktuellen <b>cron.log</b> protokollieren]]></de>
+            <de>
+                <![CDATA[Ausführungszeitpunkte und -dauer für jeden Cron in einer tagesaktuellen <b>cron.log</b> protokollieren]]></de>
             <en><![CDATA[Log execution time and length in a daily <b>cron.log</b>]]></en>
         </locale>
         <locale name="settings.execution.title">
@@ -90,16 +91,20 @@
             <en><![CDATA[Execution lock time (seconds)]]></en>
         </locale>
         <locale name="settings.cron_lock_time.description">
-            <de><![CDATA[Bestimmt die Anzahl an Sekunden, die die zentrale QUIQQER Cronausführung (Prüfung und Ausführung aller Crons) gesperrt wird, wenn die zentrale QUIQQER Cronausführung gestartet wird. Dies verhindert, dass Crons ggf. parallel ausgeführt werden. Die Sperre hält so lange wie die hier angegebene Zeit oder bis die zentrale QUIQQER Cronausführung beendet ist.]]></de>
-            <en><![CDATA[Determines the number of seconds the central QUIQQER cron execution (checking and execution of all crons) is locked when the central QUIQQER cron execution is started. This prevents crons from being executed in parallel if necessary. The lock lasts as long as the time specified here or until the central QUIQQER cron execution is finished.]]></en>
+            <de>
+                <![CDATA[Bestimmt die Anzahl an Sekunden, die die zentrale QUIQQER Cronausführung (Prüfung und Ausführung aller Crons) gesperrt wird, wenn die zentrale QUIQQER Cronausführung gestartet wird. Dies verhindert, dass Crons ggf. parallel ausgeführt werden. Die Sperre hält so lange wie die hier angegebene Zeit oder bis die zentrale QUIQQER Cronausführung beendet ist.]]></de>
+            <en>
+                <![CDATA[Determines the number of seconds the central QUIQQER cron execution (checking and execution of all crons) is locked when the central QUIQQER cron execution is started. This prevents crons from being executed in parallel if necessary. The lock lasts as long as the time specified here or until the central QUIQQER cron execution is finished.]]></en>
         </locale>
         <locale name="settings.cron_lock_timeout_notification.title">
             <de><![CDATA[Benachrichtigung bei Überschreibung der Ausführungs-Sperre]]></de>
             <en><![CDATA[Notification when execution lock is overwritten]]></en>
         </locale>
         <locale name="settings.cron_lock_timeout_notification.description">
-            <de><![CDATA[E-Mail Benachrichtigung an den System-Administrator senden, wenn die zentrale QUIQQER Cronausführung länger als die Zeit der Ausführungs-Sperre dauert.]]></de>
-            <en><![CDATA[Send e-mail notification to the system administrator if the central QUIQQER cron execution takes longer than the execution lock time.]]></en>
+            <de>
+                <![CDATA[E-Mail Benachrichtigung an den System-Administrator senden, wenn die zentrale QUIQQER Cronausführung länger als die Zeit der Ausführungs-Sperre dauert.]]></de>
+            <en>
+                <![CDATA[Send e-mail notification to the system administrator if the central QUIQQER cron execution takes longer than the execution lock time.]]></en>
         </locale>
 
         <locale name="exception.registration.empty.domain">
@@ -128,7 +133,7 @@
             <de><![CDATA[Räumt den Upload Ordner auf von Dateien auf welche älter als ein Tag sind.]]></de>
             <en><![CDATA[Clears the upload folder from files older than one day.]]></en>
         </locale>
-        
+
         <!-- region Cleanup Temp-Folder -->
         <locale name="cron.cleanup.temp.title">
             <de><![CDATA[System-Bereinigung: Temporäre Daten löschen]]></de>
@@ -297,7 +302,7 @@
             <en><![CDATA[Sends mails from the mail queue.]]></en>
         </locale>
         <!-- endregion -->
-        
+
         <locale name="notification.lock_timeout.subject">
             <de><![CDATA[System-Warnung: Cron Ausführungszeit hat Limit überschritten]]></de>
             <en><![CDATA[System warning: Cron execution time has exceeded limit]]></en>
@@ -323,7 +328,16 @@
 </ul>
 ]]></en>
         </locale>
-        
+
+        <locale name="cron.updateCheck.title">
+            <de><![CDATA[Update-Check]]></de>
+            <en><![CDATA[Update check]]></en>
+        </locale>
+        <locale name="cron.updateCheck.description">
+            <de><![CDATA[Prüft ob Updates für QUIQQER verfügbar sind.]]></de>
+            <en><![CDATA[Checks if updates for QUIQQER are available.]]></en>
+        </locale>
+
     </groups>
     <groups name="quiqqer/cron" datatype="js">
         <locale name="cron.id">

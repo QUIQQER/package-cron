@@ -1,5 +1,5 @@
 /**
- *
+ * @module package/quiqqer/cron/bin/CronServiceWindow
  */
 define('package/quiqqer/cron/bin/CronServiceWindow', [
 
@@ -19,7 +19,7 @@ define('package/quiqqer/cron/bin/CronServiceWindow', [
 ], function (QUI, QUIPopup, QUIButton, Mustache, QUILocale, QUIAjax, QUISheets, template, registrationTemplate, registrationSuccessTemplate) {
     "use strict";
 
-    var lg = 'quiqqer/cron';
+    const lg = 'quiqqer/cron';
 
     return new Class({
 
@@ -52,7 +52,7 @@ define('package/quiqqer/cron/bin/CronServiceWindow', [
         },
 
         $onOpen: function () {
-            var Content = this.getContent();
+            const Content = this.getContent();
 
             Content.set('html', '');
             Content.addClass('quiqqer-cron-cronserviceWindow');
@@ -64,22 +64,24 @@ define('package/quiqqer/cron/bin/CronServiceWindow', [
          * refresh
          */
         refresh: function () {
-            var self    = this,
-                Content = this.getContent();
+            const self    = this,
+                  Content = this.getContent();
 
             this.Loader.show();
 
             QUIAjax.get('package_quiqqer_cron_ajax_cronservice_getStatus', function (result) {
-                var status = result;
+                let status = result;
+                let statusText = QUILocale.get(lg, 'cron.window.cronservice.status.text.unregistered');
 
-                var statusText = QUILocale.get(lg, 'cron.window.cronservice.status.text.unregistered');
-                if (status['status'] == 1) {
+                status.status = parseInt(status.status);
+
+                if (status.status === 1) {
                     statusText = QUILocale.get(lg, 'cron.window.cronservice.status.text.registered');
                 }
-                if (status['status'] == 2) {
+
+                if (status.status === 2) {
                     statusText = QUILocale.get(lg, 'cron.window.cronservice.status.text.inactive');
                 }
-
 
                 Content.set('html', Mustache.render(template, {
                     cron_window_cronservice_content_title                                : QUILocale.get(lg, 'cron.window.cronservice.content.title'),
@@ -94,25 +96,28 @@ define('package/quiqqer/cron/bin/CronServiceWindow', [
                     cron_window_cronservice_content_register_lbl_stats_lastExecution     : QUILocale.get(lg, 'cron.window.cronservice.content.register.lbl.stats.lastExecution'),
                     cron_window_cronservice_content_register_lbl_stats_lastLocalExecution: QUILocale.get(lg, 'cron.window.cronservice.content.register.lbl.stats.lastLocalExecution'),
                     statusText                                                           : statusText,
-                    status                                                               : status['status'],
-                    statusErrors                                                         : status['current_failures'], //== 0 ? "0": status['errors'].toString(),
-                    statusLastExecution                                                  : status['last_execution'],
-                    statusLastLocalExecution                                             : status['last_local_execution'],
-                    registered                                                           : (status['status'] != 0),
-                    active                                                               : (status['status'] == 1),
-                    inactive                                                             : (status['status'] == 2)
+                    status                                                               : status.status,
+                    statusErrors                                                         : status.current_failures, //== 0 ? "0": status['errors'].toString(),
+                    statusLastExecution                                                  : status.last_execution,
+                    statusLastLocalExecution                                             : status.last_local_execution,
+                    registered                                                           : (status.status !== 0),
+                    active                                                               : (status.status === 1),
+                    inactive                                                             : (status.status === 2)
                 }));
 
-                self.registered = (status['status'] != 0);
-                self.status     = status['status'];
+                self.registered = (status.status !== 0);
+                self.status = status.status;
 
-                var Buttons = Content.getElement('.quiqqer-cron-cronservicewindow-buttons');
+                const Buttons = Content.getElement('.quiqqer-cron-cronservicewindow-buttons');
 
 
                 // Register/Unregister Button
+                let btnText;
+
                 if (self.status) {
-                    var btnText = QUILocale.get(lg, 'cron.window.cronservice.content.btn.register');
+                    btnText = QUILocale.get(lg, 'cron.window.cronservice.content.btn.register');
                 }
+
                 if (self.registered) {
                     btnText = QUILocale.get(lg, 'cron.window.cronservice.content.btn.unregister');
                 }
@@ -124,12 +129,14 @@ define('package/quiqqer/cron/bin/CronServiceWindow', [
                         QUILocale.get(lg, 'cron.window.cronservice.content.status.title') +
                         "</h2><br />" +
                         QUILocale.get(lg, 'cron.window.cronservice.content.status.unavailable');
+
                     self.Loader.hide();
                     return;
                 }
 
-                var Button = null;
-                if (self.status == 2) {
+                let Button;
+
+                if (parseInt(self.status) === 2) {
                     // Resend Activation Button
                     Button = new QUIButton({
                         text     : QUILocale.get(lg, 'cron.window.cronservice.content.btn.resend.activation.mail'),
@@ -147,15 +154,19 @@ define('package/quiqqer/cron/bin/CronServiceWindow', [
 
                     // Cancel Registration Button
                     new QUIButton({
-                        text  : '<span class="quiqqer-cron-cronservicewindow-registration-success-btn-cancel-text">' + QUILocale.get(lg, 'cron.window.cronservice.registration.button.text.cancel') + '</span>',
+                        text  : '<span class="quiqqer-cron-cronservicewindow-registration-success-btn-cancel-text">' +
+                                QUILocale.get(lg, 'cron.window.cronservice.registration.button.text.cancel') +
+                                '</span>',
                         events: {
                             onClick: function (Button) {
                                 Button.setAttribute('text', QUILocale.get('quiqqer/cron', 'cron.window.cronservice.content.btn.unregister.confirm'));
-                                if (Button.getAttribute('clickcnt') == 1) {
+
+                                if (Button.getAttribute('clickcnt') === 1) {
                                     self.cancelRegistration().then(function () {
                                         self.refresh();
                                     });
                                 }
+
                                 Button.setAttribute('clickcnt', 1);
                             }
                         },
@@ -175,12 +186,15 @@ define('package/quiqqer/cron/bin/CronServiceWindow', [
                                     self.showRegistration();
                                     return;
                                 }
+
                                 Button.setAttribute('text', QUILocale.get('quiqqer/cron', 'cron.window.cronservice.content.btn.unregister.confirm'));
-                                if (Button.getAttribute('clickcnt') == 1) {
+
+                                if (Button.getAttribute('clickcnt') === 1) {
                                     self.unregister().then(function () {
                                         self.refresh();
                                     });
                                 }
+
                                 Button.setAttribute('clickcnt', 1);
                             }
                         },
@@ -207,7 +221,7 @@ define('package/quiqqer/cron/bin/CronServiceWindow', [
          * Opens the registration sheet
          */
         showRegistration: function () {
-            var self = this;
+            const self = this;
 
             new QUISheets({
                 header : true,
@@ -216,7 +230,7 @@ define('package/quiqqer/cron/bin/CronServiceWindow', [
                 buttons: false,
                 events : {
                     onOpen: function (Sheet) {
-                        var Content = Sheet.getContent();
+                        const Content = Sheet.getContent();
 
                         Content.set('html', Mustache.render(registrationTemplate, {
                             cron_window_cronservice_registration_title                : QUILocale.get(lg, 'cron.window.cronservice.registration.title'),
@@ -225,7 +239,7 @@ define('package/quiqqer/cron/bin/CronServiceWindow', [
                             cron_window_cronservice_content_btn_register              : QUILocale.get(lg, 'cron.window.cronservice.registration.title')
                         }));
 
-                        var Email = Content.getElement('.quiqqer-cron-cronservicewindow-registration-txt-email');
+                        const Email = Content.getElement('.quiqqer-cron-cronservicewindow-registration-txt-email');
 
                         Content.getElement('.quiqqer-cron-cronservicewindow-btn-register').addEvent('click', function () {
                             self.Loader.show();
@@ -251,7 +265,7 @@ define('package/quiqqer/cron/bin/CronServiceWindow', [
          * Shows the registration success sheet, which contains information about the activation email
          */
         showRegistrationSuccess: function () {
-            var self = this;
+            const self = this;
 
             new QUISheets({
                 header : true,
@@ -260,7 +274,7 @@ define('package/quiqqer/cron/bin/CronServiceWindow', [
                 buttons: false,
                 events : {
                     onOpen : function (Sheet) {
-                        var Content = Sheet.getContent();
+                        const Content = Sheet.getContent();
 
                         self.Loader.show();
 
@@ -335,7 +349,8 @@ define('package/quiqqer/cron/bin/CronServiceWindow', [
         resendActivationMail: function (Button) {
             return new Promise(function (resolve, reject) {
                 Button.setAttribute("text", "<span class='fa fa-spinner fa-spin'></span>");
-                QUIAjax.get('package_quiqqer_cron_ajax_cronservice_resendActivation', function (result) {
+
+                QUIAjax.get('package_quiqqer_cron_ajax_cronservice_resendActivation', function () {
                     Button.setAttribute("textimage", "fa fa-check");
                     Button.setAttribute("text", QUILocale.get(lg, "cron.window.cronservice.content.button.message.sent.success"));
                     Button.disable();

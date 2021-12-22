@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <crons>
     <!-- region Cleanup-Crons -->
-
     <cron exec="\QUI\Cron\QuiqqerCrons::cleanupUploads">
         <title>
             <locale group="quiqqer/cron" var="cron.cleanupUploads.title"/>
@@ -166,5 +165,14 @@
         </description>
     </cron>
     <!-- endregion -->
-    <!-- endregion -->
+
+    <cron exec="\QUI\Cron\Update::check">
+        <title>
+            <locale group="quiqqer/cron" var="cron.updateCheck.title"/>
+        </title>
+
+        <description>
+            <locale group="quiqqer/cron" var="cron.updateCheck.description"/>
+        </description>
+    </cron>
 </crons>

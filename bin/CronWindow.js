@@ -3,12 +3,6 @@
  *
  * @module package/quiqqer/cron/bin/CronWindow
  * @author www.pcsg.de (Henning Leutz)
- *
- * @require qui/controls/windows/Confirm
- * @require qui/controls/input/Params
- * @require Ajax
- * @require text!package/quiqqer/cron/bin/CronWindow.html
- * @require css!package/quiqqer/cron/bin/CronWindow.css
  */
 define('package/quiqqer/cron/bin/CronWindow', [
 
@@ -56,7 +50,7 @@ define('package/quiqqer/cron/bin/CronWindow', [
 
             this.$available = [];
 
-            this.$List            = null;
+            this.$List = null;
             this.$CronTimeControl = null;
 
             this.$ParamsControl = null;
