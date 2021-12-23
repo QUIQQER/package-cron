@@ -290,6 +290,16 @@ class EventHandler
                 'exec'  => '\QUI\Cron\Update::check'
             ],
 
+            // Calculate VAR folder size
+            "quiqqer/cron:14" => [
+                "min"   => "0",
+                "hour"  => "5",
+                "day"   => "*",
+                "month" => "*",
+                "dow"   => "*",
+                'exec'  => '\QUI\Cron\Update::update'
+            ],
+
             // Login-Logger purge logs (as decided with mor & hen)
             "quiqqer/login-logger:0" => [
                 "min"   => "0",
