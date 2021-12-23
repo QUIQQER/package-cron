@@ -175,4 +175,14 @@
             <locale group="quiqqer/cron" var="cron.updateCheck.description"/>
         </description>
     </cron>
+
+    <cron exec="\QUI\Cron\Update::update">
+        <title>
+            <locale group="quiqqer/cron" var="cron.updateExecute.title"/>
+        </title>
+
+        <description>
+            <locale group="quiqqer/cron" var="cron.updateExecute.description"/>
+        </description>
+    </cron>
 </crons>

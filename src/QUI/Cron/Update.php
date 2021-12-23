@@ -14,10 +14,31 @@ use QUI;
  */
 class Update
 {
+    //region check for updates
+
     /**
      * @return void
      */
     public static function check()
+    {
+        try {
+            $Package = QUI::getPackage('quiqqer/cron');
+            $Config = $Package->getConfig();
+        } catch (\Exception $Exception) {
+            return;
+        }
+
+        if (!$Config->get('update', 'auto_check')) {
+            return;
+        }
+
+        self::checkExecute();
+    }
+
+    /**
+     * @return void
+     */
+    public static function checkExecute()
     {
         try {
             $Packages = QUI::getPackageManager();
@@ -30,6 +51,15 @@ class Update
 
         if (\count($packages)) {
             file_put_contents($file, json_encode($packages));
+
+            QUI::getMailManager()->send(
+                QUI::conf('mail', 'admin_mail'),
+                QUI::getLocale()->get('quiqqer/quiqqer', 'update.update.mail.updateCheck.subject', [
+
+                ]),
+                QUI::getLocale()->get('quiqqer/quiqqer', 'update.update.mail.updateCheck.body')
+            );
+
             return;
         }
 
@@ -38,11 +68,76 @@ class Update
         }
     }
 
+    //endregion
+
+    //region execute update
+
     /**
-     * @param $packages
      * @return void
      */
-    public static function setAvailableUpdates($packages = [])
+    public static function update()
+    {
+        try {
+            $Package = QUI::getPackage('quiqqer/cron');
+            $Config = $Package->getConfig();
+        } catch (\Exception $Exception) {
+            return;
+        }
+
+        if (!$Config->get('update', 'auto_update')) {
+            return;
+        }
+
+        self::updateExecute();
+    }
+
+    /**
+     * Execute an system update
+     *
+     * @return void
+     */
+    public static function updateExecute()
+    {
+        try {
+            $Packages = QUI::getPackageManager();
+            $packages = $Packages->getOutdated(true);
+        } catch (\Exception $Exception) {
+            QUI\System\Log::writeException($Exception);
+            return;
+        }
+
+        if (!\count($packages)) {
+            return;
+        }
+
+        try {
+            $Packages->update();
+        } catch (\Exception $Exception) {
+            QUI::getMailManager()->send(
+                QUI::conf('mail', 'admin_mail'),
+                QUI::getLocale()->get('quiqqer/quiqqer', 'update.mail.error.subject'),
+                QUI::getLocale()->get('quiqqer/quiqqer', 'update.mail.error.body')
+            );
+
+            return;
+        }
+
+        QUI::getMailManager()->send(
+            QUI::conf('mail', 'admin_mail'),
+            QUI::getLocale()->get('quiqqer/quiqqer', 'update.mail.success.subject'),
+            QUI::getLocale()->get('quiqqer/quiqqer', 'update.mail.success.body')
+        );
+    }
+
+    //endregion
+
+    //region utils
+
+    /**
+     * @param array $packages
+     * @return void
+     */
+    public static function setAvailableUpdates(array $packages = [])
     {
         $file = QUI::getPackage('quiqqer/cron')->getVarDir() . 'updates';
 
@@ -80,4 +175,6 @@ class Update
             unlink($file);
         }
     }
+
+    //endregion
 }

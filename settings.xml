@@ -26,6 +26,17 @@
                     <defaultvalue>1</defaultvalue>
                 </conf>
             </section>
+
+            <section name="update">
+                <conf name="auto_update">
+                    <type><![CDATA[bool]]></type>
+                    <defaultvalue>1</defaultvalue>
+                </conf>
+                <conf name="auto_check">
+                    <type><![CDATA[bool]]></type>
+                    <defaultvalue>1</defaultvalue>
+                </conf>
+            </section>
         </config>
 
         <window>
@@ -61,7 +72,8 @@
                                 <locale group="quiqqer/cron" var="settings.cron.showAdminMessageIfCronNotRun"/>
                             </text>
                             <description>
-                                <locale group="quiqqer/cron" var="settings.cron.showAdminMessageIfCronNotRun.description"/>
+                                <locale group="quiqqer/cron"
+                                        var="settings.cron.showAdminMessageIfCronNotRun.description"/>
                             </description>
                         </input>
 
@@ -97,6 +109,43 @@
                                 <locale group="quiqqer/cron" var="settings.cron_lock_timeout_notification.description"/>
                             </description>
                         </input>
+                    </settings>
+
+                </category>
+            </categories>
+        </window>
+
+        <window name="quiqqer">
+            <categories>
+                <category name="update" index="10">
+                    <text>
+                        <locale group="quiqqer/cron" var="settings.update.category.title"/>
+                    </text>
+                    <icon>fa fa-wrench</icon>
+
+                    <settings title="update" name="update">
+                        <title>
+                            <locale group="quiqqer/cron" var="settings.update.category.title"/>
+                        </title>
+
+                        <input conf="update.auto_check" type="checkbox">
+                            <text>
+                                <locale group="quiqqer/cron" var="settings.cron.auto_check"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/cron" var="settings.cron.auto_check.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="update.auto_update" type="checkbox">
+                            <text>
+                                <locale group="quiqqer/cron" var="settings.cron.auto_update"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/cron" var="settings.cron.auto_update.description"/>
+                            </description>
+                        </input>
+
                     </settings>
 
                 </category>

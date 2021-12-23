@@ -337,6 +337,72 @@
             <de><![CDATA[Prüft ob Updates für QUIQQER verfügbar sind.]]></de>
             <en><![CDATA[Checks if updates for QUIQQER are available.]]></en>
         </locale>
+        <locale name="cron.updateExecute.title">
+            <de><![CDATA[Automatisches Update]]></de>
+            <en><![CDATA[Automatic update]]></en>
+        </locale>
+        <locale name="cron.updateExecute..description">
+            <de><![CDATA[Führt Updates für QUIQQER aus, wenn welche verfügbar sind.]]></de>
+            <en><![CDATA[Performs updates for QUIQQER if any are available.]]></en>
+        </locale>
+
+        <locale name="update.mail.success.subject">
+            <de><![CDATA[QUIQQER Update Fehler]]></de>
+            <en><![CDATA[QUIQQER Update Error]]></en>
+        </locale>
+        <locale name="update.mail.error.description">
+            <de><![CDATA[
+            Während dem automatischen QUIQQER Update sind fehler aufgetreten.<br />
+            Bitte schaue dringend in die error log.
+            ]]></de>
+            <en><![CDATA[
+            During the automatic QUIQQER update errors occurred.<br />
+            Please check the error log urgently.
+            ]]></en>
+        </locale>
+
+        <locale name="update.update.mail.updateCheck.subject">
+            <de><![CDATA[Updates für dein QUIQQER System stehen bereit - [system]]]></de>
+            <en><![CDATA[Updates for your QUIQQER system are available - [system]]]></en>
+        </locale>
+        <locale name="update.mail.error.description">
+            <de><![CDATA[
+            Es stehen Updates für dein QUIQQER System bereit.<br />
+            Bitte aktualisere dein System um immer auf dem neusten Stand zu sein.
+            ]]></de>
+            <en><![CDATA[
+            There are updates available for your QUIQQER system.<br />
+            Please update your system to be always up to date.
+            ]]></en>
+        </locale>
+
+        <locale name="settings.update.category.title">
+            <de><![CDATA[Aktualisierung]]></de>
+            <en><![CDATA[Update]]></en>
+        </locale>
+
+        <locale name="settings.cron.auto_check">
+            <de><![CDATA[Automatische Prüfung]]></de>
+            <en><![CDATA[Automatic update check]]></en>
+        </locale>
+        <locale name="settings.cron.auto_check.description">
+            <de><![CDATA[Erhalte eine Mail und eine Nachricht wenn für dein QUIQQER System Updates bereitstehen.]]></de>
+            <en><![CDATA[Receive a mail and a message when updates are available for your QUIQQER system.]]></en>
+        </locale>
+
+        <locale name="settings.cron.auto_update">
+            <de><![CDATA[Automatische Aktualisierung]]></de>
+            <en><![CDATA[Automatic update]]></en>
+        </locale>
+        <locale name="settings.cron.auto_update.description">
+            <de><![CDATA[
+            Dein QUIQQER System wird automatisch aktualisiert sobald neue Updates dafür zur Verfügung stehen.
+            ]]></de>
+            <en><![CDATA[
+            Your QUIQQER system will be updated automatically as soon as new updates are available.
+            ]]></en>
+        </locale>
+
     </groups>
     <groups name="quiqqer/cron" datatype="js">
         <locale name="cron.id">
