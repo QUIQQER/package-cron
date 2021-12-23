@@ -54,10 +54,10 @@ class Update
 
             QUI::getMailManager()->send(
                 QUI::conf('mail', 'admin_mail'),
-                QUI::getLocale()->get('quiqqer/quiqqer', 'update.update.mail.updateCheck.subject', [
-
+                QUI::getLocale()->get('quiqqer/cron', 'update.mail.updateCheck.subject', [
+                    'system' => QUI::conf('globals', 'host')
                 ]),
-                QUI::getLocale()->get('quiqqer/quiqqer', 'update.update.mail.updateCheck.body')
+                QUI::getLocale()->get('quiqqer/cron', 'update.mail.updateCheck.description')
             );
 
             return;
@@ -115,8 +115,8 @@ class Update
         } catch (\Exception $Exception) {
             QUI::getMailManager()->send(
                 QUI::conf('mail', 'admin_mail'),
-                QUI::getLocale()->get('quiqqer/quiqqer', 'update.mail.error.subject'),
-                QUI::getLocale()->get('quiqqer/quiqqer', 'update.mail.error.body')
+                QUI::getLocale()->get('quiqqer/cron', 'update.mail.error.subject'),
+                QUI::getLocale()->get('quiqqer/cron', 'update.mail.error.body')
             );
 
             return;
@@ -124,8 +124,8 @@ class Update
 
         QUI::getMailManager()->send(
             QUI::conf('mail', 'admin_mail'),
-            QUI::getLocale()->get('quiqqer/quiqqer', 'update.mail.success.subject'),
-            QUI::getLocale()->get('quiqqer/quiqqer', 'update.mail.success.body')
+            QUI::getLocale()->get('quiqqer/cron', 'update.mail.success.subject'),
+            QUI::getLocale()->get('quiqqer/cron', 'update.mail.success.body')
         );
     }
 

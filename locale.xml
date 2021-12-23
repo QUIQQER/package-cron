@@ -361,11 +361,11 @@
             ]]></en>
         </locale>
 
-        <locale name="update.update.mail.updateCheck.subject">
+        <locale name="update.mail.updateCheck.subject">
             <de><![CDATA[Updates für dein QUIQQER System stehen bereit - [system]]]></de>
             <en><![CDATA[Updates for your QUIQQER system are available - [system]]]></en>
         </locale>
-        <locale name="update.mail.error.description">
+        <locale name="update.mail.updateCheck.description">
             <de><![CDATA[
             Es stehen Updates für dein QUIQQER System bereit.<br />
             Bitte aktualisere dein System um immer auf dem neusten Stand zu sein.
