@@ -8,6 +8,15 @@ namespace QUI\Cron;
 
 use QUI;
 
+use function copy;
+use function file_exists;
+use function filemtime;
+use function is_dir;
+use function rename;
+use function strpos;
+use function time;
+use function unlink;
+
 /**
  * Cron Manager
  * - offers the default crons
@@ -48,7 +57,7 @@ class QuiqqerCrons
      */
     public static function clearAdminMediaCache()
     {
-        QUI\Utils\System\File::unlink(VAR_DIR.'cache/admin/media/');
+        QUI\Utils\System\File::unlink(VAR_DIR . 'cache/admin/media/');
     }
 
     /**
@@ -56,7 +65,7 @@ class QuiqqerCrons
      */
     public static function clearSessions()
     {
-        $type    = QUI::conf('session', 'type');
+        $type = QUI::conf('session', 'type');
         $maxTime = 1400;
 
         if (QUI::conf('session', 'max_life_time')) {
@@ -75,33 +84,47 @@ class QuiqqerCrons
         // filesystem
         if ($type === 'filesystem') {
             // clear native session storage
-            $sessionDir = VAR_DIR.'sessions/';
+            $sessionDir = VAR_DIR . 'sessions/';
 
-            if (!\is_dir($sessionDir)) {
+            if (!is_dir($sessionDir)) {
                 return;
             }
 
             $sessionFiles = QUI\Utils\System\File::readDir($sessionDir);
 
-            foreach ($sessionFiles as $sessionFile) {
-                $fmTime = \filemtime($sessionDir.$sessionFile);
+            // create new folder for the session (file system cache)
+            $sessionTempDir = VAR_DIR . 'sessionsBackup/';
+            QUI\Utils\System\File::mkdir($sessionTempDir);
 
-                if ($fmTime + $maxTime < \time()) {
-                    \unlink($sessionDir.$sessionFile);
+            // unlink and move session
+            foreach ($sessionFiles as $sessionFile) {
+                $fmTime = filemtime($sessionDir . $sessionFile);
+
+                if ($fmTime + $maxTime < time()) {
+                    unlink($sessionDir . $sessionFile);
+                } else {
+                    copy(
+                        $sessionDir . $sessionFile,
+                        $sessionTempDir . $sessionFile
+                    );
                 }
             }
+
+            // rename session folders
+            QUI::getTemp()->moveToTemp($sessionDir);
+            rename($sessionTempDir, $sessionDir);
 
             return;
         }
 
         // database
         if ($type === 'database') {
-            $table       = QUI::getDBTableName('sessions');
-            $maxLifetime = \time() - $maxTime;
+            $table = QUI::getDBTableName('sessions');
+            $maxLifetime = time() - $maxTime;
 
             QUI::getDataBase()->delete($table, [
                 'session_time' => [
-                    'type'  => '<',
+                    'type' => '<',
                     'value' => $maxLifetime
                 ]
             ]);
@@ -133,19 +156,20 @@ class QuiqqerCrons
     {
         $execCron = function ($project, $lang) {
             $Project = QUI::getProject($project, $lang);
-            $now     = \date('Y-m-d H:i:s');
+            $now = \date('Y-m-d H:i:s');
 
             // search sites with release dates
             $PDO = QUI::getDataBase()->getPDO();
 
             $deactivate = [];
-            $activate   = [];
+            $activate = [];
 
 
             /**
              * deactivate sites
              */
-            $Statement = $PDO->prepare("
+            $Statement = $PDO->prepare(
+                "
                 SELECT id
                 FROM {$Project->table()}
                 WHERE active = 1 AND
@@ -153,7 +177,8 @@ class QuiqqerCrons
                         release_to < :date AND 
                         auto_release = 1
                 ;
-            ");
+            "
+            );
 
             $Statement->bindValue(':date', $now, \PDO::PARAM_STR);
             //$Statement->bindValue(':empty', '0000-00-00 00:00:00', \PDO::PARAM_STR);
@@ -176,7 +201,8 @@ class QuiqqerCrons
             /**
              * activate sites
              */
-            $Statement = $PDO->prepare("
+            $Statement = $PDO->prepare(
+                "
                 SELECT id, release_to
                 FROM {$Project->table()}
                 WHERE active = 0 AND
@@ -184,14 +210,15 @@ class QuiqqerCrons
                         release_from <= :date AND 
                         auto_release = 1
                 ;
-            ");
+            "
+            );
 
             $Statement->bindValue(':date', $now, \PDO::PARAM_STR);
             //$Statement->bindValue(':empty', '0000-00-00 00:00:00', \PDO::PARAM_STR);
             $Statement->execute();
 
             $result = $Statement->fetchAll(\PDO::FETCH_ASSOC);
-            $Now    = \date_create();
+            $Now = \date_create();
 
             foreach ($result as $entry) {
                 try {
@@ -246,7 +273,7 @@ class QuiqqerCrons
         };
 
         $project = false;
-        $lang    = false;
+        $lang = false;
 
         if (isset($params['project'])) {
             $project = $params['project'];
@@ -378,36 +405,36 @@ class QuiqqerCrons
      */
     public static function cleanupUploads()
     {
-        $Upload  = new QUI\Upload\Manager();
-        $dir     = $Upload->getDir();
+        $Upload = new QUI\Upload\Manager();
+        $dir = $Upload->getDir();
         $folders = QUI\Utils\System\File::readDir($dir);
 
-        $now     = \time();
+        $now = time();
         $maxTime = 86400; // seconds -> 1 day
 
         foreach ($folders as $folder) {
-            $files = QUI\Utils\System\File::readDir($dir.$folder);
+            $files = QUI\Utils\System\File::readDir($dir . $folder);
 
             foreach ($files as $file) {
-                if (\strpos($file, '.json') === false) {
+                if (strpos($file, '.json') === false) {
                     continue;
                 }
 
-                $fileTime = \filemtime($dir.$folder.'/'.$file);
+                $fileTime = filemtime($dir . $folder . '/' . $file);
 
                 if ($now - $fileTime < $maxTime) {
                     continue;
                 }
 
                 // older than a day, delete
-                $file = $dir.$folder.'/'.$file;
-                $conf = $dir.$folder.'/'.$file.'.json';
+                $file = $dir . $folder . '/' . $file;
+                $conf = $dir . $folder . '/' . $file . '.json';
 
-                if (!\file_exists($file)) {
+                if (!file_exists($file)) {
                     unlink($file);
                 }
 
-                if (!\file_exists($conf)) {
+                if (!file_exists($conf)) {
                     unlink($conf);
                 }
             }
