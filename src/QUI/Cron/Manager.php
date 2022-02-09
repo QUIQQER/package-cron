@@ -664,15 +664,34 @@ class Manager
     public function cronWithExecAndParamsExists(string $exec, array $params = []): bool
     {
         $result = QUI::getDataBase()->fetch([
-            'select' => ['id'],
+            'select' => ['params'],
             'from'   => self::table(),
             'where'  => [
-                'exec'   => $exec,
-                'params' => \json_encode($params)
+                'exec' => $exec
             ]
         ]);
 
-        return !empty($result);
+        if (empty($result)) {
+            return false;
+        }
+
+        foreach ($result as $row) {
+            $cronParams = \json_decode($row['params'], true);
+            $identical  = true;
+
+            foreach ($cronParams as $k => $v) {
+                if (!\array_key_exists($k, $params) || $params[$k] !== $v) {
+                    $identical = false;
+                    break;
+                }
+            }
+
+            if ($identical) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
