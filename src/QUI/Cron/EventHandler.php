@@ -188,7 +188,6 @@ class EventHandler
     protected static function createAutoCreateCrons(?string $scope = null): void
     {
         $CronManager = new Manager();
-        $projects    = QUI::getProjectManager()::getProjects(true);
 
         foreach ($CronManager->getAvailableCrons() as $cron) {
             $title = $cron['title'];
@@ -225,7 +224,6 @@ class EventHandler
                     }
 
                     $createParams['exec'] = $exec;
-
 
                     try {
                         $CronManager->add($title, $min, $hour, $day, $month, $dayOfWeek, $createParams);
