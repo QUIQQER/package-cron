@@ -20,6 +20,8 @@ use Cron\CronExpression;
  */
 class Manager
 {
+    const AUTOCREATE_SCOPE_PROJECTS = 'projects';
+
     /**
      * Flag that indicates if a cron.log is written
      *
@@ -651,6 +653,29 @@ class Manager
     }
 
     /**
+     * Check if a specific cron exists based on its executed method and exact parameters.
+     *
+     * @param string $exec - Execution path to static class method
+     * @param array $params (optional) - Cron parameters
+     * @return bool
+     *
+     * @throws QUI\Exception
+     */
+    public function cronWithExecAndParamsExists(string $exec, array $params = []): bool
+    {
+        $result = QUI::getDataBase()->fetch([
+            'select' => ['id'],
+            'from'   => self::table(),
+            'where'  => [
+                'exec'   => $exec,
+                'params' => \json_encode($params)
+            ]
+        ]);
+
+        return !empty($result);
+    }
+
+    /**
      * static
      */
 
@@ -714,7 +739,7 @@ class Manager
             /* @var $Cron \DOMElement */
             $Title  = $Cron->getElementsByTagName('title');
             $Desc   = $Cron->getElementsByTagName('description');
-            $Params = $Cron->getElementsByTagName('param');
+            $Params = $Cron->getElementsByTagName('params');
 
             if ($Title->length) {
                 $title = QUI\Utils\DOM::getTextFromNode($Title->item(0));
@@ -725,20 +750,104 @@ class Manager
             }
 
             if ($Params->length) {
-                foreach ($Params as $k => $Param) {
-                    /* @var $Param \DOMElement */
-                    $param = [
-                        'name'     => $Param->getAttribute('name'),
-                        'type'     => $Param->getAttribute('type'),
-                        'data-qui' => $Param->getAttribute('data-qui'),
-                        'desc'     => false
-                    ];
+                $CronParams = false;
 
-                    if ($Param->childNodes->length) {
-                        $param['desc'] = QUI\Utils\DOM::getTextFromNode($Param);
+                for ($j = 0; $j < $Params->length; $j++) {
+                    $ParamsNode = $Params->item($j);
+
+                    if ($ParamsNode->parentNode && $ParamsNode->parentNode->tagName === 'cron') {
+                        $CronParams = $ParamsNode->getElementsByTagName('param');
+                        break;
+                    }
+                }
+
+                if ($CronParams) {
+                    foreach ($CronParams as $Param) {
+                        /* @var $Param \DOMElement */
+                        $param = [
+                            'name'     => $Param->getAttribute('name'),
+                            'type'     => $Param->getAttribute('type'),
+                            'data-qui' => $Param->getAttribute('data-qui'),
+                            'desc'     => false
+                        ];
+
+                        if ($Param->childNodes->length) {
+                            $param['desc'] = QUI\Utils\DOM::getTextFromNode($Param);
+                        }
+
+                        $params[] = $param;
+                    }
+                }
+            }
+
+            // Autocreate entries
+            $autocreate = [];
+            $AutoCreate = $Cron->getElementsByTagName('autocreate');
+
+            if ($AutoCreate->length) {
+                /** @var \DOMElement $AutoCreateEntry */
+                foreach ($AutoCreate as $AutoCreateEntry) {
+                    $Interval         = $AutoCreateEntry->getElementsByTagName('interval');
+                    $Active           = $AutoCreateEntry->getElementsByTagName('active');
+                    $AutoCreateParams = $AutoCreateEntry->getElementsByTagName('params');
+                    $Scope            = $AutoCreateEntry->getElementsByTagName('scope');
+
+                    if (!$Interval->length) {
+                        \QUI\System\Log::addWarning(
+                            'quiqqer/cron -> Cron "'.$Cron->getAttribute('exec').'" from file'
+                            .' "'.$file.'" has an <autocreate> entry, but no <interval> set.'
+                            .' The <autocreate>-property is ignored.'
+                        );
+
+                        continue;
                     }
 
-                    $params[] = $param;
+                    $interval = \trim($Interval->item(0)->textContent);
+                    [$min, $hour, $day, $month, $dayOfWeek] = \explode(' ', $interval);
+
+                    $min       = \trim($min);
+                    $hour      = \trim($hour);
+                    $day       = \trim($day);
+                    $month     = \trim($month);
+                    $dayOfWeek = \trim($dayOfWeek);
+
+                    // Test interval
+                    try {
+                        CronExpression::factory(
+                            "$min $hour $day $month $dayOfWeek"
+                        );
+                    } catch (\Exception $Exception) {
+                        \QUI\System\Log::addWarning(
+                            'quiqqer/cron -> Cron "'.$Cron->getAttribute('exec').'" from file'
+                            .' "'.$file.'" has an <autocreate> entry, but the <interval>'
+                            .' is invalid: '.$Exception->getMessage()
+                            .' The <autocreate>-property is ignored.'
+                        );
+
+                        continue;
+                    }
+
+                    // Params
+                    $autoCreateParams = [];
+
+                    if ($AutoCreateParams->length) {
+                        $AutoCreateParams = $AutoCreateParams->item(0);
+                        $AutoCreateParams = $AutoCreateParams->getElementsByTagName('param');
+
+                        foreach ($AutoCreateParams as $AutoCreateParam) {
+                            $autoCreateParams[] = [
+                                'name'  => $AutoCreateParam->getAttribute('name'),
+                                'value' => \trim($AutoCreateParam->textContent)
+                            ];
+                        }
+                    }
+
+                    $autocreate[] = [
+                        'interval' => "$min $hour $day $month $dayOfWeek",
+                        'active'   => $Active->length ? \boolval($Active->item(0)->textContent) : false,
+                        'params'   => $autoCreateParams,
+                        'scope'    => $Scope->length ? \trim($Scope->item(0)->textContent) : false,
+                    ];
                 }
             }
 
@@ -746,7 +855,8 @@ class Manager
                 'title'       => $title,
                 'description' => $desc,
                 'exec'        => $Cron->getAttribute('exec'),
-                'params'      => $params
+                'params'      => $params,
+                'autocreate'  => $autocreate
             ];
         }
 

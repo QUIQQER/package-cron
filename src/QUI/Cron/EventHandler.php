@@ -75,7 +75,7 @@ class EventHandler
 
         try {
             $Package = QUI::getPackageManager()->getInstalledPackage('quiqqer/cron');
-            $Config = $Package->getConfig();
+            $Config  = $Package->getConfig();
         } catch (QUI\Exception $Exception) {
             return;
         }
@@ -88,7 +88,7 @@ class EventHandler
 
         // check last cron execution
         $CronManager = new Manager();
-        $result = $CronManager->getHistoryList([
+        $result      = $CronManager->getHistoryList([
             'page'    => 1,
             'perPage' => 1
         ]);
@@ -114,7 +114,7 @@ class EventHandler
     {
         try {
             $Package = QUI::getPackageManager()->getInstalledPackage('quiqqer/cron');
-            $Config = $Package->getConfig();
+            $Config  = $Package->getConfig();
         } catch (QUI\Exception $Exception) {
             return;
         }
@@ -166,188 +166,7 @@ class EventHandler
      */
     public static function onPackageInstall(QUI\Package\Package $Package)
     {
-        if ($Package->getName() !== 'quiqqer/cron') {
-            return;
-        }
-
-        self::createDefaultCrons();
-    }
-
-    /**
-     * Event: onQuiqqerInstallFinish => Add default crons
-     */
-    public static function onQuiqqerInstallFinish()
-    {
-        self::createDefaultCrons();
-    }
-
-    /**
-     * Creates the default crons, if they do not exist yet
-     *
-     */
-    public static function createDefaultCrons()
-    {
-        $CronManager = new Manager();
-
-        $defaultCrons = [
-            // Clear temp folder
-            "quiqqer/cron:0"         => [
-                "min"   => "0",
-                "hour"  => "0",
-                "day"   => "*",
-                "month" => "*",
-                "dow"   => "*",
-                "exec"  => '\QUI\Cron\QuiqqerCrons::clearTempFolder'
-            ],
-
-            // Clear sessions
-            "quiqqer/cron:1"         => [
-                "min"   => "0",
-                "hour"  => "*",
-                "day"   => "*",
-                "month" => "*",
-                "dow"   => "*",
-                'exec'  => '\QUI\Cron\QuiqqerCrons::clearSessions'
-            ],
-
-            // Process mail queue
-            "quiqqer/cron:6"         => [
-                "min"   => "*/5",
-                "hour"  => "*",
-                "day"   => "*",
-                "month" => "*",
-                "dow"   => "*",
-                "exec"  => '\QUI\Cron\QuiqqerCrons::mailQueue'
-            ],
-
-            // Calculate Media Folder Sizes
-            "quiqqer/cron:7"         => [
-                "min"   => "0",
-                "hour"  => "3",
-                "day"   => "*",
-                "month" => "*",
-                "dow"   => "*",
-                'exec'  => '\QUI\Cron\QuiqqerCrons::calculateMediaFolderSizes'
-            ],
-
-            // Calculate Package Folder Size
-            "quiqqer/cron:8"         => [
-                "min"   => "0",
-                "hour"  => "3",
-                "day"   => "*",
-                "month" => "*",
-                "dow"   => "*",
-                'exec'  => '\QUI\Cron\QuiqqerCrons::calculatePackageFolderSize'
-            ],
-
-            // Calculate Cache Folder Size
-            "quiqqer/cron:9"         => [
-                "min"   => "0",
-                "hour"  => "3",
-                "day"   => "*",
-                "month" => "*",
-                "dow"   => "*",
-                'exec'  => '\QUI\Cron\QuiqqerCrons::calculateCacheFolderSize'
-            ],
-
-            // Calculate Whole Installation Folder Size
-            "quiqqer/cron:10"        => [
-                "min"   => "0",
-                "hour"  => "3",
-                "day"   => "*",
-                "month" => "*",
-                "dow"   => "*",
-                'exec'  => '\QUI\Cron\QuiqqerCrons::calculateWholeInstallationFolderSize'
-            ],
-
-            // Count All Files In Installation
-            "quiqqer/cron:11"        => [
-                "min"   => "0",
-                "hour"  => "3",
-                "day"   => "*",
-                "month" => "*",
-                "dow"   => "*",
-                'exec'  => '\QUI\Cron\QuiqqerCrons::countAllFilesInInstallation'
-            ],
-
-            // Calculate VAR folder size
-            "quiqqer/cron:12"        => [
-                "min"   => "0",
-                "hour"  => "3",
-                "day"   => "*",
-                "month" => "*",
-                "dow"   => "*",
-                'exec'  => '\QUI\Cron\QuiqqerCrons::calculateVarFolderSize'
-            ],
-
-            // Calculate VAR folder size
-            "quiqqer/cron:13"        => [
-                "min"   => "0",
-                "hour"  => "1",
-                "day"   => "*",
-                "month" => "*",
-                "dow"   => "*",
-                'exec'  => '\QUI\Cron\Update::check'
-            ],
-
-            // Calculate VAR folder size
-            "quiqqer/cron:14" => [
-                "min"   => "0",
-                "hour"  => "5",
-                "day"   => "*",
-                "month" => "*",
-                "dow"   => "*",
-                'exec'  => '\QUI\Cron\Update::update'
-            ],
-
-            // Login-Logger purge logs (as decided with mor & hen)
-            "quiqqer/login-logger:0" => [
-                "min"   => "0",
-                "hour"  => "3",
-                "day"   => "*",
-                "month" => "*",
-                "dow"   => "*",
-                'exec'  => '\QUI\LoginLogger\Cron::purgeLog'
-            ]
-        ];
-
-        // Parse the installed crons
-        $installedCrons = [];
-
-        foreach ($CronManager->getList() as $row) {
-            $installedCrons[] = strtolower(trim($row['exec']));
-        }
-
-        $available = $CronManager->getAvailableCrons();
-        $getCronData = function ($exec) use ($available) {
-            foreach ($available as $data) {
-                if ($data['exec'] === $exec) {
-                    return $data;
-                }
-            }
-
-            return false;
-        };
-
-
-        // add the simple default crons, if they dont exist yet
-        foreach ($defaultCrons as $identifier => $time) {
-            $exec = \trim($time['exec']);
-            $data = $getCronData($exec);
-            $title = \trim($data['title']);
-
-            if (\in_array(\strtolower($exec), $installedCrons)) {
-                continue;
-            }
-
-            try {
-                $CronManager->add($title, $time['min'], $time['hour'], $time['day'], $time['month'], $time['dow'], [
-                    'exec' => $exec
-                ]);
-            } catch (QUI\Exception $Exception) {
-                QUI\System\Log::writeException($Exception);
-            }
-        }
+        self::createAutoCreateCrons();
     }
 
     /**
@@ -357,55 +176,123 @@ class EventHandler
      */
     public static function onCreateProject(QUI\Projects\Project $Project)
     {
+        self::createAutoCreateCrons(Manager::AUTOCREATE_SCOPE_PROJECTS);
+    }
+
+    /**
+     * Create all crons with a <autocreate> items.
+     *
+     * @param string|null $scope (optional) - Only create crons for given scope (see Manager::AUTOCREATE_SCOPE_*)
+     * @return void
+     */
+    protected static function createAutoCreateCrons(?string $scope = null): void
+    {
         $CronManager = new Manager();
-        $publishCronData = $CronManager->getCronData("quiqqer/cron:5");
+        $projects    = QUI::getProjectManager()::getProjects(true);
 
-        $languages = $Project->getLanguages();
-        $installedCrons = $CronManager->getList();
+        foreach ($CronManager->getAvailableCrons() as $cron) {
+            $title = $cron['title'];
+            $exec  = $cron['exec'];
 
-        foreach ($languages as $lang) {
-            // Check that no cron with the same parameters exists yet
-            foreach ($installedCrons as $installedCronData) {
-                $installedParams = json_decode($installedCronData['params'], true);
-                $installedProject = "";
-                $installedLang = "";
+            foreach ($cron['autocreate'] as $autocreate) {
+                // Check if cron already exists
+                $params = $autocreate['params'];
+                [$min, $hour, $day, $month, $dayOfWeek] = \explode(' ', $autocreate['interval']);
 
-                foreach ($installedParams as $param) {
-                    if ($param['name'] == "project") {
-                        $installedProject = mb_strtolower(trim($param['value']));
-                    }
-
-                    if ($param['name'] == "lang") {
-                        $installedLang = mb_strtolower(trim($param['value']));
-                    }
+                // Parse params by scope and placeholders
+                if ($scope && $scope !== $autocreate['scope']) {
+                    continue;
                 }
 
-                // Cron for this project & lang combination exists => skip
-                if ($installedProject == mb_strtolower(trim($Project->getName())) &&
-                    $installedLang == mb_strtolower(trim($lang))
-                ) {
-                    continue 2;
+                switch ($autocreate['scope']) {
+                    case Manager::AUTOCREATE_SCOPE_PROJECTS:
+                        $createWithParams = self::getCronsToCreateForProjectsScope($params);
+                        break;
+
+                    default:
+                        $createWithParams = [$params];
                 }
-            }
 
-            # Prepare parameter array
-            $params = [
-                [
-                    "name"  => "project",
-                    "value" => $Project->getName()
-                ],
-                [
-                    "name"  => "lang",
-                    "value" => $lang
-                ]
-            ];
+                // Create crons
+                foreach ($createWithParams as $createParams) {
+                    try {
+                        if ($CronManager->cronWithExecAndParamsExists($exec, $createParams)) {
+                            continue;
+                        }
+                    } catch (\Exception $Exception) {
+                        QUI\System\Log::writeException($Exception);
+                        continue;
+                    }
 
-            try {
-                // Add the cron
-                $CronManager->add($publishCronData['title'], "0", "*", "*", "*", "*", $params);
-            } catch (QUI\Exception $Exception) {
-                QUI\System\Log::writeException($Exception);
+                    $createParams['exec'] = $exec;
+
+
+                    try {
+                        $CronManager->add($title, $min, $hour, $day, $month, $dayOfWeek, $createParams);
+
+                        $cronId = QUI::getDataBase()->getPDO()->lastInsertId('id');
+
+                        if (!$autocreate['active']) {
+                            QUI::getDataBase()->update(
+                                $CronManager::table(),
+                                [
+                                    'active' => 0
+                                ],
+                                [
+                                    'id' => $cronId
+                                ]
+                            );
+                        }
+                    } catch (\Exception $Exception) {
+                        QUI\System\Log::writeException($Exception);
+                    }
+                }
             }
         }
+    }
+
+    /**
+     * Get all crons to create for autocreate scope "projects".
+     *
+     * @param array $params
+     * @return array
+     */
+    protected static function getCronsToCreateForProjectsScope(array $params): array
+    {
+        $createCrons = [];
+
+        try {
+            $projects = QUI::getProjectManager()::getProjects(true);
+        } catch (\Exception $Exception) {
+            QUI\System\Log::writeException($Exception);
+            return $createCrons;
+        }
+
+        /** @var QUI\Projects\Project $Project */
+        foreach ($projects as $Project) {
+            $projectName = $Project->getName();
+
+            foreach ($Project->getLanguages() as $language) {
+                $projectCronParams = $params;
+
+                foreach ($projectCronParams as $k => $v) {
+                    $projectCronParams[$k] = \str_replace(
+                        [
+                            '[projectName]',
+                            '[projectLang]'
+                        ],
+                        [
+                            $projectName,
+                            $language
+                        ],
+                        $v
+                    );
+                }
+
+                $createCrons[] = $projectCronParams;
+            }
+        }
+
+        return $createCrons;
     }
 }

@@ -19,6 +19,11 @@
         <description>
             <locale group="quiqqer/cron" var="cron.cleanup.temp.description"/>
         </description>
+
+        <autocreate>
+            <interval>0 0 * * *</interval>
+            <active>1</active>
+        </autocreate>
     </cron>
     <!-- endregion -->
 
@@ -30,6 +35,11 @@
         <description>
             <locale group="quiqqer/cron" var="cron.cleanup.sessions.description"/>
         </description>
+
+        <autocreate>
+            <interval>0 * * * *</interval>
+            <active>1</active>
+        </autocreate>
     </cron>
     <!-- endregion -->
 
@@ -79,6 +89,17 @@
             <param name="project" type="string"/>
             <param name="lang" type="string"/>
         </params>
+
+        <autocreate>
+            <scope>projects</scope>
+            <interval>0 * * * *</interval>
+            <active>1</active>
+
+            <params>
+                <param name="project">[projectName]</param>
+                <param name="lang">[projectLang]</param>
+            </params>
+        </autocreate>
     </cron>
     <!-- endregion -->
 
@@ -90,6 +111,11 @@
         <description>
             <locale group="quiqqer/cron" var="cron.mail.queue.description"/>
         </description>
+
+        <autocreate>
+            <interval>*/5 * * * *</interval>
+            <active>1</active>
+        </autocreate>
     </cron>
     <!-- endregion -->
 
@@ -103,6 +129,11 @@
         <description>
             <locale group="quiqqer/cron" var="cron.calculateMediaFolderSizes.description"/>
         </description>
+
+        <autocreate>
+            <interval>0 3 * * *</interval>
+            <active>1</active>
+        </autocreate>
     </cron>
     <!-- endregion -->
 
@@ -115,6 +146,11 @@
         <description>
             <locale group="quiqqer/cron" var="cron.calculatePackageFolderSize.description"/>
         </description>
+
+        <autocreate>
+            <interval>0 3 * * *</interval>
+            <active>1</active>
+        </autocreate>
     </cron>
     <!-- endregion -->
 
@@ -127,6 +163,11 @@
         <description>
             <locale group="quiqqer/cron" var="cron.calculateCacheFolderSize.description"/>
         </description>
+
+        <autocreate>
+            <interval>0 3 * * *</interval>
+            <active>1</active>
+        </autocreate>
     </cron>
     <!-- endregion -->
 
@@ -139,6 +180,11 @@
         <description>
             <locale group="quiqqer/cron" var="cron.calculateWholeInstallationFolderSize.description"/>
         </description>
+
+        <autocreate>
+            <interval>0 3 * * *</interval>
+            <active>1</active>
+        </autocreate>
     </cron>
     <!-- endregion -->
 
@@ -151,6 +197,11 @@
         <description>
             <locale group="quiqqer/cron" var="cron.countAllFilesInInstallation.description"/>
         </description>
+
+        <autocreate>
+            <interval>0 3 * * *</interval>
+            <active>1</active>
+        </autocreate>
     </cron>
     <!-- endregion -->
 
@@ -163,9 +214,14 @@
         <description>
             <locale group="quiqqer/cron" var="cron.calculateVarFolderSize.description"/>
         </description>
+
+        <autocreate>
+            <interval>0 3 * * *</interval>
+            <active>1</active>
+        </autocreate>
     </cron>
     <!-- endregion -->
- 
+
     <cron exec="\QUI\Cron\Update::check">
         <title>
             <locale group="quiqqer/cron" var="cron.updateCheck.title"/>
@@ -174,6 +230,11 @@
         <description>
             <locale group="quiqqer/cron" var="cron.updateCheck.description"/>
         </description>
+
+        <autocreate>
+            <interval>0 1 * * *</interval>
+            <active>1</active>
+        </autocreate>
     </cron>
 
     <cron exec="\QUI\Cron\Update::update">
@@ -184,5 +245,10 @@
         <description>
             <locale group="quiqqer/cron" var="cron.updateExecute.description"/>
         </description>
+
+        <autocreate>
+            <interval>0 5 * * *</interval>
+            <active>1</active>
+        </autocreate>
     </cron>
 </crons>
