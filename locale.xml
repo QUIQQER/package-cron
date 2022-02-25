@@ -346,18 +346,51 @@
             <en><![CDATA[Performs updates for QUIQQER if any are available.]]></en>
         </locale>
 
-        <locale name="update.mail.success.subject">
+        <locale name="update.mail.error.subject">
             <de><![CDATA[QUIQQER Update Fehler]]></de>
             <en><![CDATA[QUIQQER Update Error]]></en>
         </locale>
-        <locale name="update.mail.error.description">
+        <locale name="update.mail.error.body">
             <de><![CDATA[
+            Auf dem System [system] ([ip]) wurde ein automatisches Update ausgeführt.<br />
             Während dem automatischen QUIQQER Update sind fehler aufgetreten.<br />
-            Bitte schaue dringend in die error log.
+            Bitte schaue dringend in die error log. Folgende Pakete wären aktualisiert worden:
+            <pre>
+            [packages]
+            </pre>
             ]]></de>
             <en><![CDATA[
-            During the automatic QUIQQER update errors occurred.<br />
-            Please check the error log urgently.
+            An automatic update was performed on the system [system] ([ip]).<br />
+            Errors occurred during the automatic QUIQQER update. Please check the error log urgently.<br />
+            The following packages would have been updated:
+            <pre>
+            [packages]
+            </pre>
+            ]]></en>
+        </locale>
+
+        <locale name="update.mail.success.subject">
+            <de><![CDATA[Automatisches QUIQQER Update durchgeführt]]></de>
+            <en><![CDATA[Automatic QUIQQER update performed]]></en>
+        </locale>
+        <locale name="update.mail.success.body" html="1">
+            <de><![CDATA[
+            Auf dem System [system] ([ip]) wurde ein automatisches Update ausgeführt.<br />
+            Das Update erfolgreich ausgeführt. Folgende Pakete wurden aktualisiert:<br />
+            <pre>
+            [packages]
+            </pre>
+            Wenn du das autmoatische Update deaktivieren möchtest, logge dich unter [system]/admin ein und deaktiviere
+            in den Cron Einstellungen das "Automatisches Update".
+            ]]></de>
+            <en><![CDATA[
+            An automatic update was performed on the system [system] ([ip]).<br />
+            The update has been carried out successfully. The following packages were updated:
+            <pre>
+            [packages]
+            </pre>
+            If you want to deactivate the automatic update, log in to [system]/admin and deactivate the cron manager.
+            Deactivate at the cron settings the "Automatic Update".
             ]]></en>
         </locale>
 

@@ -8,6 +8,8 @@ namespace QUI\Cron;
 
 use QUI;
 
+use function count;
+
 /**
  * Update cron
  * - checked if updates are available
@@ -23,7 +25,7 @@ class Update
     {
         try {
             $Package = QUI::getPackage('quiqqer/cron');
-            $Config = $Package->getConfig();
+            $Config  = $Package->getConfig();
         } catch (\Exception $Exception) {
             return;
         }
@@ -43,13 +45,13 @@ class Update
         try {
             $Packages = QUI::getPackageManager();
             $packages = $Packages->getOutdated(true);
-            $file = QUI::getPackage('quiqqer/cron')->getVarDir() . 'updates';
+            $file     = QUI::getPackage('quiqqer/cron')->getVarDir() . 'updates';
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
             return;
         }
 
-        if (\count($packages)) {
+        if (count($packages)) {
             file_put_contents($file, json_encode($packages));
 
             QUI::getMailManager()->send(
@@ -79,7 +81,7 @@ class Update
     {
         try {
             $Package = QUI::getPackage('quiqqer/cron');
-            $Config = $Package->getConfig();
+            $Config  = $Package->getConfig();
         } catch (\Exception $Exception) {
             return;
         }
@@ -98,6 +100,10 @@ class Update
      */
     public static function updateExecute()
     {
+        $Config = QUI::getConfig('etc/conf.ini.php');
+        $Config->set('globals', 'maintenance', 1);
+        $Config->save();
+
         try {
             $Packages = QUI::getPackageManager();
             $packages = $Packages->getOutdated(true);
@@ -106,9 +112,22 @@ class Update
             return;
         }
 
-        if (!\count($packages)) {
+        if (!count($packages)) {
             return;
         }
+
+        $updateString = '<ul>';
+
+        foreach ($packages as $package) {
+            $package = $package['package'];
+            $from    = $package['oldVersion'];
+            $to      = $package['version'];
+
+            $updateString .= '<li>' . $package . ': ' . $from . ' -> ' . $to . '</li>';
+        }
+
+        $updateString .= '<ul>';
+
 
         try {
             $Packages->update();
@@ -116,7 +135,11 @@ class Update
             QUI::getMailManager()->send(
                 QUI::conf('mail', 'admin_mail'),
                 QUI::getLocale()->get('quiqqer/cron', 'update.mail.error.subject'),
-                QUI::getLocale()->get('quiqqer/cron', 'update.mail.error.body')
+                QUI::getLocale()->get('quiqqer/cron', 'update.mail.error.body', [
+                    'packages' => $updateString,
+                    'host'     => HOST,
+                    'ip'       => QUI\Utils\System::getClientIP()
+                ])
             );
 
             return;
@@ -125,8 +148,15 @@ class Update
         QUI::getMailManager()->send(
             QUI::conf('mail', 'admin_mail'),
             QUI::getLocale()->get('quiqqer/cron', 'update.mail.success.subject'),
-            QUI::getLocale()->get('quiqqer/cron', 'update.mail.success.body')
+            QUI::getLocale()->get('quiqqer/cron', 'update.mail.success.body', [
+                'packages' => $updateString,
+                'host'     => HOST,
+                'ip'       => QUI\Utils\System::getClientIP()
+            ])
         );
+
+        $Config->set('globals', 'maintenance', 0);
+        $Config->save();
     }
 
     //endregion
@@ -141,7 +171,7 @@ class Update
     {
         $file = QUI::getPackage('quiqqer/cron')->getVarDir() . 'updates';
 
-        if (\count($packages)) {
+        if (count($packages)) {
             file_put_contents($file, json_encode($packages));
         }
     }
