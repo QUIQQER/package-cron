@@ -30,7 +30,7 @@
             <section name="update">
                 <conf name="auto_update">
                     <type><![CDATA[bool]]></type>
-                    <defaultvalue>1</defaultvalue>
+                    <defaultvalue>0</defaultvalue>
                 </conf>
                 <conf name="auto_check">
                     <type><![CDATA[bool]]></type>

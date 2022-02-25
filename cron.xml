@@ -248,7 +248,7 @@
 
         <autocreate>
             <interval>0 5 * * *</interval>
-            <active>1</active>
+            <active>0</active>
         </autocreate>
     </cron>
 </crons>
