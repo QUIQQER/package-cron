@@ -1,10 +1,6 @@
 <?php
 
-/**
- * This file contains QUI\Cron\Console
- */
-
-namespace QUI\Cron;
+namespace QUI\Cron\Console;
 
 use QUI;
 
@@ -13,7 +9,7 @@ use QUI;
  *
  * @author www.pcsg.de (Henning Leutz)
  */
-class Console extends QUI\System\Console\Tool
+class ExecCrons extends QUI\System\Console\Tool
 {
     /**
      * Konstruktor

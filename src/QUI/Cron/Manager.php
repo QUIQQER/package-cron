@@ -20,7 +20,8 @@ use Cron\CronExpression;
  */
 class Manager
 {
-    const AUTOCREATE_SCOPE_PROJECTS = 'projects';
+    const AUTOCREATE_SCOPE_PROJECTS  = 'projects';
+    const AUTOCREATE_SCOPE_LANGUAGES = 'languages';
 
     /**
      * Flag that indicates if a cron.log is written
