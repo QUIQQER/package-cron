@@ -8,6 +8,12 @@ namespace QUI\Cron;
 
 use QUI;
 
+use function array_filter;
+use function count;
+use function file_exists;
+use function strpos;
+use function unlink;
+
 /**
  * Update cron
  * - checked if updates are available
@@ -17,13 +23,16 @@ class Update
     //region check for updates
 
     /**
+     * Execute the update check, if auto update is active
+     *
      * @return void
+     * @throws QUI\Exception
      */
     public static function check()
     {
         try {
             $Package = QUI::getPackage('quiqqer/cron');
-            $Config = $Package->getConfig();
+            $Config  = $Package->getConfig();
         } catch (\Exception $Exception) {
             return;
         }
@@ -36,35 +45,65 @@ class Update
     }
 
     /**
+     * Execute the update check
+     * - if updates are available, an email will be sent
+     *
      * @return void
+     * @throws QUI\Exception
      */
     public static function checkExecute()
     {
         try {
             $Packages = QUI::getPackageManager();
             $packages = $Packages->getOutdated(true);
-            $file = QUI::getPackage('quiqqer/cron')->getVarDir() . 'updates';
+            $file     = QUI::getPackage('quiqqer/cron')->getVarDir() . 'updates';
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
             return;
         }
 
-        if (\count($packages)) {
+        // filter - dev-dev and dev-master
+        $filteredPackages = array_filter($packages, function ($package) {
+            if (strpos($package['version'], 'dev-') !== false) {
+                return false;
+            }
+
+            return true;
+        });
+
+        if (count($filteredPackages)) {
             file_put_contents($file, json_encode($packages));
+
+            $updateString = '<ul>';
+
+            foreach ($packages as $package) {
+                $packageName = $package['package'];
+                $from        = $package['oldVersion'];
+                $to          = $package['version'];
+
+                $updateString .= '<li>' . $packageName . ': ' . $from . ' -> ' . $to . '</li>';
+            }
+
+            $updateString .= '<ul>';
+
 
             QUI::getMailManager()->send(
                 QUI::conf('mail', 'admin_mail'),
                 QUI::getLocale()->get('quiqqer/cron', 'update.mail.updateCheck.subject', [
                     'system' => QUI::conf('globals', 'host')
                 ]),
-                QUI::getLocale()->get('quiqqer/cron', 'update.mail.updateCheck.description')
+                QUI::getLocale()->get('quiqqer/cron', 'update.mail.updateCheck.description', [
+                    'packages' => $updateString,
+                    'host'     => HOST,
+                    'ip'       => QUI\Utils\System::getClientIP()
+                ])
             );
 
             return;
         }
 
-        if (\file_exists($file)) {
-            \unlink($file);
+        if (file_exists($file)) {
+            unlink($file);
         }
     }
 
@@ -73,13 +112,16 @@ class Update
     //region execute update
 
     /**
+     * execute an update, if auto update is active
+     *
      * @return void
+     * @throws QUI\Exception
      */
     public static function update()
     {
         try {
             $Package = QUI::getPackage('quiqqer/cron');
-            $Config = $Package->getConfig();
+            $Config  = $Package->getConfig();
         } catch (\Exception $Exception) {
             return;
         }
@@ -95,9 +137,14 @@ class Update
      * Execute an system update
      *
      * @return void
+     * @throws QUI\Exception
      */
     public static function updateExecute()
     {
+        $Config = QUI::getConfig('etc/conf.ini.php');
+        $Config->set('globals', 'maintenance', 1);
+        $Config->save();
+
         try {
             $Packages = QUI::getPackageManager();
             $packages = $Packages->getOutdated(true);
@@ -106,9 +153,22 @@ class Update
             return;
         }
 
-        if (!\count($packages)) {
+        if (!count($packages)) {
             return;
         }
+
+        $updateString = '<ul>';
+
+        foreach ($packages as $package) {
+            $packageName = $package['package'];
+            $from        = $package['oldVersion'];
+            $to          = $package['version'];
+
+            $updateString .= '<li>' . $packageName . ': ' . $from . ' -> ' . $to . '</li>';
+        }
+
+        $updateString .= '<ul>';
+
 
         try {
             $Packages->update();
@@ -116,7 +176,11 @@ class Update
             QUI::getMailManager()->send(
                 QUI::conf('mail', 'admin_mail'),
                 QUI::getLocale()->get('quiqqer/cron', 'update.mail.error.subject'),
-                QUI::getLocale()->get('quiqqer/cron', 'update.mail.error.body')
+                QUI::getLocale()->get('quiqqer/cron', 'update.mail.error.body', [
+                    'packages' => $updateString,
+                    'host'     => HOST,
+                    'ip'       => QUI\Utils\System::getClientIP()
+                ])
             );
 
             return;
@@ -125,8 +189,15 @@ class Update
         QUI::getMailManager()->send(
             QUI::conf('mail', 'admin_mail'),
             QUI::getLocale()->get('quiqqer/cron', 'update.mail.success.subject'),
-            QUI::getLocale()->get('quiqqer/cron', 'update.mail.success.body')
+            QUI::getLocale()->get('quiqqer/cron', 'update.mail.success.body', [
+                'packages' => $updateString,
+                'host'     => HOST,
+                'ip'       => QUI\Utils\System::getClientIP()
+            ])
         );
+
+        $Config->set('globals', 'maintenance', 0);
+        $Config->save();
     }
 
     //endregion
@@ -136,12 +207,13 @@ class Update
     /**
      * @param array $packages
      * @return void
+     * @throws QUI\Exception
      */
     public static function setAvailableUpdates(array $packages = [])
     {
         $file = QUI::getPackage('quiqqer/cron')->getVarDir() . 'updates';
 
-        if (\count($packages)) {
+        if (count($packages)) {
             file_put_contents($file, json_encode($packages));
         }
     }
