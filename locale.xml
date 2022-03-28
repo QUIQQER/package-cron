@@ -401,11 +401,21 @@
         <locale name="update.mail.updateCheck.description">
             <de><![CDATA[
             Es stehen Updates für dein QUIQQER System bereit.<br />
-            Bitte aktualisere dein System um immer auf dem neusten Stand zu sein.
+            Bitte aktualisere dein System um immer auf dem neusten Stand zu sein.<br />
+            <br />
+            Folgende Pakete stehen zur Aktualisierung bereit:
+            <pre>
+            [packages]
+            </pre>
             ]]></de>
             <en><![CDATA[
             There are updates available for your QUIQQER system.<br />
-            Please update your system to be always up to date.
+            Please update your system to be always up to date.<br />
+            <br />
+            The following packages are available for updating:
+            <pre>
+            [packages]
+            </pre>
             ]]></en>
         </locale>
 

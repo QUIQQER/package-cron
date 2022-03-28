@@ -9,6 +9,8 @@ namespace QUI\Cron;
 use QUI;
 
 use function count;
+use function file_exists;
+use function unlink;
 
 /**
  * Update cron
@@ -19,7 +21,10 @@ class Update
     //region check for updates
 
     /**
+     * Execute the update check, if auto update is active
+     *
      * @return void
+     * @throws QUI\Exception
      */
     public static function check()
     {
@@ -38,7 +43,11 @@ class Update
     }
 
     /**
+     * Execute the update check
+     * - if updates are available, an email will be sent
+     *
      * @return void
+     * @throws QUI\Exception
      */
     public static function checkExecute()
     {
@@ -54,19 +63,37 @@ class Update
         if (count($packages)) {
             file_put_contents($file, json_encode($packages));
 
+
+            $updateString = '<ul>';
+
+            foreach ($packages as $package) {
+                $packageName = $package['package'];
+                $from        = $package['oldVersion'];
+                $to          = $package['version'];
+
+                $updateString .= '<li>' . $packageName . ': ' . $from . ' -> ' . $to . '</li>';
+            }
+
+            $updateString .= '<ul>';
+
+
             QUI::getMailManager()->send(
                 QUI::conf('mail', 'admin_mail'),
                 QUI::getLocale()->get('quiqqer/cron', 'update.mail.updateCheck.subject', [
                     'system' => QUI::conf('globals', 'host')
                 ]),
-                QUI::getLocale()->get('quiqqer/cron', 'update.mail.updateCheck.description')
+                QUI::getLocale()->get('quiqqer/cron', 'update.mail.updateCheck.description', [
+                    'packages' => $updateString,
+                    'host'     => HOST,
+                    'ip'       => QUI\Utils\System::getClientIP()
+                ])
             );
 
             return;
         }
 
-        if (\file_exists($file)) {
-            \unlink($file);
+        if (file_exists($file)) {
+            unlink($file);
         }
     }
 
@@ -75,7 +102,10 @@ class Update
     //region execute update
 
     /**
+     * execute an update, if auto update is active
+     *
      * @return void
+     * @throws QUI\Exception
      */
     public static function update()
     {
@@ -97,6 +127,7 @@ class Update
      * Execute an system update
      *
      * @return void
+     * @throws QUI\Exception
      */
     public static function updateExecute()
     {
@@ -119,11 +150,11 @@ class Update
         $updateString = '<ul>';
 
         foreach ($packages as $package) {
-            $package = $package['package'];
-            $from    = $package['oldVersion'];
-            $to      = $package['version'];
+            $packageName = $package['package'];
+            $from        = $package['oldVersion'];
+            $to          = $package['version'];
 
-            $updateString .= '<li>' . $package . ': ' . $from . ' -> ' . $to . '</li>';
+            $updateString .= '<li>' . $packageName . ': ' . $from . ' -> ' . $to . '</li>';
         }
 
         $updateString .= '<ul>';
@@ -166,6 +197,7 @@ class Update
     /**
      * @param array $packages
      * @return void
+     * @throws QUI\Exception
      */
     public static function setAvailableUpdates(array $packages = [])
     {
