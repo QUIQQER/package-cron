@@ -232,7 +232,7 @@
         </description>
 
         <autocreate>
-            <interval>0 1 * * *</interval>
+            <interval>0 1 * * 1</interval>
             <active>1</active>
         </autocreate>
     </cron>
@@ -247,7 +247,7 @@
         </description>
 
         <autocreate>
-            <interval>0 5 * * *</interval>
+            <interval>0 5 * * 1</interval>
             <active>0</active>
         </autocreate>
     </cron>

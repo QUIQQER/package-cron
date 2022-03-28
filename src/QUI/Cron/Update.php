@@ -8,8 +8,10 @@ namespace QUI\Cron;
 
 use QUI;
 
+use function array_filter;
 use function count;
 use function file_exists;
+use function strpos;
 use function unlink;
 
 /**
@@ -60,9 +62,17 @@ class Update
             return;
         }
 
-        if (count($packages)) {
-            file_put_contents($file, json_encode($packages));
+        // filter - dev-dev and dev-master
+        $filteredPackages = array_filter($packages, function ($package) {
+            if (strpos($package['version'], 'dev-') !== false) {
+                return false;
+            }
 
+            return true;
+        });
+
+        if (count($filteredPackages)) {
+            file_put_contents($file, json_encode($packages));
 
             $updateString = '<ul>';
 
