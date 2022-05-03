@@ -1,10 +1,6 @@
 <?php
 
-/**
- * This file contains QUI\Cron\Console
- */
-
-namespace QUI\Cron;
+namespace QUI\Cron\Console;
 
 use QUI;
 
@@ -13,7 +9,7 @@ use QUI;
  *
  * @author www.pcsg.de (Henning Leutz)
  */
-class Console extends QUI\System\Console\Tool
+class ExecCrons extends QUI\System\Console\Tool
 {
     /**
      * Konstruktor
@@ -128,7 +124,7 @@ class Console extends QUI\System\Console\Tool
      */
     public function run()
     {
-        $Manager = new Manager();
+        $Manager = new QUI\Cron\Manager();
 
         $this->writeLn('');
         $this->write('Execute all upcoming crons ...');
@@ -144,7 +140,7 @@ class Console extends QUI\System\Console\Tool
      */
     public function listCrons()
     {
-        $Manager = new Manager();
+        $Manager = new QUI\Cron\Manager();
         $list    = $Manager->getList();
 
         $this->writeLn('Cron list:');
@@ -157,14 +153,14 @@ class Console extends QUI\System\Console\Tool
             }
 
             $time = $entry['min']
-                    . ' ' . $entry['hour']
-                    . ' ' . $entry['day']
-                    . ' ' . $entry['month'];
+                    .' '.$entry['hour']
+                    .' '.$entry['day']
+                    .' '.$entry['month'];
 
             $exec = $entry['exec'];
 
-            $this->writeLn('ID: ' . $entry['id']);
-            $this->writeLn($time . "\t" . $exec, 'green');
+            $this->writeLn('ID: '.$entry['id']);
+            $this->writeLn($time."\t".$exec, 'green');
 
             $this->resetColor();
             $this->writeLn('');
@@ -179,7 +175,7 @@ class Console extends QUI\System\Console\Tool
      */
     public function listAllCrons()
     {
-        $Manager = new Manager();
+        $Manager = new QUI\Cron\Manager();
         $list    = $Manager->getList();
 
         $this->writeLn('Cron list:');
@@ -188,14 +184,14 @@ class Console extends QUI\System\Console\Tool
 
         foreach ($list as $entry) {
             $time = $entry['min']
-                    . ' ' . $entry['hour']
-                    . ' ' . $entry['day']
-                    . ' ' . $entry['month'];
+                    .' '.$entry['hour']
+                    .' '.$entry['day']
+                    .' '.$entry['month'];
 
             $exec = $entry['exec'];
 
-            $this->writeLn('ID: ' . $entry['id']);
-            $this->writeLn($time . "\t" . $exec, 'green');
+            $this->writeLn('ID: '.$entry['id']);
+            $this->writeLn($time."\t".$exec, 'green');
 
             $this->resetColor();
             $this->writeLn('');
@@ -213,14 +209,14 @@ class Console extends QUI\System\Console\Tool
      */
     public function runCron($cronId = false)
     {
-        $Manager = new Manager();
+        $Manager = new QUI\Cron\Manager();
         $cron    = $Manager->getCronById($cronId);
 
         if (!$cron) {
             throw new QUI\Exception('Cron not found');
         }
 
-        $this->writeLn('Execute Cron: ' . $cronId. ' '. $cron['title']);
+        $this->writeLn('Execute Cron: '.$cronId.' '.$cron['title']);
         $Manager->executeCron($cronId);
 
         $this->writeLn('=======================================================');
