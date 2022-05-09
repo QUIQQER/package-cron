@@ -3,6 +3,7 @@
     <item parent="/extras/"
           name="crons"
           icon="fa fa-clock-o"
+          permission="quiqqer.packages.quiqqercron.canUse,quiqqer.cron.edit"
     >
         Crons
     </item>
@@ -11,6 +12,7 @@
           name="manager"
           require="package/quiqqer/cron/bin/Manager"
           icon="fa fa-clock-o"
+          permission="quiqqer.packages.quiqqercron.canUse,quiqqer.cron.edit"
     >
         Cron-Manager
     </item>
@@ -19,6 +21,7 @@
           name="history"
           require="package/quiqqer/cron/bin/History"
           icon="fa fa-long-arrow-right"
+          permission="quiqqer.packages.quiqqercron.canUse,quiqqer.cron.edit"
     >
         Cron-History
     </item>
@@ -27,6 +30,7 @@
           name="cronservice"
           require="package/quiqqer/cron/bin/CronServiceWindow"
           icon="fa fa-cloud"
+          permission="quiqqer.packages.quiqqercron.canUse,quiqqer.cron.edit"
     >
         Cronservice
     </item>
