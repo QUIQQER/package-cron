@@ -7,14 +7,15 @@ use QUI\System\Log;
 
 class CronService
 {
-    const CRONSERVICE_URL = "https://cron.quiqqer.com";
+    const CRON_SERVICE_URL = "https://cron.quiqqer.com";
 
-    private $domain;
-    private $https;
-    private $packageDir;
+    private string $domain;
+    private bool $https;
+    private string $packageDir;
 
     /**
      * CronService constructor.
+     * @throws \QUI\Exception
      */
     public function __construct()
     {
@@ -57,6 +58,9 @@ class CronService
      * Will register this quiqqer instance.
      *
      * @param $email - Email used for communication. Must be valid.
+     *
+     * @throws \QUI\Cron\Exception
+     * @throws \QUI\Exception
      */
     public function register($email)
     {
@@ -66,7 +70,7 @@ class CronService
     /**
      * Gets the status of the given domain.
      *
-     * Returnformat :
+     * Return format :
      * array(
      *       'status'           => 0,  (0=unregistered; 1=active; 2=inactive)
      *       'current_failures' => int,
@@ -75,6 +79,7 @@ class CronService
      * )
      *
      * @return mixed
+     * @throws \QUI\Exception
      */
     public function getStatus()
     {
@@ -116,6 +121,7 @@ class CronService
 
     /**
      * Revoked the registration for this quiqqer instance
+     * @throws \QUI\Exception
      */
     public function revokeRegistration()
     {
@@ -135,6 +141,7 @@ class CronService
      * Requests the cronservice to resend the activation email
      *
      * @throws Exception
+     * @throws \QUI\Exception
      */
     public function resendActivationMail()
     {
@@ -154,6 +161,7 @@ class CronService
      * Attempts to cancel the registration on the server
      *
      * @throws Exception
+     * @throws \QUI\Exception
      */
     public function cancelRegistration()
     {
@@ -184,6 +192,7 @@ class CronService
      * @param $https - wether or not http secure should be used to call the cron.php
      *
      * @throws Exception
+     * @throws \QUI\Exception
      */
     private function sendRegistrationRequest($domain, $email, $packageDir, $https)
     {
@@ -200,7 +209,7 @@ class CronService
         }
 
 
-        $url = self::CRONSERVICE_URL . "/admin/ajax.php?" .
+        $url = self::CRON_SERVICE_URL . "/admin/ajax.php?" .
             "_rf=" . urlencode("[\"package_pcsg_cronservice_ajax_register\"]") .
             "&package=" . urlencode("pcsg/cronservice") .
             "&lang=" . QUI::getUserBySession()->getLang() .
@@ -269,7 +278,7 @@ class CronService
      */
     private function makeServerAjaxCall($function, $params)
     {
-        $url = self::CRONSERVICE_URL . "/admin/ajax.php?" .
+        $url = self::CRON_SERVICE_URL . "/admin/ajax.php?" .
             "_rf=" . urlencode('["' . $function . '"]') .
             "&package=" . urlencode("pcsg/cronservice") .
             "&lang=" . QUI::getUserBySession()->getLang();
@@ -305,6 +314,7 @@ class CronService
      * Saves the revoke token into a file
      *
      * @param $token
+     * @throws \QUI\Exception
      */
     private function saveRevokeToken($token)
     {
@@ -322,9 +332,11 @@ class CronService
      * Reads the revoke token from the filesystem
      *
      * @return string
+     *
      * @throws Exception
+     * @throws \QUI\Exception
      */
-    private function readRevokeToken()
+    private function readRevokeToken(): string
     {
         $varDir   = QUI::getPackage('quiqqer/cron')->getVarDir() . '/cronservice';
         $fileName = $varDir . '/.revoketoken';

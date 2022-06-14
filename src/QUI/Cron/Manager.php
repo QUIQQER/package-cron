@@ -20,7 +20,7 @@ use Cron\CronExpression;
  */
 class Manager
 {
-    const AUTOCREATE_SCOPE_PROJECTS  = 'projects';
+    const AUTOCREATE_SCOPE_PROJECTS = 'projects';
     const AUTOCREATE_SCOPE_LANGUAGES = 'languages';
 
     /**
@@ -263,7 +263,7 @@ class Manager
 
             $lockTime = self::getLockTime(); // lock time in seconds
             $EndTime  = clone $Start;
-            $EndTime  = $EndTime->add(\date_interval_create_from_date_string($lockTime.' seconds'));
+            $EndTime  = $EndTime->add(\date_interval_create_from_date_string($lockTime . ' seconds'));
 
             self::$runtime['lockEnd'] = $EndTime->format('Y-m-d H:i:s');
 
@@ -273,7 +273,7 @@ class Manager
             QUI\System\Log::writeRecursive($Exception->getMessage());
 
             Manager::log(
-                'Crons cannot be executed due to an error: '.$Exception->getMessage()
+                'Crons cannot be executed due to an error: ' . $Exception->getMessage()
             );
 
             return;
@@ -316,8 +316,8 @@ class Manager
                 $next = $Cron->getNextRunDate($lastexec)->getTimestamp();
             } catch (\Exception $Exception) {
                 QUI\System\Log::addError(
-                    'Could not evaluate cron run date (Cron "'.$entry['title'].'" #'.$entry['id'].').'
-                    .' Cron is deleted. Error :: '.$Exception->getMessage()
+                    'Could not evaluate cron run date (Cron "' . $entry['title'] . '" #' . $entry['id'] . ').'
+                    . ' Cron is deleted. Error :: ' . $Exception->getMessage()
                 );
 
                 $this->deleteCronIds([$entry['id']]);
@@ -348,7 +348,7 @@ class Manager
                 }
             } catch (\Exception $Exception) {
                 $message = print_r($entry, true);
-                $message .= "\n".$Exception->getMessage();
+                $message .= "\n" . $Exception->getMessage();
 
                 QUI\System\Log::addError($message);
 
@@ -400,14 +400,14 @@ class Manager
             }
         }
 
-        Manager::log('START cron "'.$cronData['title'].'" (ID: '.$cronId.')');
+        Manager::log('START cron "' . $cronData['title'] . '" (ID: ' . $cronId . ')');
         $start    = \microtime(true);
         $starTime = \time();
 
         call_user_func_array($cronData['exec'], [$params, $this]);
 
         $end = \round(\microtime(true) - $start, 2);
-        Manager::log('FINISH cron "'.$cronData['title'].'" (ID: '.$cronId.') - time: '.$end.' seconds');
+        Manager::log('FINISH cron "' . $cronData['title'] . '" (ID: ' . $cronId . ') - time: ' . $end . ' seconds');
 
         QUI::getMessagesHandler()->addSuccess(
             QUI::getLocale()->get(
@@ -446,8 +446,8 @@ class Manager
         $result = [];
 
         foreach ($packageList as $entry) {
-            $dir      = OPT_DIR.$entry['name'].'/';
-            $cronFile = $dir.'cron.xml';
+            $dir      = OPT_DIR . $entry['name'] . '/';
+            $cronFile = $dir . 'cron.xml';
 
             if (!file_exists($cronFile)) {
                 continue;
@@ -544,7 +544,7 @@ class Manager
 
         if (isset($params['perPage']) && isset($params['page'])) {
             $start = (int)$params['page'] - 1;
-            $limit = $start.','.(int)$params['perPage'];
+            $limit = $start . ',' . (int)$params['perPage'];
         }
 
         $data = QUI::getDataBase()->fetch([
@@ -706,7 +706,7 @@ class Manager
      */
     public static function table()
     {
-        return QUI_DB_PRFX.'cron';
+        return QUI_DB_PRFX . 'cron';
     }
 
     /**
@@ -716,7 +716,7 @@ class Manager
      */
     public static function tableHistory()
     {
-        return QUI_DB_PRFX.'cron_history';
+        return QUI_DB_PRFX . 'cron_history';
     }
 
     /**
@@ -814,9 +814,9 @@ class Manager
 
                     if (!$Interval->length) {
                         \QUI\System\Log::addWarning(
-                            'quiqqer/cron -> Cron "'.$Cron->getAttribute('exec').'" from file'
-                            .' "'.$file.'" has an <autocreate> entry, but no <interval> set.'
-                            .' The <autocreate>-property is ignored.'
+                            'quiqqer/cron -> Cron "' . $Cron->getAttribute('exec') . '" from file'
+                            . ' "' . $file . '" has an <autocreate> entry, but no <interval> set.'
+                            . ' The <autocreate>-property is ignored.'
                         );
 
                         continue;
@@ -838,10 +838,10 @@ class Manager
                         );
                     } catch (\Exception $Exception) {
                         \QUI\System\Log::addWarning(
-                            'quiqqer/cron -> Cron "'.$Cron->getAttribute('exec').'" from file'
-                            .' "'.$file.'" has an <autocreate> entry, but the <interval>'
-                            .' is invalid: '.$Exception->getMessage()
-                            .' The <autocreate>-property is ignored.'
+                            'quiqqer/cron -> Cron "' . $Cron->getAttribute('exec') . '" from file'
+                            . ' "' . $file . '" has an <autocreate> entry, but the <interval>'
+                            . ' is invalid: ' . $Exception->getMessage()
+                            . ' The <autocreate>-property is ignored.'
                         );
 
                         continue;
@@ -950,7 +950,7 @@ class Manager
         if (empty($adminMail)) {
             QUI\System\Log::addWarning(
                 'quiqqer/cron -> Cannot send lock timeout notification since no administrator e-mail is configured in'
-                .' this QUIQQER system.'
+                . ' this QUIQQER system.'
             );
 
             return;
@@ -972,10 +972,14 @@ class Manager
             $TimeDiff = $End->diff($Now);
 
             $Mailer->setBody(
-                $L->get('quiqqer/cron', 'notification.lock_timeout.body', \array_merge(self::$runtime, [
-                    'host' => QUI::conf('globals', 'host'),
-                    'diff' => $TimeDiff->format('%H:%M:%S')
-                ]))
+                $L->get(
+                    'quiqqer/cron',
+                    'notification.lock_timeout.body',
+                    \array_merge(self::$runtime, [
+                        'host' => QUI::conf('globals', 'host'),
+                        'diff' => $TimeDiff->format('%H:%M:%S')
+                    ])
+                )
             );
 
             $Mailer->send();
