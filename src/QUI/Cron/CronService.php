@@ -7,7 +7,6 @@ use QUI\System\Log;
 
 class CronService
 {
-
     const CRONSERVICE_URL = "https://cron.quiqqer.com";
 
     private $domain;
@@ -79,9 +78,9 @@ class CronService
      */
     public function getStatus()
     {
-        $status = $this->makeServerAjaxCall('package_pcsg_cronservice_ajax_getStatus', array(
+        $status = $this->makeServerAjaxCall('package_pcsg_cronservice_ajax_getStatus', [
             'domain' => $this->domain
-        ));
+        ]);
 
         if (empty($status['last_execution'])) {
             $status['last_execution'] = QUI::getLocale()->get(
@@ -105,7 +104,7 @@ class CronService
             return $status;
         }
 
-        if (!isset($history[0]['lastexec']) || empty($history[0]['lastexec'])) {
+        if (empty($history[0]['lastexec'])) {
             return $status;
         }
 
@@ -122,10 +121,10 @@ class CronService
     {
         $token = $this->readRevokeToken();
 
-        $this->makeServerAjaxCall('package_pcsg_cronservice_ajax_revokeRegistration', array(
+        $this->makeServerAjaxCall('package_pcsg_cronservice_ajax_revokeRegistration', [
             'domain' => $this->domain,
             'token'  => $token
-        ));
+        ]);
 
         $Config = QUI::getPackage("quiqqer/cron")->getConfig();
         $Config->set("settings", "executeOnAdminLogin", 1);
@@ -139,15 +138,15 @@ class CronService
      */
     public function resendActivationMail()
     {
-        if (!isset($this->domain) || empty($this->domain)) {
+        if (empty($this->domain)) {
             throw new Exception("Could not get the instances domain.");
         }
 
         $this->makeServerAjaxCall(
             "package_pcsg_cronservice_ajax_resendActivationMail",
-            array(
+            [
                 "domain" => $this->domain
-            )
+            ]
         );
     }
 
@@ -159,15 +158,16 @@ class CronService
     public function cancelRegistration()
     {
         Log::addDebug("");
-        if (!isset($this->domain) || empty($this->domain)) {
+
+        if (empty($this->domain)) {
             throw new Exception("Could not get the instances domain.");
         }
 
         $this->makeServerAjaxCall(
             "package_pcsg_cronservice_ajax_cancelRegistration",
-            array(
+            [
                 "domain" => $this->domain
-            )
+            ]
         );
 
         $Config = QUI::getPackage("quiqqer/cron")->getConfig();
@@ -178,25 +178,25 @@ class CronService
     /**
      * Sends an ajax request to the cronservice server.
      *
-     * @param $domain     - The domain to be registered. Example : example.org
-     * @param $email      - The Email that should be used for communication.
+     * @param $domain - The domain to be registered. Example : example.org
+     * @param $email - The Email that should be used for communication.
      * @param $packageDir - The package url dir
-     * @param $https      - wether or not http secure should be used to call the cron.php
+     * @param $https - wether or not http secure should be used to call the cron.php
      *
      * @throws Exception
      */
     private function sendRegistrationRequest($domain, $email, $packageDir, $https)
     {
         if (empty($domain)) {
-            throw new Exception(array("quiqqer/cron", "exception.registration.empty.domain"));
+            throw new Exception(["quiqqer/cron", "exception.registration.empty.domain"]);
         }
 
         if (empty($email)) {
-            throw new Exception(array("quiqqer/cron", "exception.registration.empty.email"));
+            throw new Exception(["quiqqer/cron", "exception.registration.empty.email"]);
         }
 
         if (empty($packageDir)) {
-            throw new Exception(array("quiqqer/cron", "exception.registration.empty.packageDir"));
+            throw new Exception(["quiqqer/cron", "exception.registration.empty.packageDir"]);
         }
 
 
@@ -212,11 +212,11 @@ class CronService
 
 
         $curl = curl_init();
-        curl_setopt_array($curl, array(
+        curl_setopt_array($curl, [
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_URL            => $url,
             CURLOPT_USERAGENT      => 'QUIQQER'
-        ));
+        ]);
 
         if (isset($_SERVER['SERVER_ADDR'])) {
             curl_setopt($curl, CURLOPT_INTERFACE, $_SERVER['SERVER_ADDR']);
@@ -225,6 +225,7 @@ class CronService
         $response = curl_exec($curl);
         $response = substr($response, 9, -10);
         $data     = json_decode($response, true);
+
         if (json_last_error() != JSON_ERROR_NONE) {
             Log::addDebug($response);
             throw new Exception(json_last_error_msg());
@@ -235,6 +236,7 @@ class CronService
         }
 
         $data = $data['package_pcsg_cronservice_ajax_register']['result'];
+
         if (!isset($data['status']) || $data['status'] != 1) {
             Log::addDebug($response);
             Log::writeRecursive($data);
@@ -250,7 +252,7 @@ class CronService
         $this->saveRevokeToken($revokeCode);
 
         curl_close($curl);
-        
+
         $Config = QUI::getPackage("quiqqer/cron")->getConfig();
         $Config->set("settings", "executeOnAdminLogin", 0);
         $Config->save();
@@ -260,7 +262,7 @@ class CronService
      * Calls the given ajax function on the Cronservice server and returns its output
      *
      * @param $function - Ajax function name
-     * @param $params   - Params to pass
+     * @param $params - Params to pass
      *
      * @return mixed
      * @throws QUI\Exception
@@ -277,11 +279,11 @@ class CronService
         }
 
         $curl = curl_init();
-        curl_setopt_array($curl, array(
+        curl_setopt_array($curl, [
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_URL            => $url,
             CURLOPT_USERAGENT      => 'QUIQQER'
-        ));
+        ]);
 
         $response = curl_exec($curl);
 
@@ -332,6 +334,7 @@ class CronService
         }
 
         $token = file_get_contents($fileName);
+
         if ($token === false) {
             throw new Exception("Could not read tokenfile.");
         }
