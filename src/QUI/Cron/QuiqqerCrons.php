@@ -8,7 +8,6 @@ namespace QUI\Cron;
 
 use QUI;
 
-use function copy;
 use function file_exists;
 use function filemtime;
 use function is_dir;
@@ -65,7 +64,7 @@ class QuiqqerCrons
      */
     public static function clearSessions()
     {
-        $type = QUI::conf('session', 'type');
+        $type    = QUI::conf('session', 'type');
         $maxTime = 1400;
 
         if (QUI::conf('session', 'max_life_time')) {
@@ -103,7 +102,7 @@ class QuiqqerCrons
                 if ($fmTime + $maxTime < time()) {
                     unlink($sessionDir . $sessionFile);
                 } else {
-                    copy(
+                    rename(
                         $sessionDir . $sessionFile,
                         $sessionTempDir . $sessionFile
                     );
@@ -119,12 +118,12 @@ class QuiqqerCrons
 
         // database
         if ($type === 'database') {
-            $table = QUI::getDBTableName('sessions');
+            $table       = QUI::getDBTableName('sessions');
             $maxLifetime = time() - $maxTime;
 
             QUI::getDataBase()->delete($table, [
                 'session_time' => [
-                    'type' => '<',
+                    'type'  => '<',
                     'value' => $maxLifetime
                 ]
             ]);
@@ -156,13 +155,13 @@ class QuiqqerCrons
     {
         $execCron = function ($project, $lang) {
             $Project = QUI::getProject($project, $lang);
-            $now = \date('Y-m-d H:i:s');
+            $now     = \date('Y-m-d H:i:s');
 
             // search sites with release dates
             $PDO = QUI::getDataBase()->getPDO();
 
             $deactivate = [];
-            $activate = [];
+            $activate   = [];
 
 
             /**
@@ -218,7 +217,7 @@ class QuiqqerCrons
             $Statement->execute();
 
             $result = $Statement->fetchAll(\PDO::FETCH_ASSOC);
-            $Now = \date_create();
+            $Now    = \date_create();
 
             foreach ($result as $entry) {
                 try {
@@ -273,7 +272,7 @@ class QuiqqerCrons
         };
 
         $project = false;
-        $lang = false;
+        $lang    = false;
 
         if (isset($params['project'])) {
             $project = $params['project'];
@@ -405,11 +404,11 @@ class QuiqqerCrons
      */
     public static function cleanupUploads()
     {
-        $Upload = new QUI\Upload\Manager();
-        $dir = $Upload->getDir();
+        $Upload  = new QUI\Upload\Manager();
+        $dir     = $Upload->getDir();
         $folders = QUI\Utils\System\File::readDir($dir);
 
-        $now = time();
+        $now     = time();
         $maxTime = 86400; // seconds -> 1 day
 
         foreach ($folders as $folder) {
