@@ -251,4 +251,18 @@
             <active>0</active>
         </autocreate>
     </cron>
+
+    <cron exec="\QUI\Cron\QuiqqerCrons::updateExternalImages">
+        <title>
+            <locale group="quiqqer/cron" var="cron.cleanup.externalImages.title"/>
+        </title>
+        <description>
+            <locale group="quiqqer/cron" var="cron.cleanup.externalImages.description"/>
+        </description>
+
+        <autocreate>
+            <interval>0 1 * * *</interval>
+            <active>1</active>
+        </autocreate>
+    </cron>
 </crons>
