@@ -439,4 +439,18 @@ class QuiqqerCrons
             }
         }
     }
+
+    /**
+     * Updates all external images
+     *
+     * @return void
+     */
+    public static function updateExternalImages()
+    {
+        $projects = QUI::getProjectManager()->getProjectList();
+
+        foreach ($projects as $Project) {
+            $Project->getMedia()->updateExternalImages();
+        }
+    }
 }
