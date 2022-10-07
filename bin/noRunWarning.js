@@ -11,7 +11,7 @@ function adminInit() {
                 maxHeight: 400,
                 maxWidth : 600,
 
-                autoclose         : false,
+                autoclose         : true,
                 backgroundClosable: false,
                 titleCloseButton  : false,
 
