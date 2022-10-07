@@ -16,6 +16,8 @@ use QUI\Exception;
  */
 class EventHandler
 {
+    protected static $cronWarning = true;
+
     /**
      * event: onPackageSetup
      *
@@ -145,6 +147,10 @@ class EventHandler
             });
             </script>';
         }
+
+        if (self::$cronWarning) {
+            echo '<script src="'.URL_OPT_DIR.'quiqqer/cron/bin/noRunWarning.js"></script>';
+        }
     }
 
     /**
@@ -157,6 +163,8 @@ class EventHandler
             QUI::getUserBySession(),
             QUI::getUserBySession()->getLocale()->get('quiqqer/cron', 'message.cron.admin.info.24h')
         );
+
+        self::$cronWarning = true;
     }
 
     /**
