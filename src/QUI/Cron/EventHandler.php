@@ -16,7 +16,7 @@ use QUI\Exception;
  */
 class EventHandler
 {
-    protected static $cronWarning = true;
+    protected static $cronWarning = false;
 
     /**
      * event: onPackageSetup
