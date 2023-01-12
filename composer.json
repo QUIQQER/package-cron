@@ -1,29 +1,30 @@
 {
-    "name": "quiqqer\/cron",
-    "type": "quiqqer-module",
-    "description": "This Package provided a cron functionality to QUIQQER. Crons are tasks which to be repeated in intervals.",
-    "license": "GPL-3.0+",
-    "authors": [
-        {
-            "name": "Henning Leutz",
-            "email": "leutz@pcsg.de",
-            "homepage": "http:\/\/www.pcsg.de",
-            "role": "Developer"
-        }
-    ],
-    "support": {
-        "email": "support@pcsg.de"
-    },
-    "require": {
-        "quiqqer\/quiqqer": ">=1.6|dev-master|dev-dev",
-        "quiqqer\/qui": ">=1|*@dev",
-        "quiqqer\/utils": ">=1.4|dev-master|dev-dev",
-        "mtdowling\/cron-expression": "1.0.*",
-        "quiqqer-asset/animejs": "*"
-    },
-    "autoload": {
-        "psr-0": {
-            "QUI": "src\/"
-        }
+  "name": "quiqqer\/cron",
+  "type": "quiqqer-module",
+  "description": "This Package provided a cron functionality to QUIQQER. Crons are tasks which to be repeated in intervals.",
+  "license": "GPL-3.0+",
+  "authors": [
+    {
+      "name": "Henning Leutz",
+      "email": "leutz@pcsg.de",
+      "homepage": "http:\/\/www.pcsg.de",
+      "role": "Developer"
     }
+  ],
+  "support": {
+    "email": "support@pcsg.de"
+  },
+  "require": {
+    "quiqqer\/quiqqer": ">=1.6|dev-master|dev-dev",
+    "quiqqer\/qui": ">=1|*@dev",
+    "quiqqer\/utils": ">=1.4|dev-master|dev-dev",
+    "quiqqer\/requirements": "^3|dev-master|dev-dev",
+    "mtdowling\/cron-expression": "1.0.*",
+    "quiqqer-asset/animejs": "*"
+  },
+  "autoload": {
+    "psr-0": {
+      "QUI": "src\/"
+    }
+  }
 }
