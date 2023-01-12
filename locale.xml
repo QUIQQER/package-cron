@@ -14,11 +14,27 @@
           Crons are recurring tasks e.G. maintenance tasks or publishing certain pages at a later moment in time.]]></en>
         </locale>
 
-        <locale name="message.cron.admin.info.24h">
-            <de><![CDATA[In den letzten 24 Stunden wurden keine geplanten Aufgaben ausgeführt.
-                Unter Umständen sind die geplanten Aufgaben fehlerhaft.]]></de>
-            <en><![CDATA[In the past 24 hours no cron was running.
-                It is possible that the Crons will not run properly.]]></en>
+        <locale name="message.cron.admin.info.24h" html="true">
+            <de><![CDATA[<p>In den letzten 24 Stunden wurden keine wiederkehrenden Aufgaben ("Crons") ausgeführt.
+                Unter Umständen sind die wiederkehrenden Aufgaben fehlerhaft konfiguriert.</p><br/>
+                <p>Dies kann dazu führen, dass wichtige Systemaufgaben nicht durchgeführt werden und das System nicht mehr fehlerfrei läuft.</p><br/>
+<p><b>Bitte wende dich mit dieser Fehlermeldung an einen Administrator!</b></p>]]></de>
+            <en><![CDATA[<p>In the past 24 hours no cronjobs were executed.</p>
+                <p>It is possible that the cronjobs are not configured properly.</p><br/>
+                <p>This can lead to important system tasks not being performed and the system no longer running without errors.</p><br/>
+<p><b>Please contact an administrator with this error message!</b></p>]]></en>
+        </locale>
+        <locale name="message.cron.admin.info.24h.title">
+            <de><![CDATA[Achtung!]]></de>
+            <en><![CDATA[Attention!]]></en>
+        </locale>
+        <locale name="message.cron.admin.info.24h.text">
+            <de><![CDATA[Wiederkehrende Aufgaben wurden nicht korrekt ausgeführt!]]></de>
+            <en><![CDATA[Cronjobs have not been executed correctly!]]></en>
+        </locale>
+        <locale name="message.cron.admin.info.24h.btn.submit">
+            <de><![CDATA[Verstanden]]></de>
+            <en><![CDATA[Understood]]></en>
         </locale>
     </groups>
     <groups name="quiqqer/cron" datatype="php">
