@@ -5,6 +5,5 @@
     <event on="onPackageSetup" fire="\QUI\Cron\EventHandler::onPackageSetup"/>
     <event on="onCreateProject" fire="\QUI\Cron\EventHandler::onCreateProject"/>
     <event on="onPackageInstallAfter" fire="\QUI\Cron\EventHandler::onPackageInstall"/>
-    <event on="onQuiqqerInstallFinish" fire="\QUI\Cron\EventHandler::onQuiqqerInstallFinish"/>
     <event on="onUpdateEnd" fire="\QUI\Cron\EventHandler::updateEnd"/>
 </events>
