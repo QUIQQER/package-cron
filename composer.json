@@ -3,6 +3,7 @@
   "type": "quiqqer-module",
   "description": "This Package provided a cron functionality to QUIQQER. Crons are tasks which to be repeated in intervals.",
   "license": "GPL-3.0+",
+  "version": "1.11.0",
   "authors": [
     {
       "name": "Henning Leutz",
