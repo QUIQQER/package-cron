@@ -265,4 +265,22 @@
             <active>1</active>
         </autocreate>
     </cron>
+
+    <cron exec="\QUI\Cron\SecurityUpdateCron::execute">
+        <title>
+            <locale group="quiqqer/cron" var="cron.securityUpdateCron.title"/>
+        </title>
+        <description>
+            <locale group="quiqqer/cron" var="cron.securityUpdateCron.description"/>
+        </description>
+
+        <params>
+            <param name="email" type="string"/>
+        </params>
+
+        <autocreate>
+            <interval>0 1 * * *</interval>
+            <active>0</active>
+        </autocreate>
+    </cron>
 </crons>

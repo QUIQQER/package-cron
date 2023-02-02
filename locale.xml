@@ -462,6 +462,15 @@
             ]]></en>
         </locale>
 
+        <locale name="cron.securityUpdateCron.title">
+            <de><![CDATA[Automatisches Security Update]]></de>
+            <en><![CDATA[Automatic security update]]></en>
+        </locale>
+        <locale name="cron.securityUpdateCron.description">
+            <de><![CDATA[Führt ein automatisches Security Update durch.]]></de>
+            <en><![CDATA[Performs an automatic security update.]]></en>
+        </locale>
+        
     </groups>
     <groups name="quiqqer/cron" datatype="js">
         <locale name="cron.id">
