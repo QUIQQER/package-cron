@@ -8,6 +8,7 @@ namespace QUI\Cron;
 
 use QUI;
 
+use function date;
 use function file_exists;
 use function filemtime;
 use function is_dir;
@@ -155,7 +156,7 @@ class QuiqqerCrons
     {
         $execCron = function ($project, $lang) {
             $Project = QUI::getProject($project, $lang);
-            $now     = \date('Y-m-d H:i:s');
+            $now     = date('Y-m-d H:i:s');
 
             // search sites with release dates
             $PDO = QUI::getDataBase()->getPDO();
