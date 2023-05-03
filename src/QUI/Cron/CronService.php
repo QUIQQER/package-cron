@@ -241,6 +241,8 @@ class CronService
         }
 
         if (!isset($data['package_pcsg_cronservice_ajax_register']['result'])) {
+            Log::addDebug($response);
+            Log::writeRecursive($data, Log::LEVEL_ERROR);
             throw new Exception("Something went wrong!");
         }
 
@@ -248,7 +250,7 @@ class CronService
 
         if (!isset($data['status']) || $data['status'] != 1) {
             Log::addDebug($response);
-            Log::writeRecursive($data);
+            Log::writeRecursive($data, Log::LEVEL_ERROR);
             if (isset($data['message'])) {
                 throw new Exception($data['message']);
             }
