@@ -19,7 +19,7 @@
     "quiqqer\/qui": ">=1|*@dev",
     "quiqqer\/utils": ">=1.4|dev-master|dev-dev",
     "quiqqer\/requirements": "^3|dev-master|dev-dev",
-    "mtdowling\/cron-expression": "1.0.*",
+    "dragonmantank/cron-expression": "^v3.3",
     "quiqqer-asset/animejs": "*"
   },
   "autoload": {
