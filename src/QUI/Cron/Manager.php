@@ -35,7 +35,7 @@ use function trim;
  */
 class Manager
 {
-    const AUTOCREATE_SCOPE_PROJECTS = 'projects';
+    const AUTOCREATE_SCOPE_PROJECTS  = 'projects';
     const AUTOCREATE_SCOPE_LANGUAGES = 'languages';
 
     /**
@@ -144,7 +144,8 @@ class Manager
         $month,
         $dayOfWeek,
         $params = []
-    ) {
+    )
+    {
         Permission::checkPermission('quiqqer.cron.edit');
 
         if (!$this->cronExists($cron)) {
@@ -158,9 +159,7 @@ class Manager
 
         // test the cron data
         try {
-            CronExpression::factory(
-                "$min $hour $day $month $dayOfWeek"
-            );
+            new CronExpression("$min $hour $day $month $dayOfWeek");
         } catch (\Exception $Exception) {
             throw new QUI\Exception($Exception->getMessage());
         }
@@ -325,10 +324,7 @@ class Manager
             }
 
             try {
-                $Cron = CronExpression::factory(
-                    "$min $hour $day $month $dayOfWeek"
-                );
-
+                $Cron = new CronExpression("$min $hour $day $month $dayOfWeek");
                 $next = $Cron->getNextRunDate($lastexec)->getTimestamp();
             } catch (\Exception $Exception) {
                 QUI\System\Log::addError(
@@ -856,9 +852,7 @@ class Manager
 
                     // Test interval
                     try {
-                        CronExpression::factory(
-                            "$min $hour $day $month $dayOfWeek"
-                        );
+                        new CronExpression("$min $hour $day $month $dayOfWeek");
                     } catch (\Exception $Exception) {
                         \QUI\System\Log::addWarning(
                             'quiqqer/cron -> Cron "' . $Cron->getAttribute('exec') . '" from file'
