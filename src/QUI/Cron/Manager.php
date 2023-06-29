@@ -144,8 +144,7 @@ class Manager
         $month,
         $dayOfWeek,
         $params = []
-    )
-    {
+    ) {
         Permission::checkPermission('quiqqer.cron.edit');
 
         if (!$this->cronExists($cron)) {
