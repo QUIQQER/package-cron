@@ -16,7 +16,7 @@ use QUI\Exception;
  */
 class EventHandler
 {
-    protected static $cronWarning = false;
+    protected static bool $cronWarning = false;
 
     /**
      * event: onPackageSetup
@@ -77,7 +77,7 @@ class EventHandler
 
         try {
             $Package = QUI::getPackageManager()->getInstalledPackage('quiqqer/cron');
-            $Config  = $Package->getConfig();
+            $Config = $Package->getConfig();
         } catch (QUI\Exception $Exception) {
             return;
         }
@@ -90,8 +90,8 @@ class EventHandler
 
         // check last cron execution
         $CronManager = new Manager();
-        $result      = $CronManager->getHistoryList([
-            'page'    => 1,
+        $result = $CronManager->getHistoryList([
+            'page' => 1,
             'perPage' => 1
         ]);
 
@@ -116,7 +116,7 @@ class EventHandler
     {
         try {
             $Package = QUI::getPackageManager()->getInstalledPackage('quiqqer/cron');
-            $Config  = $Package->getConfig();
+            $Config = $Package->getConfig();
         } catch (QUI\Exception $Exception) {
             return;
         }
@@ -149,7 +149,7 @@ class EventHandler
         }
 
         if (self::$cronWarning) {
-            echo '<script src="'.URL_OPT_DIR.'quiqqer/cron/bin/noRunWarning.js"></script>';
+            echo '<script src="' . URL_OPT_DIR . 'quiqqer/cron/bin/noRunWarning.js"></script>';
         }
     }
 
@@ -159,6 +159,10 @@ class EventHandler
      */
     public static function sendAdminInfoCronError()
     {
+        if (Manager::isQuiqqerInstallerExecuted() === false) {
+            return;
+        }
+
         QUI::getMessagesHandler()->sendAttention(
             QUI::getUserBySession(),
             QUI::getUserBySession()->getLocale()->get('quiqqer/cron', 'message.cron.admin.info.24h')
@@ -199,7 +203,7 @@ class EventHandler
 
         foreach ($CronManager->getAvailableCrons() as $cron) {
             $title = $cron['title'];
-            $exec  = $cron['exec'];
+            $exec = $cron['exec'];
 
             foreach ($cron['autocreate'] as $autocreate) {
                 // Check if cron already exists
