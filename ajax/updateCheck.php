@@ -5,9 +5,17 @@
  *
  * @return array
  */
+
+use QUI\Cron\Manager;
+
 QUI::$Ajax->registerFunction(
     'package_quiqqer_cron_ajax_updateCheck',
     function () {
+        // only execute if quiqqer is completely set up
+        if (Manager::isQuiqqerInstallerExecuted() === false) {
+            return [];
+        }
+        
         return QUI\Cron\Update::getAvailableUpdates();
     },
     false,
