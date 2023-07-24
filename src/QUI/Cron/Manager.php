@@ -537,12 +537,7 @@ class Manager
             $Package = QUI::getPackage($cronParts[0]);
             $cronFile = $Package->getXMLFilePath('cron.xml');
 
-            if (
-                $Package->isQuiqqerPackage()
-                && $cronFile
-                && isset($cronParts[1])
-                && is_numeric($cronParts[1])
-            ) {
+            if ($Package->isQuiqqerPackage() && $cronFile && isset($cronParts[1]) && is_numeric($cronParts[1])) {
                 $cronNo = (int)$cronParts[1];
                 $cronList = $this->getCronsFromFile($cronFile);
 
