@@ -338,16 +338,17 @@ class Manager
                 $dayOfWeek = $entry['dayOfWeek'];
             }
 
+            $cronExpression = "$min $hour $day $month $dayOfWeek";
+
             try {
-                $Cron = new CronExpression("$min $hour $day $month $dayOfWeek");
+                $Cron = new CronExpression($cronExpression);
                 $next = $Cron->getNextRunDate($lastexec)->getTimestamp();
             } catch (\Exception $Exception) {
                 QUI\System\Log::addError(
-                    'Could not evaluate cron run date (Cron "' . $entry['title'] . '" #' . $entry['id'] . ').'
-                    . ' Cron is deleted. Error :: ' . $Exception->getMessage()
+                    'Could not evaluate cron expression "' . $cronExpression . '" for cron'
+                    . ' (Cron "' . $entry['title'] . '" #' . $entry['id'] . ').'
+                    . ' Error :: ' . $Exception->getMessage()
                 );
-
-                $this->deleteCronIds([$entry['id']]);
 
                 continue;
             }
