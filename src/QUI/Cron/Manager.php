@@ -95,7 +95,7 @@ class Manager
      *
      * @throws QUI\Exception
      */
-    public function add($cron, $min, $hour, $day, $month, $dayOfWeek, $params = [])
+    public function add(string $cron, $min, $hour, $day, $month, $dayOfWeek, $params = [])
     {
         Permission::checkPermission('quiqqer.cron.add');
 
