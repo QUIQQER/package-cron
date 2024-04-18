@@ -15,10 +15,10 @@
     "email": "support@pcsg.de"
   },
   "require": {
-    "quiqqer\/quiqqer": ">=1.6|dev-master|dev-dev",
-    "quiqqer\/qui": ">=1|*@dev",
-    "quiqqer\/utils": ">=1.4|dev-master|dev-dev",
-    "quiqqer\/requirements": "^3|dev-master|dev-dev",
+    "quiqqer\/quiqqer": "^2",
+    "quiqqer\/qui": "^1",
+    "quiqqer\/utils": "^1.4",
+    "quiqqer\/requirements": "^3",
     "dragonmantank/cron-expression": "^v3.3",
     "quiqqer-asset/animejs": "*"
   },
