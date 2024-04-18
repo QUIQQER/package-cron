@@ -3,6 +3,7 @@
 namespace QUI\Cron\Console;
 
 use QUI;
+use QUI\Exception;
 
 /**
  * Cron Console Manager
@@ -23,12 +24,13 @@ class ExecCrons extends QUI\System\Console\Tool
     /**
      * (non-PHPdoc)
      *
+     * @throws Exception
      * @see \QUI\System\Console\Tool::execute()
      */
-    public function execute()
+    public function execute(): void
     {
-        $run     = $this->getArgument('--run');
-        $list    = $this->getArgument('--list');
+        $run = $this->getArgument('--run');
+        $list = $this->getArgument('--list');
         $listall = $this->getArgument('--list-all');
         $runCron = $this->getArgument('--cron');
 
@@ -54,7 +56,7 @@ class ExecCrons extends QUI\System\Console\Tool
 
         $this->writeLn('Welcome to the Cron Manager');
         $this->writeLn('Which Command would you execute?');
-        $this->writeLn('');
+        $this->writeLn();
 
         $this->commandRead();
     }
@@ -62,7 +64,7 @@ class ExecCrons extends QUI\System\Console\Tool
     /**
      * Read the command from the command line
      */
-    public function commandRead()
+    public function commandRead(): void
     {
         $this->writeLn('Available Commands: ');
         $this->writeLn("- run\t\trun all active crons");
@@ -70,7 +72,7 @@ class ExecCrons extends QUI\System\Console\Tool
         $this->writeLn("- list-all\tlist all crons");
         $this->writeLn("- cron\trun a specific cron");
 
-        $this->writeLn('');
+        $this->writeLn();
 
         $this->writeLn('Command: ');
         $command = $this->readInput();
@@ -103,7 +105,7 @@ class ExecCrons extends QUI\System\Console\Tool
                 } catch (QUI\Exception $Exception) {
                     $this->writeLn($Exception->getMessage(), 'red');
                     $this->resetColor();
-                    $this->writeLn('');
+                    $this->writeLn();
                 }
 
                 $this->commandRead();
@@ -122,30 +124,35 @@ class ExecCrons extends QUI\System\Console\Tool
     /**
      * Execute all upcoming crons
      */
-    public function run()
+    public function run(): void
     {
         $Manager = new QUI\Cron\Manager();
 
-        $this->writeLn('');
+        $this->writeLn();
         $this->write('Execute all upcoming crons ...');
 
-        $Manager->execute();
+        try {
+            $Manager->execute();
+        } catch (QUI\Database\Exception) {
+        } catch (QUI\Permissions\Exception) {
+        }
 
         $this->write('finish');
-        $this->writeLn('');
+        $this->writeLn();
     }
 
     /**
      * List all active crons
+     * @throws QUI\Database\Exception
      */
-    public function listCrons()
+    public function listCrons(): void
     {
         $Manager = new QUI\Cron\Manager();
-        $list    = $Manager->getList();
+        $list = $Manager->getList();
 
         $this->writeLn('Cron list:');
         $this->writeLn('=======================================================');
-        $this->writeLn('');
+        $this->writeLn();
 
         foreach ($list as $entry) {
             if ($entry['active'] != 1) {
@@ -153,52 +160,53 @@ class ExecCrons extends QUI\System\Console\Tool
             }
 
             $time = $entry['min']
-                    .' '.$entry['hour']
-                    .' '.$entry['day']
-                    .' '.$entry['month'];
+                . ' ' . $entry['hour']
+                . ' ' . $entry['day']
+                . ' ' . $entry['month'];
 
             $exec = $entry['exec'];
 
-            $this->writeLn('ID: '.$entry['id']);
-            $this->writeLn($time."\t".$exec, 'green');
+            $this->writeLn('ID: ' . $entry['id']);
+            $this->writeLn($time . "\t" . $exec, 'green');
 
             $this->resetColor();
-            $this->writeLn('');
+            $this->writeLn();
         }
 
         $this->writeLn('=======================================================');
-        $this->writeLn('');
+        $this->writeLn();
     }
 
     /**
      * List all inserted Crons
+     * @throws QUI\Database\Exception
      */
-    public function listAllCrons()
+    public function listAllCrons(): void
     {
         $Manager = new QUI\Cron\Manager();
-        $list    = $Manager->getList();
+        $list = $Manager->getList();
 
         $this->writeLn('Cron list:');
         $this->writeLn('=======================================================');
-        $this->writeLn('');
+        $this->writeLn();
 
         foreach ($list as $entry) {
             $time = $entry['min']
-                    .' '.$entry['hour']
-                    .' '.$entry['day']
-                    .' '.$entry['month'];
+                . ' ' . $entry['hour']
+                . ' ' . $entry['day']
+                . ' ' . $entry['month'];
 
             $exec = $entry['exec'];
 
-            $this->writeLn('ID: '.$entry['id']);
-            $this->writeLn($time."\t".$exec, 'green');
+            $this->writeLn('ID: ' . $entry['id']);
+            $this->writeLn($time . "\t" . $exec, 'green');
 
             $this->resetColor();
-            $this->writeLn('');
+            $this->writeLn();
         }
 
         $this->writeLn('=======================================================');
-        $this->writeLn('');
+        $this->writeLn();
     }
 
     /**
@@ -207,19 +215,19 @@ class ExecCrons extends QUI\System\Console\Tool
      * @param Boolean|Integer $cronId - ID of the cron
      * @throws QUI\Exception
      */
-    public function runCron($cronId = false)
+    public function runCron(bool|int $cronId = false): void
     {
         $Manager = new QUI\Cron\Manager();
-        $cron    = $Manager->getCronById($cronId);
+        $cron = $Manager->getCronById($cronId);
 
         if (!$cron) {
             throw new QUI\Exception('Cron not found');
         }
 
-        $this->writeLn('Execute Cron: '.$cronId.' '.$cron['title']);
+        $this->writeLn('Execute Cron: ' . $cronId . ' ' . $cron['title']);
         $Manager->executeCron($cronId);
 
         $this->writeLn('=======================================================');
-        $this->writeLn('');
+        $this->writeLn();
     }
 }

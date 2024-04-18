@@ -9,6 +9,9 @@ namespace QUI\Cron;
 use QUI;
 use QUI\Exception;
 
+use function explode;
+use function str_replace;
+
 /**
  * Cron Main Events
  *
@@ -23,7 +26,7 @@ class EventHandler
      *
      * @param QUI\Package\Package $Package
      */
-    public static function onPackageSetup(QUI\Package\Package $Package)
+    public static function onPackageSetup(QUI\Package\Package $Package): void
     {
         if ($Package->getName() === 'quiqqer/cron') {
             self::checkCronTable();
@@ -34,7 +37,7 @@ class EventHandler
      * @return void
      * @throws Exception
      */
-    public static function updateEnd()
+    public static function updateEnd(): void
     {
         QUI\Cron\Update::clearUpdateCheck();
     }
@@ -44,7 +47,7 @@ class EventHandler
      *
      * @return void
      */
-    protected static function checkCronTable()
+    protected static function checkCronTable(): void
     {
         $categoryColumn = QUI::getDataBase()->table()->getColumn('cron', 'title');
 
@@ -59,7 +62,7 @@ class EventHandler
     /**
      * event : on admin header loaded
      */
-    public static function onAdminLoad()
+    public static function onAdminLoad(): void
     {
         if (!defined('ADMIN')) {
             return;
@@ -78,7 +81,7 @@ class EventHandler
         try {
             $Package = QUI::getPackageManager()->getInstalledPackage('quiqqer/cron');
             $Config = $Package->getConfig();
-        } catch (QUI\Exception $Exception) {
+        } catch (QUI\Exception) {
             return;
         }
 
@@ -112,7 +115,7 @@ class EventHandler
     /**
      * event : on admin loaded -> footer output
      */
-    public static function adminLoadFooter()
+    public static function adminLoadFooter(): void
     {
         try {
             $Package = QUI::getPackageManager()->getInstalledPackage('quiqqer/cron');
@@ -157,7 +160,7 @@ class EventHandler
      * send a message to the user, maybe an error in the crons exist
      * last 24h was no cron sended
      */
-    public static function sendAdminInfoCronError()
+    public static function sendAdminInfoCronError(): void
     {
         if (Manager::isQuiqqerInstallerExecuted() === false) {
             return;
@@ -176,17 +179,17 @@ class EventHandler
      *
      * @param QUI\Package\Package $Package
      */
-    public static function onPackageInstall(QUI\Package\Package $Package)
+    public static function onPackageInstall(QUI\Package\Package $Package): void
     {
         self::createAutoCreateCrons();
     }
 
     /**
-     * Event: onCreateProject => Add the publish cron for this project
+     * Event: onCreateProject => Add the publishing cron for this project
      *
      * @param QUI\Projects\Project $Project
      */
-    public static function onCreateProject(QUI\Projects\Project $Project)
+    public static function onCreateProject(QUI\Projects\Project $Project): void
     {
         self::createAutoCreateCrons(Manager::AUTOCREATE_SCOPE_PROJECTS);
     }
@@ -208,7 +211,7 @@ class EventHandler
             foreach ($cron['autocreate'] as $autocreate) {
                 // Check if cron already exists
                 $params = $autocreate['params'];
-                [$min, $hour, $day, $month, $dayOfWeek] = \explode(' ', $autocreate['interval']);
+                [$min, $hour, $day, $month, $dayOfWeek] = explode(' ', $autocreate['interval']);
 
                 // Parse params by scope and placeholders
                 if ($scope && $scope !== $autocreate['scope']) {
@@ -290,7 +293,7 @@ class EventHandler
                 $projectCronParams = $params;
 
                 foreach ($projectCronParams as $k => $v) {
-                    $projectCronParams[$k] = \str_replace(
+                    $projectCronParams[$k] = str_replace(
                         [
                             '[projectName]',
                             '[projectLang]'
@@ -324,7 +327,7 @@ class EventHandler
             $projectCronParams = $params;
 
             foreach ($projectCronParams as $k => $v) {
-                $projectCronParams[$k] = \str_replace(
+                $projectCronParams[$k] = str_replace(
                     [
                         '[lang]',
                     ],
