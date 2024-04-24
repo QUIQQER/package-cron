@@ -120,7 +120,7 @@ class EventHandler
         try {
             $Package = QUI::getPackageManager()->getInstalledPackage('quiqqer/cron');
             $Config = $Package->getConfig();
-        } catch (QUI\Exception $Exception) {
+        } catch (QUI\Exception) {
             return;
         }
 
