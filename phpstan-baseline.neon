@@ -1,0 +1,621 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Cannot call method registerFunction\\(\\) on QUI\\\\Ajax\\|null\\.$#"
+			count: 1
+			path: ajax/add.php
+
+		-
+			message: "#^Cannot call method registerFunction\\(\\) on QUI\\\\Ajax\\|null\\.$#"
+			count: 1
+			path: ajax/cron/activate.php
+
+		-
+			message: "#^Cannot call method registerFunction\\(\\) on QUI\\\\Ajax\\|null\\.$#"
+			count: 1
+			path: ajax/cron/deactivate.php
+
+		-
+			message: "#^Cannot call method registerFunction\\(\\) on QUI\\\\Ajax\\|null\\.$#"
+			count: 1
+			path: ajax/cron/executeCron.php
+
+		-
+			message: "#^Cannot call method registerFunction\\(\\) on QUI\\\\Ajax\\|null\\.$#"
+			count: 1
+			path: ajax/cron/get.php
+
+		-
+			message: "#^Cannot call method registerFunction\\(\\) on QUI\\\\Ajax\\|null\\.$#"
+			count: 1
+			path: ajax/cron/toggle.php
+
+		-
+			message: "#^Cannot call method registerFunction\\(\\) on QUI\\\\Ajax\\|null\\.$#"
+			count: 1
+			path: ajax/cronservice/cancelRegistration.php
+
+		-
+			message: "#^Cannot call method registerFunction\\(\\) on QUI\\\\Ajax\\|null\\.$#"
+			count: 1
+			path: ajax/cronservice/getStatus.php
+
+		-
+			message: "#^Cannot call method registerFunction\\(\\) on QUI\\\\Ajax\\|null\\.$#"
+			count: 1
+			path: ajax/cronservice/resendActivation.php
+
+		-
+			message: "#^Cannot call method registerFunction\\(\\) on QUI\\\\Ajax\\|null\\.$#"
+			count: 1
+			path: ajax/cronservice/revokeRegistration.php
+
+		-
+			message: "#^Cannot call method registerFunction\\(\\) on QUI\\\\Ajax\\|null\\.$#"
+			count: 1
+			path: ajax/cronservice/sendRegistration.php
+
+		-
+			message: "#^Cannot call method registerFunction\\(\\) on QUI\\\\Ajax\\|null\\.$#"
+			count: 1
+			path: ajax/delete.php
+
+		-
+			message: "#^Cannot call method registerFunction\\(\\) on QUI\\\\Ajax\\|null\\.$#"
+			count: 1
+			path: ajax/edit.php
+
+		-
+			message: "#^Cannot call method clear\\(\\) on QUI\\\\Messages\\\\Handler\\|null\\.$#"
+			count: 1
+			path: ajax/execute.php
+
+		-
+			message: "#^Cannot call method registerFunction\\(\\) on QUI\\\\Ajax\\|null\\.$#"
+			count: 1
+			path: ajax/execute.php
+
+		-
+			message: "#^Cannot call method registerFunction\\(\\) on QUI\\\\Ajax\\|null\\.$#"
+			count: 1
+			path: ajax/getAvailableCrons.php
+
+		-
+			message: "#^Cannot call method get\\(\\) on QUI\\\\Locale\\|null\\.$#"
+			count: 1
+			path: ajax/getList.php
+
+		-
+			message: "#^Cannot call method getDateFormatter\\(\\) on QUI\\\\Locale\\|null\\.$#"
+			count: 1
+			path: ajax/getList.php
+
+		-
+			message: "#^Cannot call method getPartsOfLocaleString\\(\\) on QUI\\\\Locale\\|null\\.$#"
+			count: 1
+			path: ajax/getList.php
+
+		-
+			message: "#^Cannot call method isLocaleString\\(\\) on QUI\\\\Locale\\|null\\.$#"
+			count: 1
+			path: ajax/getList.php
+
+		-
+			message: "#^Cannot call method registerFunction\\(\\) on QUI\\\\Ajax\\|null\\.$#"
+			count: 1
+			path: ajax/getList.php
+
+		-
+			message: "#^Cannot call method registerFunction\\(\\) on QUI\\\\Ajax\\|null\\.$#"
+			count: 1
+			path: ajax/history/get.php
+
+		-
+			message: "#^Cannot call method registerFunction\\(\\) on QUI\\\\Ajax\\|null\\.$#"
+			count: 1
+			path: ajax/updateCheck.php
+
+		-
+			message: "#^Parameter \\#1 \\$cronId of method QUI\\\\Cron\\\\Console\\\\ExecCrons\\:\\:runCron\\(\\) expects bool\\|int, string given\\.$#"
+			count: 1
+			path: src/QUI/Cron/Console/ExecCrons.php
+
+		-
+			message: "#^Parameter \\#1 \\$cronId of method QUI\\\\Cron\\\\Console\\\\ExecCrons\\:\\:runCron\\(\\) expects bool\\|int, string\\|true given\\.$#"
+			count: 1
+			path: src/QUI/Cron/Console/ExecCrons.php
+
+		-
+			message: "#^Parameter \\#1 \\$cronId of method QUI\\\\Cron\\\\Manager\\:\\:executeCron\\(\\) expects int, bool\\|int given\\.$#"
+			count: 1
+			path: src/QUI/Cron/Console/ExecCrons.php
+
+		-
+			message: "#^Parameter \\#1 \\$cronId of method QUI\\\\Cron\\\\Manager\\:\\:getCronById\\(\\) expects int, bool\\|int given\\.$#"
+			count: 1
+			path: src/QUI/Cron/Console/ExecCrons.php
+
+		-
+			message: "#^Binary operation \"\\.\" between array\\|string and array\\<int, string\\>\\|string results in an error\\.$#"
+			count: 1
+			path: src/QUI/Cron/CronService.php
+
+		-
+			message: "#^Cannot call method get\\(\\) on QUI\\\\Config\\|null\\.$#"
+			count: 4
+			path: src/QUI/Cron/CronService.php
+
+		-
+			message: "#^Cannot call method get\\(\\) on QUI\\\\Locale\\|null\\.$#"
+			count: 2
+			path: src/QUI/Cron/CronService.php
+
+		-
+			message: "#^Cannot call method getStandard\\(\\) on QUI\\\\Projects\\\\Manager\\|null\\.$#"
+			count: 1
+			path: src/QUI/Cron/CronService.php
+
+		-
+			message: "#^Cannot call method save\\(\\) on bool\\|QUI\\\\Config\\.$#"
+			count: 3
+			path: src/QUI/Cron/CronService.php
+
+		-
+			message: "#^Cannot call method set\\(\\) on bool\\|QUI\\\\Config\\.$#"
+			count: 3
+			path: src/QUI/Cron/CronService.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\CronService\\:\\:makeServerAjaxCall\\(\\) has parameter \\$function with no type specified\\.$#"
+			count: 1
+			path: src/QUI/Cron/CronService.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\CronService\\:\\:makeServerAjaxCall\\(\\) has parameter \\$params with no type specified\\.$#"
+			count: 1
+			path: src/QUI/Cron/CronService.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\CronService\\:\\:register\\(\\) has parameter \\$email with no type specified\\.$#"
+			count: 1
+			path: src/QUI/Cron/CronService.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\CronService\\:\\:saveRevokeToken\\(\\) has parameter \\$token with no type specified\\.$#"
+			count: 1
+			path: src/QUI/Cron/CronService.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\CronService\\:\\:sendRegistrationRequest\\(\\) has parameter \\$domain with no type specified\\.$#"
+			count: 1
+			path: src/QUI/Cron/CronService.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\CronService\\:\\:sendRegistrationRequest\\(\\) has parameter \\$email with no type specified\\.$#"
+			count: 1
+			path: src/QUI/Cron/CronService.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\CronService\\:\\:sendRegistrationRequest\\(\\) has parameter \\$https with no type specified\\.$#"
+			count: 1
+			path: src/QUI/Cron/CronService.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\CronService\\:\\:sendRegistrationRequest\\(\\) has parameter \\$packageDir with no type specified\\.$#"
+			count: 1
+			path: src/QUI/Cron/CronService.php
+
+		-
+			message: "#^Parameter \\#1 \\$haystack of function str_contains expects string, array\\|string given\\.$#"
+			count: 2
+			path: src/QUI/Cron/CronService.php
+
+		-
+			message: "#^Parameter \\#1 \\$haystack of function str_starts_with expects string, bool\\|string given\\.$#"
+			count: 1
+			path: src/QUI/Cron/CronService.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function substr expects string, bool\\|string given\\.$#"
+			count: 2
+			path: src/QUI/Cron/CronService.php
+
+		-
+			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, bool\\|string given\\.$#"
+			count: 1
+			path: src/QUI/Cron/CronService.php
+
+		-
+			message: "#^Property QUI\\\\Cron\\\\CronService\\:\\:\\$domain \\(string\\) does not accept array\\<int, string\\>\\|string\\.$#"
+			count: 2
+			path: src/QUI/Cron/CronService.php
+
+		-
+			message: "#^Property QUI\\\\Cron\\\\CronService\\:\\:\\$domain \\(string\\) does not accept array\\|string\\.$#"
+			count: 1
+			path: src/QUI/Cron/CronService.php
+
+		-
+			message: "#^Cannot call method get\\(\\) on bool\\|QUI\\\\Config\\.$#"
+			count: 2
+			path: src/QUI/Cron/EventHandler.php
+
+		-
+			message: "#^Cannot call method getColumn\\(\\) on QUI\\\\Database\\\\Tables\\|null\\.$#"
+			count: 1
+			path: src/QUI/Cron/EventHandler.php
+
+		-
+			message: "#^Cannot call method getInstalledPackage\\(\\) on QUI\\\\Package\\\\Manager\\|null\\.$#"
+			count: 2
+			path: src/QUI/Cron/EventHandler.php
+
+		-
+			message: "#^Cannot call method lastInsertId\\(\\) on PDO\\|null\\.$#"
+			count: 1
+			path: src/QUI/Cron/EventHandler.php
+
+		-
+			message: "#^Cannot call method prepare\\(\\) on PDO\\|null\\.$#"
+			count: 1
+			path: src/QUI/Cron/EventHandler.php
+
+		-
+			message: "#^Cannot call method sendAttention\\(\\) on QUI\\\\Messages\\\\Handler\\|null\\.$#"
+			count: 1
+			path: src/QUI/Cron/EventHandler.php
+
+		-
+			message: "#^Cannot call static method getProjects\\(\\) on QUI\\\\Projects\\\\Manager\\|null\\.$#"
+			count: 1
+			path: src/QUI/Cron/EventHandler.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\EventHandler\\:\\:getCronsToCreateForLanguagesScope\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QUI/Cron/EventHandler.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\EventHandler\\:\\:getCronsToCreateForLanguagesScope\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QUI/Cron/EventHandler.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\EventHandler\\:\\:getCronsToCreateForProjectsScope\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QUI/Cron/EventHandler.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\EventHandler\\:\\:getCronsToCreateForProjectsScope\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QUI/Cron/EventHandler.php
+
+		-
+			message: "#^Access to an undefined property DOMNode\\:\\:\\$tagName\\.$#"
+			count: 1
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Cannot access offset 'exec' on array\\|false\\.$#"
+			count: 3
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Cannot access offset 'title' on array\\|false\\.$#"
+			count: 2
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Cannot access property \\$parentNode on DOMElement\\|null\\.$#"
+			count: 2
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Cannot access property \\$textContent on DOMElement\\|null\\.$#"
+			count: 3
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Cannot call method add\\(\\) on DateTime\\|false\\.$#"
+			count: 1
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Cannot call method addError\\(\\) on QUI\\\\Messages\\\\Handler\\|null\\.$#"
+			count: 1
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Cannot call method addSuccess\\(\\) on QUI\\\\Messages\\\\Handler\\|null\\.$#"
+			count: 3
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Cannot call method diff\\(\\) on DateTime\\|false\\.$#"
+			count: 1
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Cannot call method format\\(\\) on DateTime\\|false\\.$#"
+			count: 1
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Cannot call method get\\(\\) on QUI\\\\Locale\\|null\\.$#"
+			count: 7
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Cannot call method get\\(\\) on QUI\\\\Users\\\\Manager\\|null\\.$#"
+			count: 1
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Cannot call method get\\(\\) on bool\\|QUI\\\\Config\\.$#"
+			count: 3
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Cannot call method getAttribute\\(\\) on DOMElement\\|null\\.$#"
+			count: 3
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Cannot call method getElementsByTagName\\(\\) on DOMElement\\|null\\.$#"
+			count: 7
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Cannot call method getInstalled\\(\\) on QUI\\\\Package\\\\Manager\\|null\\.$#"
+			count: 1
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Cannot call method getName\\(\\) on QUI\\\\Users\\\\Nobody\\|QUI\\\\Users\\\\User\\|false\\.$#"
+			count: 1
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Cannot clone non\\-object variable \\$Start of type DateTime\\|false\\.$#"
+			count: 1
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\Manager\\:\\:add\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\Manager\\:\\:cronWithExecAndParamsExists\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\Manager\\:\\:deleteCronIds\\(\\) has parameter \\$ids with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\Manager\\:\\:edit\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\Manager\\:\\:getAvailableCrons\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\Manager\\:\\:getCronById\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\Manager\\:\\:getCronData\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\Manager\\:\\:getCronsFromFile\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\Manager\\:\\:getHistoryList\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\Manager\\:\\:getHistoryList\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\Manager\\:\\:getList\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\Manager\\:\\:getLockTime\\(\\) should return int but returns array\\|string\\.$#"
+			count: 1
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^PHPDoc tag @return with type QUI\\\\Cron\\\\Manager is not subtype of native type static\\(QUI\\\\Cron\\\\Manager\\)\\.$#"
+			count: 1
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Parameter \\#1 \\$Node of static method QUI\\\\Utils\\\\DOM\\:\\:getTextFromNode\\(\\) expects DOMNode, DOMElement\\|null given\\.$#"
+			count: 2
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Parameter \\#1 \\$email of method QUI\\\\Mail\\\\Mailer\\:\\:addRecipient\\(\\) expects string, array\\|string\\|true given\\.$#"
+			count: 1
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Parameter \\#1 \\$html of method QUI\\\\Mail\\\\Mailer\\:\\:setBody\\(\\) expects string, array\\|string given\\.$#"
+			count: 1
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Parameter \\#1 \\$subject of method QUI\\\\Mail\\\\Mailer\\:\\:setSubject\\(\\) expects string, array\\|string given\\.$#"
+			count: 1
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Property QUI\\\\Cron\\\\Manager\\:\\:\\$runtime type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QUI/Cron/Manager.php
+
+		-
+			message: "#^Call to an undefined method QUI\\\\Projects\\\\Site\\:\\:deactivate\\(\\)\\.$#"
+			count: 1
+			path: src/QUI/Cron/QuiqqerCrons.php
+
+		-
+			message: "#^Cannot call method clear\\(\\) on QUI\\\\Temp\\|null\\.$#"
+			count: 1
+			path: src/QUI/Cron/QuiqqerCrons.php
+
+		-
+			message: "#^Cannot call method get\\(\\) on QUI\\\\Locale\\|null\\.$#"
+			count: 2
+			path: src/QUI/Cron/QuiqqerCrons.php
+
+		-
+			message: "#^Cannot call method getPackageFolderSize\\(\\) on QUI\\\\Package\\\\Manager\\|null\\.$#"
+			count: 1
+			path: src/QUI/Cron/QuiqqerCrons.php
+
+		-
+			message: "#^Cannot call method getProjectList\\(\\) on QUI\\\\Projects\\\\Manager\\|null\\.$#"
+			count: 2
+			path: src/QUI/Cron/QuiqqerCrons.php
+
+		-
+			message: "#^Cannot call method getProjects\\(\\) on QUI\\\\Projects\\\\Manager\\|null\\.$#"
+			count: 1
+			path: src/QUI/Cron/QuiqqerCrons.php
+
+		-
+			message: "#^Cannot call method moveToTemp\\(\\) on QUI\\\\Temp\\|null\\.$#"
+			count: 1
+			path: src/QUI/Cron/QuiqqerCrons.php
+
+		-
+			message: "#^Cannot call method prepare\\(\\) on PDO\\|null\\.$#"
+			count: 2
+			path: src/QUI/Cron/QuiqqerCrons.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\QuiqqerCrons\\:\\:calculateCacheFolderSize\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QUI/Cron/QuiqqerCrons.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\QuiqqerCrons\\:\\:calculateMediaFolderSizes\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QUI/Cron/QuiqqerCrons.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\QuiqqerCrons\\:\\:calculatePackageFolderSize\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QUI/Cron/QuiqqerCrons.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\QuiqqerCrons\\:\\:calculateVarFolderSize\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QUI/Cron/QuiqqerCrons.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\QuiqqerCrons\\:\\:calculateWholeInstallationFolderSize\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QUI/Cron/QuiqqerCrons.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\QuiqqerCrons\\:\\:countAllFilesInInstallation\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QUI/Cron/QuiqqerCrons.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\QuiqqerCrons\\:\\:mailQueue\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QUI/Cron/QuiqqerCrons.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\QuiqqerCrons\\:\\:realeaseDate\\(\\) has parameter \\$CronManager with no type specified\\.$#"
+			count: 1
+			path: src/QUI/Cron/QuiqqerCrons.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\QuiqqerCrons\\:\\:realeaseDate\\(\\) has parameter \\$params with no type specified\\.$#"
+			count: 1
+			path: src/QUI/Cron/QuiqqerCrons.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\QuiqqerCrons\\:\\:releaseDate\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QUI/Cron/QuiqqerCrons.php
+
+		-
+			message: "#^Parameter \\#1 \\$message of static method QUI\\\\System\\\\Log\\:\\:addInfo\\(\\) expects string, array\\|string given\\.$#"
+			count: 2
+			path: src/QUI/Cron/QuiqqerCrons.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\SecurityUpdateCron\\:\\:execute\\(\\) has parameter \\$CronManager with no type specified\\.$#"
+			count: 1
+			path: src/QUI/Cron/SecurityUpdateCron.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\SecurityUpdateCron\\:\\:execute\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QUI/Cron/SecurityUpdateCron.php
+
+		-
+			message: "#^Cannot call method get\\(\\) on QUI\\\\Locale\\|null\\.$#"
+			count: 6
+			path: src/QUI/Cron/Update.php
+
+		-
+			message: "#^Cannot call method get\\(\\) on bool\\|QUI\\\\Config\\.$#"
+			count: 2
+			path: src/QUI/Cron/Update.php
+
+		-
+			message: "#^Cannot call method getOutdated\\(\\) on QUI\\\\Package\\\\Manager\\|null\\.$#"
+			count: 2
+			path: src/QUI/Cron/Update.php
+
+		-
+			message: "#^Cannot call method send\\(\\) on QUI\\\\Mail\\\\Manager\\|null\\.$#"
+			count: 3
+			path: src/QUI/Cron/Update.php
+
+		-
+			message: "#^Cannot call method update\\(\\) on QUI\\\\Package\\\\Manager\\|null\\.$#"
+			count: 1
+			path: src/QUI/Cron/Update.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\Update\\:\\:getAvailableUpdates\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QUI/Cron/Update.php
+
+		-
+			message: "#^Method QUI\\\\Cron\\\\Update\\:\\:setAvailableUpdates\\(\\) has parameter \\$packages with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/QUI/Cron/Update.php
+
+		-
+			message: "#^Parameter \\#1 \\$json of function json_decode expects string, string\\|false given\\.$#"
+			count: 1
+			path: src/QUI/Cron/Update.php
+
+		-
+			message: "#^Parameter \\#3 \\$value of method QUI\\\\Config\\:\\:set\\(\\) expects string\\|null, int given\\.$#"
+			count: 2
+			path: src/QUI/Cron/Update.php
