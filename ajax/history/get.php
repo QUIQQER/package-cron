@@ -6,6 +6,7 @@
  * @param {array} $params - filter params
  * @return array
  */
+
 QUI::$Ajax->registerFunction(
     'package_quiqqer_cron_ajax_history_get',
     function ($params) {

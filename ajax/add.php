@@ -11,6 +11,7 @@
  * @param String $dayOfWeek
  * @param string $params
  */
+
 QUI::$Ajax->registerFunction(
     'package_quiqqer_cron_ajax_add',
     function ($cron, $min, $hour, $day, $month, $dayOfWeek, $params) {
