@@ -7,16 +7,22 @@
 namespace QUI\Cron;
 
 use Cron\CronExpression;
+use DateTime;
+use DOMElement;
 use QUI;
+use QUI\Database\Exception;
 use QUI\Permissions\Permission;
+use QUI\System\Log;
 
 use function array_filter;
 use function array_key_exists;
 use function array_merge;
 use function boolval;
 use function count;
+use function date;
 use function date_create;
 use function date_interval_create_from_date_string;
+use function explode;
 use function is_callable;
 use function is_null;
 use function json_decode;
@@ -85,18 +91,25 @@ class Manager
      * Add a cron
      *
      * @param string $cron - Name of the Cron
-     * @param string $min - On which minute should it start
-     * @param string $hour - On which hour should it start
-     * @param string $day - On which day should it start
-     * @param string $month - On which month should it start
-     * @param string $dayOfWeek - day of week (0 - 6) (0 to 6 are Sunday to Saturday,
+     * @param int|string $min - On which minute should it start
+     * @param int|string $hour - On which hour should it start
+     * @param int|string $day - On which day should it start
+     * @param int|string $month - On which month should it start
+     * @param int|string $dayOfWeek - day of week (0 - 6) (0 to 6 are Sunday to Saturday,
      *                          or use names; 7 is Sunday, the same as 0)
      * @param array $params - Cron Parameter
      *
      * @throws QUI\Exception
      */
-    public function add(string $cron, $min, $hour, $day, $month, $dayOfWeek, $params = [])
-    {
+    public function add(
+        string $cron,
+        int|string $min,
+        int|string $hour,
+        int|string $day,
+        int|string $month,
+        int|string $dayOfWeek,
+        array $params = []
+    ): void {
         Permission::checkPermission('quiqqer.cron.add');
 
         if (!$this->cronExists($cron)) {
@@ -141,26 +154,26 @@ class Manager
      * Edit the cron
      *
      * @param string $cron - Name of the Cron
-     * @param integer $cronId
-     * @param string $min
-     * @param string $hour
-     * @param string $day
-     * @param string $month
-     * @param string $dayOfWeek
+     * @param int $cronId
+     * @param int|string $min
+     * @param int|string $hour
+     * @param int|string $day
+     * @param int|string $month
+     * @param int|string $dayOfWeek
      * @param array $params
      *
      * @throws QUI\Exception
      */
     public function edit(
-        $cronId,
-        $cron,
-        $min,
-        $hour,
-        $day,
-        $month,
-        $dayOfWeek,
-        $params = []
-    ) {
+        int $cronId,
+        string $cron,
+        int|string $min,
+        int|string $hour,
+        int|string $day,
+        int|string $month,
+        int|string $dayOfWeek,
+        array $params = []
+    ): void {
         Permission::checkPermission('quiqqer.cron.edit');
 
         if (!$this->cronExists($cron)) {
@@ -205,16 +218,16 @@ class Manager
      *
      * @param integer $cronId - ID of the cron
      * @throws QUI\Permissions\Exception
-     * @throws \QUI\Database\Exception
+     * @throws Exception
      */
-    public function activateCron(int $cronId)
+    public function activateCron(int $cronId): void
     {
         Permission::checkPermission('quiqqer.cron.deactivate');
 
         QUI::getDataBase()->update(
             $this->table(),
             ['active' => 1],
-            ['id' => (int)$cronId]
+            ['id' => $cronId]
         );
     }
 
@@ -222,16 +235,16 @@ class Manager
      * deactivate a cron in the cron list
      *
      * @param integer $cronId - ID of the cron
-     * @throws QUI\Permissions\Exception|\QUI\Database\Exception
+     * @throws QUI\Permissions\Exception|Exception
      */
-    public function deactivateCron($cronId)
+    public function deactivateCron(int $cronId): void
     {
         Permission::checkPermission('quiqqer.cron.activate');
 
         QUI::getDataBase()->update(
             $this->table(),
             ['active' => 0],
-            ['id' => (int)$cronId]
+            ['id' => $cronId]
         );
     }
 
@@ -239,9 +252,9 @@ class Manager
      * Delete the crons
      *
      * @param array $ids - Array of the Cron-Ids
-     * @throws QUI\Permissions\Exception|\QUI\Database\Exception
+     * @throws QUI\Permissions\Exception|Exception
      */
-    public function deleteCronIds($ids)
+    public function deleteCronIds(array $ids): void
     {
         Permission::checkPermission('quiqqer.cron.delete');
 
@@ -264,9 +277,9 @@ class Manager
     /**
      * Execute all upcoming crons
      *
-     * @throws QUI\Permissions\Exception|\QUI\Database\Exception
+     * @throws QUI\Permissions\Exception|Exception
      */
-    public function execute()
+    public function execute(): void
     {
         Manager::log('Start cron execution (all crons)');
 
@@ -299,8 +312,8 @@ class Manager
 
             QUI\Lock\Locker::lock($Package, $lockKey, $lockTime);
         } catch (\Exception $Exception) {
-            QUI\System\Log::writeDebugException($Exception);
-            QUI\System\Log::writeRecursive($Exception->getMessage());
+            Log::writeDebugException($Exception);
+            Log::writeRecursive($Exception->getMessage());
 
             Manager::log(
                 'Crons cannot be executed due to an error: ' . $Exception->getMessage()
@@ -324,7 +337,7 @@ class Manager
             $lastexec = $entry['lastexec'];
 
             if (empty($lastexec)) {
-                $lastexec = new \DateTime();
+                $lastexec = new DateTime();
                 $lastexec->setTimestamp(0);
             }
 
@@ -344,7 +357,7 @@ class Manager
                 $Cron = new CronExpression($cronExpression);
                 $next = $Cron->getNextRunDate($lastexec)->getTimestamp();
             } catch (\Exception $Exception) {
-                QUI\System\Log::addError(
+                Log::addError(
                     'Could not evaluate cron expression "' . $cronExpression . '" for cron'
                     . ' (Cron "' . $entry['title'] . '" #' . $entry['id'] . ').'
                     . ' Error :: ' . $Exception->getMessage()
@@ -361,7 +374,7 @@ class Manager
 
             // execute cron
             try {
-                self::$runtime['startCurrent'] = \date('Y-m-d H:i:s');
+                self::$runtime['startCurrent'] = date('Y-m-d H:i:s');
                 self::$runtime['currentCronId'] = $entry['id'];
                 self::$runtime['currentCronTitle'] = $entry['title'];
 
@@ -378,7 +391,7 @@ class Manager
                 $message = print_r($entry, true);
                 $message .= "\n" . $Exception->getMessage();
 
-                QUI\System\Log::addError($message);
+                Log::addError($message);
 
                 #self::log($message);
                 QUI::getMessagesHandler()->addError($message);
@@ -390,7 +403,7 @@ class Manager
         try {
             QUI\Lock\Locker::unlock($Package, $lockKey);
         } catch (\Exception $Exception) {
-            QUI\System\Log::writeDebugException($Exception);
+            Log::writeDebugException($Exception);
         }
     }
 
@@ -399,10 +412,10 @@ class Manager
      *
      * @param integer $cronId - ID of the cron
      *
-     * @return \QUI\Cron\Manager
+     * @return Manager
      * @throws QUI\Exception
      */
-    public function executeCron($cronId)
+    public function executeCron(int $cronId): static
     {
         Permission::checkPermission('quiqqer.cron.execute');
 
@@ -433,7 +446,7 @@ class Manager
         $starTime = time();
 
         if (!is_callable($cronData['exec'])) {
-            QUI\System\Log::addError('Cron is not callable "' . $cronData['title'] . '" (ID: ' . $cronId . ')');
+            Log::addError('Cron is not callable "' . $cronData['title'] . '" (ID: ' . $cronId . ')');
             return $this;
         }
 
@@ -471,7 +484,7 @@ class Manager
      *
      * @return array
      */
-    public function getAvailableCrons()
+    public function getAvailableCrons(): array
     {
         $PackageManager = QUI::getPackageManager();
         $packageList = $PackageManager->getInstalled();
@@ -496,18 +509,19 @@ class Manager
     }
 
     /**
-     * Return the data of a inserted cron
+     * Return the data of an inserted cron
      *
      * @param integer $cronId - ID of the Cron
      *
      * @return array|false - Cron Data
+     * @throws Exception
      */
-    public function getCronById($cronId)
+    public function getCronById(int $cronId): bool|array
     {
         $result = QUI::getDataBase()->fetch([
             'from' => $this->table(),
             'where' => [
-                'id' => (int)$cronId
+                'id' => $cronId
             ],
             'limit' => 1
         ]);
@@ -527,7 +541,7 @@ class Manager
      *
      * @return array|false - Cron Data
      */
-    public function getCronData($cron)
+    public function getCronData(string $cron): bool|array
     {
         $availableCrons = $this->getAvailableCrons();
 
@@ -546,7 +560,7 @@ class Manager
                     return $cronList[$cronNo];
                 }
             }
-        } catch (QUI\Exception $Exception) {
+        } catch (QUI\Exception) {
         }
 
         // search cron via title
@@ -565,8 +579,9 @@ class Manager
      * @param array $params - select params -> (page, perPage)
      *
      * @return array
+     * @throws Exception
      */
-    public function getHistoryList($params = [])
+    public function getHistoryList(array $params = []): array
     {
         $limit = '0,20';
         $order = 'lastexec DESC';
@@ -614,7 +629,7 @@ class Manager
                 }
 
                 $entry['username'] = $username;
-            } catch (QUI\Exception $Exception) {
+            } catch (QUI\Exception) {
             }
 
             $result[] = $entry;
@@ -627,7 +642,7 @@ class Manager
      * Return the history count, how many history entries exist
      *
      * @return integer
-     * @throws \QUI\Database\Exception
+     * @throws Exception
      */
     public function getHistoryCount(): int
     {
@@ -643,7 +658,7 @@ class Manager
      * Return the cron list
      *
      * @return array
-     * @throws \QUI\Database\Exception
+     * @throws Exception
      */
     public function getList(): array
     {
@@ -658,6 +673,7 @@ class Manager
      * @param string $cron - cron title
      *
      * @return bool
+     * @throws Exception
      */
     public function isCronSetUp(string $cron): bool
     {
@@ -751,7 +767,7 @@ class Manager
     }
 
     /**
-     * Return the Crons from a XML File
+     * Return the Crons from an XML File
      *
      * @param string $file
      *
@@ -766,15 +782,15 @@ class Manager
         $Dom = QUI\Utils\Text\XML::getDomFromXml($file);
         $crons = $Dom->getElementsByTagName('crons');
 
-        if (!$crons || !$crons->length) {
+        if (!$crons->length) {
             return [];
         }
 
-        /* @var $Crons \DOMElement */
+        /* @var $Crons DOMElement */
         $Crons = $crons->item(0);
         $list = $Crons->getElementsByTagName('cron');
 
-        if (!$list || !$list->length) {
+        if (!$list->length) {
             return [];
         }
 
@@ -787,7 +803,7 @@ class Manager
             $desc = '';
             $params = [];
 
-            /* @var $Cron \DOMElement */
+            /* @var $Cron DOMElement */
             $Title = $Cron->getElementsByTagName('title');
             $Desc = $Cron->getElementsByTagName('description');
             $Params = $Cron->getElementsByTagName('params');
@@ -814,7 +830,7 @@ class Manager
 
                 if ($CronParams) {
                     foreach ($CronParams as $Param) {
-                        /* @var $Param \DOMElement */
+                        /* @var $Param DOMElement */
                         $param = [
                             'name' => $Param->getAttribute('name'),
                             'type' => $Param->getAttribute('type'),
@@ -836,7 +852,7 @@ class Manager
             $AutoCreate = $Cron->getElementsByTagName('autocreate');
 
             if ($AutoCreate->length) {
-                /** @var \DOMElement $AutoCreateEntry */
+                /** @var DOMElement $AutoCreateEntry */
                 foreach ($AutoCreate as $AutoCreateEntry) {
                     $Interval = $AutoCreateEntry->getElementsByTagName('interval');
                     $Active = $AutoCreateEntry->getElementsByTagName('active');
@@ -844,7 +860,7 @@ class Manager
                     $Scope = $AutoCreateEntry->getElementsByTagName('scope');
 
                     if (!$Interval->length) {
-                        \QUI\System\Log::addWarning(
+                        Log::addWarning(
                             'quiqqer/cron -> Cron "' . $Cron->getAttribute('exec') . '" from file'
                             . ' "' . $file . '" has an <autocreate> entry, but no <interval> set.'
                             . ' The <autocreate>-property is ignored.'
@@ -854,7 +870,7 @@ class Manager
                     }
 
                     $interval = trim($Interval->item(0)->textContent);
-                    [$min, $hour, $day, $month, $dayOfWeek] = \explode(' ', $interval);
+                    [$min, $hour, $day, $month, $dayOfWeek] = explode(' ', $interval);
 
                     $min = trim($min);
                     $hour = trim($hour);
@@ -866,7 +882,7 @@ class Manager
                     try {
                         new CronExpression("$min $hour $day $month $dayOfWeek");
                     } catch (\Exception $Exception) {
-                        \QUI\System\Log::addWarning(
+                        Log::addWarning(
                             'quiqqer/cron -> Cron "' . $Cron->getAttribute('exec') . '" from file'
                             . ' "' . $file . '" has an <autocreate> entry, but the <interval>'
                             . ' is invalid: ' . $Exception->getMessage()
@@ -893,7 +909,7 @@ class Manager
 
                     $autocreate[] = [
                         'interval' => "$min $hour $day $month $dayOfWeek",
-                        'active' => $Active->length ? boolval($Active->item(0)->textContent) : false,
+                        'active' => $Active->length && $Active->item(0)->textContent,
                         'params' => $autoCreateParams,
                         'scope' => $Scope->length ? trim($Scope->item(0)->textContent) : false,
                     ];
@@ -917,17 +933,17 @@ class Manager
      *
      * @param string $message - Message
      */
-    public static function log(string $message)
+    public static function log(string $message): void
     {
         if (self::isWriteCronLog()) {
-            QUI\System\Log::addInfo($message, [], 'cron');
+            Log::addInfo($message, [], 'cron');
         }
     }
 
     /**
      * Write cron log?
      *
-     * @return bool
+     * @return bool|null
      */
     protected static function isWriteCronLog(): ?bool
     {
@@ -943,7 +959,7 @@ class Manager
                 )
             );
         } catch (\Exception $Exception) {
-            QUI\System\Log::writeException($Exception);
+            Log::writeException($Exception);
             self::$writeCronLog = false;
         }
 
@@ -955,7 +971,7 @@ class Manager
      *
      * @return void
      */
-    protected static function sendCronLockTimeoutNotification()
+    protected static function sendCronLockTimeoutNotification(): void
     {
         // Check if notification shall be sent
         if (self::$lockTimeoutNotificationSent) {
@@ -969,7 +985,7 @@ class Manager
                 return;
             }
         } catch (\Exception $Exception) {
-            QUI\System\Log::writeException($Exception);
+            Log::writeException($Exception);
 
             return;
         }
@@ -977,7 +993,7 @@ class Manager
         $adminMail = QUI::conf('mail', 'admin_mail');
 
         if (empty($adminMail)) {
-            QUI\System\Log::addWarning(
+            Log::addWarning(
                 'quiqqer/cron -> Cannot send lock timeout notification since no administrator e-mail is configured in'
                 . ' this QUIQQER system.'
             );
@@ -1015,7 +1031,7 @@ class Manager
 
             self::$lockTimeoutNotificationSent = true;
         } catch (\Exception $Exception) {
-            QUI\System\Log::writeException($Exception);
+            Log::writeException($Exception);
         }
     }
 
@@ -1036,7 +1052,7 @@ class Manager
 
             return $lockTime;
         } catch (\Exception $Exception) {
-            QUI\System\Log::writeException($Exception);
+            Log::writeException($Exception);
 
             return 1440;
         }

@@ -7,13 +7,17 @@
 namespace QUI\Cron;
 
 use QUI;
+use QUI\Exception;
 
 /**
  * @author www.pcsg.de (Henning Leutz)
  */
 class SecurityUpdateCron
 {
-    public static function execute($params, $CronManager)
+    /**
+     * @throws Exception
+     */
+    public static function execute(array $params, $CronManager): void
     {
         $Console = new QUI\System\Console\Tools\SecurityUpdate();
 

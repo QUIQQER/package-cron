@@ -19,7 +19,7 @@ class CronService
      */
     public function __construct()
     {
-        $host    = QUI::$Conf->get("globals", "host");
+        $host = QUI::$Conf->get("globals", "host");
         $cms_dir = QUI::$Conf->get("globals", "cms_dir");
         $opt_dir = QUI::$Conf->get("globals", "opt_dir");
         $url_dir = QUI::$Conf->get("globals", "url_dir");
@@ -28,7 +28,7 @@ class CronService
         $vhost = QUI::getProjectManager()->getStandard()->getVHost(true, true);
 
         // Check if https should be used.
-        if (substr($vhost, 0, 8) == 'https://') {
+        if (str_starts_with($vhost, 'https://')) {
             $this->https = true;
         }
 
@@ -37,14 +37,14 @@ class CronService
         // Read the domain from the config file if no vhost could be detected.
         if (empty($vhost)) {
             // Parse Domain and protocol
-            if (strpos($host, "https://") !== false) {
-                $this->https  = true;
+            if (str_contains($host, "https://")) {
+                $this->https = true;
                 $this->domain = str_replace("https://", "", $host);
-            } elseif (strpos($host, "http://") !== false) {
-                $this->https  = false;
+            } elseif (str_contains($host, "http://")) {
+                $this->https = false;
                 $this->domain = str_replace("http://", "", $host);
             } else {
-                $this->https  = false;
+                $this->https = false;
                 $this->domain = $host;
             }
         }
@@ -59,10 +59,10 @@ class CronService
      *
      * @param $email - Email used for communication. Must be valid.
      *
-     * @throws \QUI\Cron\Exception
+     * @throws Exception
      * @throws \QUI\Exception
      */
-    public function register($email)
+    public function register($email): void
     {
         $this->sendRegistrationRequest($this->domain, $email, $this->packageDir, $this->https);
     }
@@ -81,7 +81,7 @@ class CronService
      * @return mixed
      * @throws \QUI\Exception
      */
-    public function getStatus()
+    public function getStatus(): mixed
     {
         $status = $this->makeServerAjaxCall('package_pcsg_cronservice_ajax_getStatus', [
             'domain' => $this->domain
@@ -97,7 +97,7 @@ class CronService
 
         # Get local last execution
         $CronManager = new Manager();
-        $history     = $CronManager->getHistoryList();
+        $history = $CronManager->getHistoryList();
 
 
         $status['last_local_execution'] = QUI::getLocale()->get(
@@ -113,7 +113,7 @@ class CronService
             return $status;
         }
 
-        $lastLocalExecution             = $history[0]['lastexec'];
+        $lastLocalExecution = $history[0]['lastexec'];
         $status['last_local_execution'] = $lastLocalExecution;
 
         return $status;
@@ -123,13 +123,13 @@ class CronService
      * Revoked the registration for this quiqqer instance
      * @throws \QUI\Exception
      */
-    public function revokeRegistration()
+    public function revokeRegistration(): void
     {
         $token = $this->readRevokeToken();
 
         $this->makeServerAjaxCall('package_pcsg_cronservice_ajax_revokeRegistration', [
             'domain' => $this->domain,
-            'token'  => $token
+            'token' => $token
         ]);
 
         $Config = QUI::getPackage("quiqqer/cron")->getConfig();
@@ -143,7 +143,7 @@ class CronService
      * @throws Exception
      * @throws \QUI\Exception
      */
-    public function resendActivationMail()
+    public function resendActivationMail(): void
     {
         if (empty($this->domain)) {
             throw new Exception("Could not get the instances domain.");
@@ -163,7 +163,7 @@ class CronService
      * @throws Exception
      * @throws \QUI\Exception
      */
-    public function cancelRegistration()
+    public function cancelRegistration(): void
     {
         Log::addDebug("");
 
@@ -184,17 +184,17 @@ class CronService
     }
 
     /**
-     * Sends an ajax request to the cronservice server.
+     * Sends an ajax request to the cron service server.
      *
      * @param $domain - The domain to be registered. Example : example.org
      * @param $email - The Email that should be used for communication.
      * @param $packageDir - The package url dir
-     * @param $https - wether or not http secure should be used to call the cron.php
+     * @param $https - weather or not http secure should be used to call the cron.php
      *
      * @throws Exception
      * @throws \QUI\Exception
      */
-    private function sendRegistrationRequest($domain, $email, $packageDir, $https)
+    private function sendRegistrationRequest($domain, $email, $packageDir, $https): void
     {
         if (empty($domain)) {
             throw new Exception(["quiqqer/cron", "exception.registration.empty.domain"]);
@@ -223,8 +223,8 @@ class CronService
         $curl = curl_init();
         curl_setopt_array($curl, [
             CURLOPT_RETURNTRANSFER => 1,
-            CURLOPT_URL            => $url,
-            CURLOPT_USERAGENT      => 'QUIQQER'
+            CURLOPT_URL => $url,
+            CURLOPT_USERAGENT => 'QUIQQER'
         ]);
 
         if (isset($_SERVER['SERVER_ADDR'])) {
@@ -233,7 +233,7 @@ class CronService
 
         $response = curl_exec($curl);
         $response = substr($response, 9, -10);
-        $data     = json_decode($response, true);
+        $data = json_decode($response, true);
 
         if (json_last_error() != JSON_ERROR_NONE) {
             Log::addDebug($response);
@@ -270,7 +270,7 @@ class CronService
     }
 
     /**
-     * Calls the given ajax function on the Cronservice server and returns its output
+     * Calls the given ajax function on the Cron service server and returns its output
      *
      * @param $function - Ajax function name
      * @param $params - Params to pass
@@ -278,7 +278,7 @@ class CronService
      * @return mixed
      * @throws QUI\Exception
      */
-    private function makeServerAjaxCall($function, $params)
+    private function makeServerAjaxCall($function, $params): mixed
     {
         $url = self::CRON_SERVICE_URL . "/admin/ajax.php?" .
             "_rf=" . urlencode('["' . $function . '"]') .
@@ -292,8 +292,8 @@ class CronService
         $curl = curl_init();
         curl_setopt_array($curl, [
             CURLOPT_RETURNTRANSFER => 1,
-            CURLOPT_URL            => $url,
-            CURLOPT_USERAGENT      => 'QUIQQER'
+            CURLOPT_URL => $url,
+            CURLOPT_USERAGENT => 'QUIQQER'
         ]);
 
         $response = curl_exec($curl);
@@ -318,9 +318,9 @@ class CronService
      * @param $token
      * @throws \QUI\Exception
      */
-    private function saveRevokeToken($token)
+    private function saveRevokeToken($token): void
     {
-        $varDir   = QUI::getPackage('quiqqer/cron')->getVarDir() . '/cronservice';
+        $varDir = QUI::getPackage('quiqqer/cron')->getVarDir() . '/cronservice';
         $fileName = $varDir . '/.revoketoken';
 
         if (!is_dir($varDir)) {
@@ -340,7 +340,7 @@ class CronService
      */
     private function readRevokeToken(): string
     {
-        $varDir   = QUI::getPackage('quiqqer/cron')->getVarDir() . '/cronservice';
+        $varDir = QUI::getPackage('quiqqer/cron')->getVarDir() . '/cronservice';
         $fileName = $varDir . '/.revoketoken';
 
         if (!file_exists($fileName)) {
