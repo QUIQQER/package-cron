@@ -11,7 +11,6 @@ use QUI;
 use function array_filter;
 use function count;
 use function file_exists;
-use function strpos;
 use function unlink;
 
 /**
@@ -26,14 +25,14 @@ class Update
      * Execute the update check, if auto update is active
      *
      * @return void
-     * @throws QUI\Exception
+     * @throws QUI\Exception|\PHPMailer\PHPMailer\Exception
      */
-    public static function check()
+    public static function check(): void
     {
         try {
             $Package = QUI::getPackage('quiqqer/cron');
-            $Config  = $Package->getConfig();
-        } catch (\Exception $Exception) {
+            $Config = $Package->getConfig();
+        } catch (\Exception) {
             return;
         }
 
@@ -49,14 +48,14 @@ class Update
      * - if updates are available, an email will be sent
      *
      * @return void
-     * @throws QUI\Exception
+     * @throws QUI\Exception|\PHPMailer\PHPMailer\Exception
      */
-    public static function checkExecute()
+    public static function checkExecute(): void
     {
         try {
             $Packages = QUI::getPackageManager();
             $packages = $Packages->getOutdated(true);
-            $file     = QUI::getPackage('quiqqer/cron')->getVarDir() . 'updates';
+            $file = QUI::getPackage('quiqqer/cron')->getVarDir() . 'updates';
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
             return;
@@ -64,7 +63,7 @@ class Update
 
         // filter - dev-dev and dev-master
         $filteredPackages = array_filter($packages, function ($package) {
-            if (strpos($package['version'], 'dev-') !== false) {
+            if (str_contains($package['version'], 'dev-')) {
                 return false;
             }
 
@@ -78,8 +77,8 @@ class Update
 
             foreach ($packages as $package) {
                 $packageName = $package['package'];
-                $from        = $package['oldVersion'];
-                $to          = $package['version'];
+                $from = $package['oldVersion'];
+                $to = $package['version'];
 
                 $updateString .= '<li>' . $packageName . ': ' . $from . ' -> ' . $to . '</li>';
             }
@@ -94,8 +93,8 @@ class Update
                 ]),
                 QUI::getLocale()->get('quiqqer/cron', 'update.mail.updateCheck.description', [
                     'packages' => $updateString,
-                    'host'     => HOST,
-                    'ip'       => QUI\Utils\System::getClientIP()
+                    'host' => HOST,
+                    'ip' => QUI\Utils\System::getClientIP()
                 ])
             );
 
@@ -115,14 +114,14 @@ class Update
      * execute an update, if auto update is active
      *
      * @return void
-     * @throws QUI\Exception
+     * @throws QUI\Exception|\PHPMailer\PHPMailer\Exception
      */
-    public static function update()
+    public static function update(): void
     {
         try {
             $Package = QUI::getPackage('quiqqer/cron');
-            $Config  = $Package->getConfig();
-        } catch (\Exception $Exception) {
+            $Config = $Package->getConfig();
+        } catch (\Exception) {
             return;
         }
 
@@ -137,9 +136,9 @@ class Update
      * Execute an system update
      *
      * @return void
-     * @throws QUI\Exception
+     * @throws QUI\Exception|\PHPMailer\PHPMailer\Exception
      */
-    public static function updateExecute()
+    public static function updateExecute(): void
     {
         $Config = QUI::getConfig('etc/conf.ini.php');
         $Config->set('globals', 'maintenance', 1);
@@ -161,8 +160,8 @@ class Update
 
         foreach ($packages as $package) {
             $packageName = $package['package'];
-            $from        = $package['oldVersion'];
-            $to          = $package['version'];
+            $from = $package['oldVersion'];
+            $to = $package['version'];
 
             $updateString .= '<li>' . $packageName . ': ' . $from . ' -> ' . $to . '</li>';
         }
@@ -172,14 +171,14 @@ class Update
 
         try {
             $Packages->update();
-        } catch (\Exception $Exception) {
+        } catch (\Exception) {
             QUI::getMailManager()->send(
                 QUI::conf('mail', 'admin_mail'),
                 QUI::getLocale()->get('quiqqer/cron', 'update.mail.error.subject'),
                 QUI::getLocale()->get('quiqqer/cron', 'update.mail.error.body', [
                     'packages' => $updateString,
-                    'host'     => HOST,
-                    'ip'       => QUI\Utils\System::getClientIP()
+                    'host' => HOST,
+                    'ip' => QUI\Utils\System::getClientIP()
                 ])
             );
 
@@ -191,8 +190,8 @@ class Update
             QUI::getLocale()->get('quiqqer/cron', 'update.mail.success.subject'),
             QUI::getLocale()->get('quiqqer/cron', 'update.mail.success.body', [
                 'packages' => $updateString,
-                'host'     => HOST,
-                'ip'       => QUI\Utils\System::getClientIP()
+                'host' => HOST,
+                'ip' => QUI\Utils\System::getClientIP()
             ])
         );
 
@@ -209,7 +208,7 @@ class Update
      * @return void
      * @throws QUI\Exception
      */
-    public static function setAvailableUpdates(array $packages = [])
+    public static function setAvailableUpdates(array $packages = []): void
     {
         $file = QUI::getPackage('quiqqer/cron')->getVarDir() . 'updates';
 
@@ -239,7 +238,7 @@ class Update
      * @return void
      * @throws QUI\Exception
      */
-    public static function clearUpdateCheck()
+    public static function clearUpdateCheck(): void
     {
         $file = QUI::getPackage('quiqqer/cron')->getVarDir() . 'updates';
 

@@ -5,6 +5,7 @@
  *
  * @param string $ids - json array
  */
+
 QUI::$Ajax->registerFunction(
     'package_quiqqer_cron_ajax_delete',
     function ($ids) {
