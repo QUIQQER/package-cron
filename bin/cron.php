@@ -7,9 +7,9 @@
 define('QUIQQER_SYSTEM', true);
 define('SYSTEM_INTERN', true); // Session user = System user
 
-require dirname(dirname(dirname(dirname(__FILE__))))."/header.php";
+require dirname(dirname(dirname(dirname(__FILE__)))) . "/header.php";
 
-use \Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Response;
 
 // Vars löschen die Probleme bereiten können
 $_REQUEST = [];

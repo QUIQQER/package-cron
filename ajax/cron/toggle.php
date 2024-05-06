@@ -7,6 +7,7 @@
  *
  * @throws \QUI\Exception
  */
+
 QUI::$Ajax->registerFunction(
     'package_quiqqer_cron_ajax_cron_toggle',
     function ($cronId) {

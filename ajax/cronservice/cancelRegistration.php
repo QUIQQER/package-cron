@@ -5,6 +5,7 @@
  *
  * @param - The email which was used for registration.
  */
+
 QUI::$Ajax->registerFunction(
     'package_quiqqer_cron_ajax_cronservice_cancelRegistration',
     function () {

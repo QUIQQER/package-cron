@@ -6,5 +6,4 @@ use QUI;
 
 class Exception extends QUI\Exception
 {
-
 }

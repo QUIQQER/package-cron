@@ -7,6 +7,7 @@
  *
  * @return array
  */
+
 QUI::$Ajax->registerFunction(
     'package_quiqqer_cron_ajax_cron_get',
     function ($cronId) {

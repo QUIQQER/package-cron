@@ -15,7 +15,7 @@ QUI::$Ajax->registerFunction(
         if (Manager::isQuiqqerInstallerExecuted() === false) {
             return [];
         }
-        
+
         return QUI\Cron\Update::getAvailableUpdates();
     },
     false,

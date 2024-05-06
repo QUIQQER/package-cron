@@ -6,14 +6,16 @@
 
 namespace QUI\Cron;
 
+use PDO;
 use QUI;
+use QUI\Database\Exception;
 
 use function date;
+use function date_create;
 use function file_exists;
 use function filemtime;
 use function is_dir;
 use function rename;
-use function strpos;
 use function time;
 use function unlink;
 
@@ -28,7 +30,7 @@ class QuiqqerCrons
     /**
      * Clear the temp folder
      */
-    public static function clearTempFolder()
+    public static function clearTempFolder(): void
     {
         $Temp = QUI::getTemp();
         $Temp->clear();
@@ -37,7 +39,7 @@ class QuiqqerCrons
     /**
      * Clear complete cache
      */
-    public static function clearCache()
+    public static function clearCache(): void
     {
         QUI\Cache\Manager::clearAll();
     }
@@ -45,7 +47,7 @@ class QuiqqerCrons
     /**
      * Purge the cache
      */
-    public static function purgeCache()
+    public static function purgeCache(): void
     {
         QUI\Cache\Manager::purge();
     }
@@ -55,17 +57,19 @@ class QuiqqerCrons
      *
      * @throws QUI\Exception
      */
-    public static function clearAdminMediaCache()
+    public static function clearAdminMediaCache(): void
     {
         QUI\Utils\System\File::unlink(VAR_DIR . 'cache/admin/media/');
     }
 
     /**
      * delete all unwanted / unneeded sessions
+     * @throws Exception
+     * @throws QUI\Exception
      */
-    public static function clearSessions()
+    public static function clearSessions(): void
     {
-        $type    = QUI::conf('session', 'type');
+        $type = QUI::conf('session', 'type');
         $maxTime = 1400;
 
         if (QUI::conf('session', 'max_life_time')) {
@@ -119,12 +123,12 @@ class QuiqqerCrons
 
         // database
         if ($type === 'database') {
-            $table       = QUI::getDBTableName('sessions');
+            $table = QUI::getDBTableName('sessions');
             $maxLifetime = time() - $maxTime;
 
             QUI::getDataBase()->delete($table, [
                 'session_time' => [
-                    'type'  => '<',
+                    'type' => '<',
                     'value' => $maxLifetime
                 ]
             ]);
@@ -138,7 +142,7 @@ class QuiqqerCrons
      * @param $CronManager
      * @throws QUI\Exception
      */
-    public static function realeaseDate($params, $CronManager)
+    public static function realeaseDate($params, $CronManager): void
     {
         self::releaseDate($params, $CronManager);
     }
@@ -148,21 +152,21 @@ class QuiqqerCrons
      * Activate or deactivate sites
      *
      * @param array $params - Cron Parameter
-     * @param \QUI\Cron\Manager $CronManager
+     * @param Manager $CronManager
      *
      * @throws QUI\Exception
      */
-    public static function releaseDate($params, $CronManager)
+    public static function releaseDate(array $params, Manager $CronManager): void
     {
         $execCron = function ($project, $lang) {
             $Project = QUI::getProject($project, $lang);
-            $now     = date('Y-m-d H:i:s');
+            $now = date('Y-m-d H:i:s');
 
             // search sites with release dates
             $PDO = QUI::getDataBase()->getPDO();
 
             $deactivate = [];
-            $activate   = [];
+            $activate = [];
 
 
             /**
@@ -180,11 +184,10 @@ class QuiqqerCrons
             "
             );
 
-            $Statement->bindValue(':date', $now, \PDO::PARAM_STR);
-            //$Statement->bindValue(':empty', '0000-00-00 00:00:00', \PDO::PARAM_STR);
+            $Statement->bindValue(':date', $now);
             $Statement->execute();
 
-            $result = $Statement->fetchAll(\PDO::FETCH_ASSOC);
+            $result = $Statement->fetchAll(PDO::FETCH_ASSOC);
 
             foreach ($result as $entry) {
                 try {
@@ -213,19 +216,19 @@ class QuiqqerCrons
             "
             );
 
-            $Statement->bindValue(':date', $now, \PDO::PARAM_STR);
+            $Statement->bindValue(':date', $now);
             //$Statement->bindValue(':empty', '0000-00-00 00:00:00', \PDO::PARAM_STR);
             $Statement->execute();
 
-            $result = $Statement->fetchAll(\PDO::FETCH_ASSOC);
-            $Now    = \date_create();
+            $result = $Statement->fetchAll(PDO::FETCH_ASSOC);
+            $Now = date_create();
 
             foreach ($result as $entry) {
                 try {
                     // Do not activate sites that have a "release to" date
                     // that is already reached.
                     if (!empty($entry['release_to'])) {
-                        $ReleaseTo = \date_create($entry['release_to']);
+                        $ReleaseTo = date_create($entry['release_to']);
 
                         if ($ReleaseTo && $ReleaseTo < $Now) {
                             continue;
@@ -250,7 +253,7 @@ class QuiqqerCrons
                     ),
                     [
                         'project' => $Project->getName(),
-                        'lang'    => $Project->getLang(),
+                        'lang' => $Project->getLang(),
                     ],
                     'cron'
                 );
@@ -265,7 +268,7 @@ class QuiqqerCrons
                     ),
                     [
                         'project' => $Project->getName(),
-                        'lang'    => $Project->getLang(),
+                        'lang' => $Project->getLang(),
                     ],
                     'cron'
                 );
@@ -273,7 +276,7 @@ class QuiqqerCrons
         };
 
         $project = false;
-        $lang    = false;
+        $lang = false;
 
         if (isset($params['project'])) {
             $project = $params['project'];
@@ -308,9 +311,10 @@ class QuiqqerCrons
      * Send the mail queue
      *
      * @param array $params
-     * @param \QUI\Cron\Manager $CronManager
+     * @param Manager $CronManager
+     * @throws Exception
      */
-    public static function mailQueue($params, $CronManager)
+    public static function mailQueue(array $params, Manager $CronManager): void
     {
         $MailQueue = new QUI\Mail\Queue();
         $MailQueue->sendAll();
@@ -319,19 +323,12 @@ class QuiqqerCrons
     /**
      * Calculate the sizes of the media folders of each project
      *
-     * @param $params
+     * @param array $params
      * @param Manager $CronManager
      */
-    public static function calculateMediaFolderSizes($params, Manager $CronManager)
+    public static function calculateMediaFolderSizes(array $params, Manager $CronManager): void
     {
-        try {
-            $projects = QUI::getProjectManager()->getProjects(true);
-        } catch (QUI\Exception $Exception) {
-            QUI\System\Log::addError('Something went wrong getting all projects to calculate the media folder sizes');
-            QUI\System\Log::writeException($Exception);
-
-            return;
-        }
+        $projects = QUI::getProjectManager()->getProjects(true);
 
         foreach ($projects as $Project) {
             QUI\Projects\Media\Utils::getMediaFolderSizeForProject($Project, true);
@@ -343,10 +340,10 @@ class QuiqqerCrons
      * Calculate and caches the sizes of the package-folder.
      * The cached value is used by some system functions.
      *
-     * @param $params
+     * @param array $params
      * @param Manager $CronManager
      */
-    public static function calculatePackageFolderSize($params, Manager $CronManager)
+    public static function calculatePackageFolderSize(array $params, Manager $CronManager): void
     {
         QUI::getPackageManager()->getPackageFolderSize(true);
     }
@@ -355,10 +352,10 @@ class QuiqqerCrons
      * Calculate and caches the sizes of the package-folder.
      * The cached value is used by some system functions.
      *
-     * @param $params
+     * @param array $params
      * @param Manager $CronManager
      */
-    public static function calculateCacheFolderSize($params, Manager $CronManager)
+    public static function calculateCacheFolderSize(array $params, Manager $CronManager): void
     {
         QUI\Cache\Manager::getCacheFolderSize(true);
     }
@@ -367,10 +364,10 @@ class QuiqqerCrons
      * Calculate and caches the sizes of the package-folder.
      * The cached value is used by some system functions.
      *
-     * @param $params
+     * @param array $params
      * @param Manager $CronManager
      */
-    public static function calculateWholeInstallationFolderSize($params, Manager $CronManager)
+    public static function calculateWholeInstallationFolderSize(array $params, Manager $CronManager): void
     {
         QUI\Utils\Installation::getWholeFolderSize(true);
     }
@@ -379,10 +376,10 @@ class QuiqqerCrons
      * Counts and caches the amount of files in the QUIQQER installation folder.
      * The cached value is used by some system functions.
      *
-     * @param $params
+     * @param array $params
      * @param Manager $CronManager
      */
-    public static function countAllFilesInInstallation($params, Manager $CronManager)
+    public static function countAllFilesInInstallation(array $params, Manager $CronManager): void
     {
         QUI\Utils\Installation::getAllFileCount(true);
     }
@@ -391,10 +388,10 @@ class QuiqqerCrons
      * Calculate and caches the sizes of the VAR-folder.
      * The cached value is used by some system functions.
      *
-     * @param $params
+     * @param array $params
      * @param Manager $CronManager
      */
-    public static function calculateVarFolderSize($params, Manager $CronManager)
+    public static function calculateVarFolderSize(array $params, Manager $CronManager): void
     {
         QUI\Utils\Installation::getVarFolderSize(false, true);
     }
@@ -403,20 +400,20 @@ class QuiqqerCrons
      * Cleanup all expired uploads
      * - older than a day
      */
-    public static function cleanupUploads()
+    public static function cleanupUploads(): void
     {
-        $Upload  = new QUI\Upload\Manager();
-        $dir     = $Upload->getDir();
+        $Upload = new QUI\Upload\Manager();
+        $dir = $Upload->getDir();
         $folders = QUI\Utils\System\File::readDir($dir);
 
-        $now     = time();
+        $now = time();
         $maxTime = 86400; // seconds -> 1 day
 
         foreach ($folders as $folder) {
             $files = QUI\Utils\System\File::readDir($dir . $folder);
 
             foreach ($files as $file) {
-                if (strpos($file, '.json') === false) {
+                if (!str_contains($file, '.json')) {
                     continue;
                 }
 
@@ -446,7 +443,7 @@ class QuiqqerCrons
      *
      * @return void
      */
-    public static function updateExternalImages()
+    public static function updateExternalImages(): void
     {
         $projects = QUI::getProjectManager()->getProjectList();
 

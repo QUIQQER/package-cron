@@ -5,6 +5,7 @@
  *
  *
  */
+
 QUI::$Ajax->registerFunction(
     'package_quiqqer_cron_ajax_cronservice_sendRegistration',
     function ($email) {
