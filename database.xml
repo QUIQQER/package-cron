@@ -3,14 +3,14 @@
 
     <global>
         <table name="cron">
-            <field type="INT( 3 ) NOT NULL AUTO_INCREMENT PRIMARY KEY">id</field>
-            <field type="TINYINT( 1 )">active</field>
-            <field type="VARCHAR( 1000 ) NOT NULL">title</field>
-            <field type="VARCHAR( 128 ) NOT NULL">min</field>
-            <field type="VARCHAR( 128 ) NOT NULL">hour</field>
-            <field type="VARCHAR( 128 ) NOT NULL">day</field>
-            <field type="VARCHAR( 128 ) NOT NULL">month</field>
-            <field type="VARCHAR( 128 ) NOT NULL">dayOfWeek</field>
+            <field type="INT(3) NOT NULL AUTO_INCREMENT PRIMARY KEY">id</field>
+            <field type="TINYINT(1)">active</field>
+            <field type="VARCHAR(1000) NOT NULL">title</field>
+            <field type="VARCHAR(128) NOT NULL">min</field>
+            <field type="VARCHAR(128) NOT NULL">hour</field>
+            <field type="VARCHAR(128) NOT NULL">day</field>
+            <field type="VARCHAR(128) NOT NULL">month</field>
+            <field type="VARCHAR(128) NOT NULL">dayOfWeek</field>
             <field type="TEXT NOT NULL">exec</field>
             <field type="TEXT NOT NULL">params</field>
             <field type="DATETIME NULL DEFAULT NULL">lastexec</field>
@@ -19,8 +19,8 @@
         </table>
 
         <table name="cron_history">
-            <field type="INT( 3 ) NOT NULL">cronid</field>
-            <field type="INT( 11 ) NOT NULL">uid</field>
+            <field type="INT(3) NOT NULL">cronid</field>
+            <field type="VARCHAR(50) NOT NULL">uid</field>
             <field type="DATETIME NOT NULL">lastexec</field>
             <field type="DATETIME NULL DEFAULT NULl">finish</field>
 
@@ -28,8 +28,8 @@
         </table>
 
         <table name="cron_cronservice">
-            <field type="INT( 3 ) NOT NULL">cronid</field>
-            <field type="INT( 11 ) NOT NULL">uid</field>
+            <field type="INT(3) NOT NULL">cronid</field>
+            <field type="VARCHAR(50) NOT NULL">uid</field>
             <field type="DATETIME NOT NULL">lastexec</field>
 
             <index>cronid</index>
