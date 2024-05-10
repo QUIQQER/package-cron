@@ -8,7 +8,6 @@ namespace QUI\Cron;
 
 use QUI;
 use QUI\Exception;
-
 use QUI\System\Console\Tools\MigrationV2;
 
 use function explode;
