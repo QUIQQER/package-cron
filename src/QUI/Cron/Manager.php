@@ -466,7 +466,7 @@ class Manager
             'cronid' => $cronId,
             'lastexec' => date('Y-m-d H:i:s', $starTime),
             'finish' => date('Y-m-d H:i:s'),
-            'uid' => QUI::getUserBySession()->getId() ?: 0
+            'uid' => QUI::getUserBySession()->getUUID() ?: 0
         ]);
 
 
