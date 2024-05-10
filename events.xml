@@ -6,4 +6,5 @@
     <event on="onCreateProject" fire="\QUI\Cron\EventHandler::onCreateProject"/>
     <event on="onPackageInstallAfter" fire="\QUI\Cron\EventHandler::onPackageInstall"/>
     <event on="onUpdateEnd" fire="\QUI\Cron\EventHandler::updateEnd"/>
+    <event on="onQuiqqerMigrationV2" fire="\QUI\Cron\EventHandler::onQuiqqerMigrationV2"/>
 </events>

@@ -9,6 +9,8 @@ namespace QUI\Cron;
 use QUI;
 use QUI\Exception;
 
+use QUI\System\Console\Tools\MigrationV2;
+
 use function explode;
 use function str_replace;
 
@@ -342,5 +344,34 @@ class EventHandler
         }
 
         return $createCrons;
+    }
+
+    public static function onQuiqqerMigrationV2(MigrationV2 $Console): void
+    {
+        $Console->writeLn('- Migrate cron history');
+        $count = (new Manager())->getHistoryCount();
+
+        if ($count > 100000) {
+            $Console->writeLn(
+                'cron history table has more than 100000 entries. skip the migration. 
+                please have a look and empty or decimate the table if necessary.',
+                'red'
+            );
+
+            $Console->resetColor();
+            return;
+        }
+
+        QUI\Utils\MigrationV1ToV2::migrateUsers(
+            QUI::getDBTableName('cron_history'),
+            ['uid'],
+            'cronid'
+        );
+
+        QUI\Utils\MigrationV1ToV2::migrateUsers(
+            QUI::getDBTableName('cron_cronservice'),
+            ['uid'],
+            'cronid'
+        );
     }
 }
