@@ -136,7 +136,6 @@ class EventHandler
         // execute cron ?
         if ($Config->get('settings', 'executeOnAdminLogin')) {
             echo '<script src="' . URL_OPT_DIR . 'quiqqer/cron/bin/executeCronViaAdmin.js"></script>';
-
         }
 
         if (self::$cronWarning) {
