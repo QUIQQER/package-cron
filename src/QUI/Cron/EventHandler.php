@@ -135,21 +135,8 @@ class EventHandler
 
         // execute cron ?
         if ($Config->get('settings', 'executeOnAdminLogin')) {
-            echo '
-            <script>
-            window.addEvent("load", function()
-            {
-                require(["Ajax"], function(QUIAjax)
-                {
-                    QUIAjax.post("package_quiqqer_cron_ajax_execute", function()
-                    {
+            echo '<script src="' . URL_OPT_DIR . 'quiqqer/cron/bin/executeCronViaAdmin.js"></script>';
 
-                    }, {
-                        "package" : "quiqqer/cron"
-                    });
-                });
-            });
-            </script>';
         }
 
         if (self::$cronWarning) {
