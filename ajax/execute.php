@@ -14,6 +14,12 @@ QUI::$Ajax->registerFunction(
             return;
         }
 
+        // not execute at the first log in
+        if (QUI::getPackage('quiqqer/cron')->getConfig()->get('update', 'logged_in_before') === false) {
+            QUI::getPackage('quiqqer/cron')->getConfig()->set('update', 'logged_in_before', 1);
+            return;
+        }
+
         try {
             $Manager = new QUI\Cron\Manager();
             $Manager->execute();
