@@ -12,7 +12,7 @@ QUI::$Ajax->registerFunction(
     'package_quiqqer_cron_ajax_cron_toggle',
     function ($cronId) {
         $Manager = new QUI\Cron\Manager();
-        $data    = $Manager->getCronById($cronId);
+        $data = $Manager->getCronById($cronId);
 
         if (!$data) {
             throw new QUI\Exception('Cron not exists', 404);

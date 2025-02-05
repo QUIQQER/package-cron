@@ -13,8 +13,8 @@ QUI::$Ajax->registerFunction(
         $list = $CronManager->getList();
         $Locale = QUI::getLocale();
         $Formatter = $Locale->getDateFormatter(
-            \IntlDateFormatter::SHORT,
-            \IntlDateFormatter::SHORT
+            IntlDateFormatter::SHORT,
+            IntlDateFormatter::SHORT
         );
 
         foreach ($list as $key => $cron) {
@@ -23,7 +23,11 @@ QUI::$Ajax->registerFunction(
                 $list[$key]['title'] = $Locale->get($locale[0], $locale[1]);
             }
 
-            $list[$key]['lastexec'] = $Formatter->format(\strtotime($list[$key]['lastexec']));
+            if (!empty($list[$key]['lastexec'])) {
+                $list[$key]['lastexec'] = $Formatter->format(strtotime($list[$key]['lastexec']));
+            } else {
+                $list[$key]['lastexec'] = '';
+            }
         }
 
         return $list;

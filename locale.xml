@@ -470,7 +470,7 @@
             <de><![CDATA[Führt ein automatisches Security Update durch.]]></de>
             <en><![CDATA[Performs an automatic security update.]]></en>
         </locale>
-        
+
     </groups>
     <groups name="quiqqer/cron" datatype="js">
         <locale name="cron.id">
@@ -913,6 +913,17 @@ This is realized with an external server on which QUIQQER systems can register t
             <de><![CDATA[Nicht jetzt]]></de>
             <en><![CDATA[Not yet]]></en>
         </locale>
-
+        <locale name="message.admin.cron.execution">
+            <de><![CDATA[
+            Zurzeit wird eine geplante Systemaufgabe (Cron-Job) ausgeführt.
+            Dadurch können andere Aktionen wie Anfragen oder das Laden von Dateien etwas langsamer sein.
+            Bitte haben Sie ein wenig Geduld. Vielen Dank für Ihr Verständnis.
+            ]]></de>
+            <en><![CDATA[
+            A scheduled system task (cron job) is currently being executed.
+            As a result, other actions such as requests or loading files may be somewhat slower.
+            Please be patient. Thank you for your understanding.
+            ]]></en>
+        </locale>
     </groups>
 </locales>
