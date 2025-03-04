@@ -103,11 +103,11 @@ class Manager
      */
     public function add(
         string $cron,
-        int|string $min,
-        int|string $hour,
-        int|string $day,
-        int|string $month,
-        int|string $dayOfWeek,
+        int | string $min,
+        int | string $hour,
+        int | string $day,
+        int | string $month,
+        int | string $dayOfWeek,
         array $params = []
     ): void {
         Permission::checkPermission('quiqqer.cron.add');
@@ -167,11 +167,11 @@ class Manager
     public function edit(
         int $cronId,
         string $cron,
-        int|string $min,
-        int|string $hour,
-        int|string $day,
-        int|string $month,
-        int|string $dayOfWeek,
+        int | string $min,
+        int | string $hour,
+        int | string $day,
+        int | string $month,
+        int | string $dayOfWeek,
         array $params = []
     ): void {
         Permission::checkPermission('quiqqer.cron.edit');
@@ -410,9 +410,6 @@ class Manager
     /**
      * Execute a cron
      *
-     * @param integer $cronId - ID of the cron
-     *
-     * @return Manager
      * @throws QUI\Exception
      */
     public function executeCron(int $cronId): static
@@ -516,7 +513,7 @@ class Manager
      * @return array|false - Cron Data
      * @throws Exception
      */
-    public function getCronById(int $cronId): bool|array
+    public function getCronById(int $cronId): bool | array
     {
         $result = QUI::getDataBase()->fetch([
             'from' => $this->table(),
@@ -541,7 +538,7 @@ class Manager
      *
      * @return array|false - Cron Data
      */
-    public function getCronData(string $cron): bool|array
+    public function getCronData(string $cron): bool | array
     {
         $availableCrons = $this->getAvailableCrons();
 
@@ -822,7 +819,11 @@ class Manager
                 for ($j = 0; $j < $Params->length; $j++) {
                     $ParamsNode = $Params->item($j);
 
-                    if ($ParamsNode->parentNode && $ParamsNode->parentNode->tagName === 'cron') {
+                    if (
+                        $ParamsNode->parentNode
+                        && isset($ParamsNode->parentNode->tagName)
+                        && $ParamsNode->parentNode->tagName === 'cron'
+                    ) {
                         $CronParams = $ParamsNode->getElementsByTagName('param');
                         break;
                     }
