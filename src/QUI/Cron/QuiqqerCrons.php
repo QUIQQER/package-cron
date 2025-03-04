@@ -192,7 +192,10 @@ class QuiqqerCrons
             foreach ($result as $entry) {
                 try {
                     $Site = $Project->get((int)$entry['id']);
-                    $Site->deactivate();
+
+                    if (method_exists($Site, 'deactivate')) {
+                        $Site->deactivate();
+                    }
 
                     $deactivate[] = (int)$entry['id'];
                 } catch (QUI\Exception $Exception) {

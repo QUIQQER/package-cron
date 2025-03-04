@@ -410,9 +410,6 @@ class Manager
     /**
      * Execute a cron
      *
-     * @param integer $cronId - ID of the cron
-     *
-     * @return Manager
      * @throws QUI\Exception
      */
     public function executeCron(int $cronId): static
@@ -822,7 +819,11 @@ class Manager
                 for ($j = 0; $j < $Params->length; $j++) {
                     $ParamsNode = $Params->item($j);
 
-                    if ($ParamsNode->parentNode && $ParamsNode->parentNode->tagName === 'cron') {
+                    if (
+                        $ParamsNode->parentNode
+                        && isset($ParamsNode->parentNode->tagName)
+                        && $ParamsNode->parentNode->tagName === 'cron'
+                    ) {
                         $CronParams = $ParamsNode->getElementsByTagName('param');
                         break;
                     }
