@@ -215,7 +215,7 @@ class ExecCrons extends QUI\System\Console\Tool
      * @param Boolean|Integer $cronId - ID of the cron
      * @throws QUI\Exception
      */
-    public function runCron(bool|int $cronId = false): void
+    public function runCron(bool | int $cronId = false): void
     {
         $Manager = new QUI\Cron\Manager();
         $cron = $Manager->getCronById($cronId);

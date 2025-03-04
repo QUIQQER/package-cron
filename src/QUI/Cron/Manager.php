@@ -103,11 +103,11 @@ class Manager
      */
     public function add(
         string $cron,
-        int|string $min,
-        int|string $hour,
-        int|string $day,
-        int|string $month,
-        int|string $dayOfWeek,
+        int | string $min,
+        int | string $hour,
+        int | string $day,
+        int | string $month,
+        int | string $dayOfWeek,
         array $params = []
     ): void {
         Permission::checkPermission('quiqqer.cron.add');
@@ -167,11 +167,11 @@ class Manager
     public function edit(
         int $cronId,
         string $cron,
-        int|string $min,
-        int|string $hour,
-        int|string $day,
-        int|string $month,
-        int|string $dayOfWeek,
+        int | string $min,
+        int | string $hour,
+        int | string $day,
+        int | string $month,
+        int | string $dayOfWeek,
         array $params = []
     ): void {
         Permission::checkPermission('quiqqer.cron.edit');
@@ -516,7 +516,7 @@ class Manager
      * @return array|false - Cron Data
      * @throws Exception
      */
-    public function getCronById(int $cronId): bool|array
+    public function getCronById(int $cronId): bool | array
     {
         $result = QUI::getDataBase()->fetch([
             'from' => $this->table(),
@@ -541,7 +541,7 @@ class Manager
      *
      * @return array|false - Cron Data
      */
-    public function getCronData(string $cron): bool|array
+    public function getCronData(string $cron): bool | array
     {
         $availableCrons = $this->getAvailableCrons();
 
