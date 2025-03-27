@@ -12,7 +12,7 @@
     </cron>
 
     <!-- region Cleanup Temp-Folder -->
-    <cron exec="\QUI\Cron\QuiqqerCrons::cleanupCronHistory">
+    <cron exec="\QUI\Cron\QuiqqerCrons::cleanupCronHistory" required="1">
         <title>
             <locale group="quiqqer/cron" var="cron.cleanup.history.title"/>
         </title>
@@ -31,7 +31,7 @@
     <!-- endregion -->
 
     <!-- region Cleanup Temp-Folder -->
-    <cron exec="\QUI\Cron\QuiqqerCrons::clearTempFolder">
+    <cron exec="\QUI\Cron\QuiqqerCrons::clearTempFolder" required="1">
         <title>
             <locale group="quiqqer/cron" var="cron.cleanup.temp.title"/>
         </title>
@@ -47,7 +47,7 @@
     <!-- endregion -->
 
     <!-- region Cleanup Sessions -->
-    <cron exec="\QUI\Cron\QuiqqerCrons::clearSessions">
+    <cron exec="\QUI\Cron\QuiqqerCrons::clearSessions" required="1">
         <title>
             <locale group="quiqqer/cron" var="cron.cleanup.sessions.title"/>
         </title>
