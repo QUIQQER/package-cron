@@ -798,12 +798,20 @@ class Manager
 
             $title = '';
             $desc = '';
+            $required = false;
             $params = [];
 
             /* @var $Cron DOMElement */
             $Title = $Cron->getElementsByTagName('title');
             $Desc = $Cron->getElementsByTagName('description');
             $Params = $Cron->getElementsByTagName('params');
+
+            if (
+                $Cron->getAttribute('required')
+                && ($Cron->getAttribute('required') === '1' || $Cron->getAttribute('required') === 'true')
+            ) {
+                $required = true;
+            }
 
             if ($Title->length) {
                 $title = QUI\Utils\DOM::getTextFromNode($Title->item(0));
@@ -920,6 +928,7 @@ class Manager
             $result[] = [
                 'title' => $title,
                 'description' => $desc,
+                'required' => $required,
                 'exec' => $Cron->getAttribute('exec'),
                 'params' => $params,
                 'autocreate' => $autocreate

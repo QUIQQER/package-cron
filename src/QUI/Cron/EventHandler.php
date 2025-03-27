@@ -33,6 +33,8 @@ class EventHandler
         if ($Package->getName() === 'quiqqer/cron') {
             self::checkCronTable();
         }
+
+        self::createAutoCreateCrons(null, true);
     }
 
     /**
@@ -191,15 +193,27 @@ class EventHandler
      * Create all crons with a <autocreate> items.
      *
      * @param string|null $scope (optional) - Only create crons for given scope (see Manager::AUTOCREATE_SCOPE_*)
+     * @param bool $onlyRequired - Only create required crons
      * @return void
      */
-    public static function createAutoCreateCrons(?string $scope = null): void
-    {
+    public static function createAutoCreateCrons(
+        ?string $scope = null,
+        bool $onlyRequired = false
+    ): void {
         $CronManager = new Manager();
 
         foreach ($CronManager->getAvailableCrons() as $cron) {
             $title = $cron['title'];
             $exec = $cron['exec'];
+            $required = $cron['required'];
+
+            if ($onlyRequired && $required === false) {
+                continue;
+            }
+
+            if (empty($cron['autocreate'])) {
+                continue;
+            }
 
             foreach ($cron['autocreate'] as $autocreate) {
                 // Check if cron already exists
@@ -211,18 +225,11 @@ class EventHandler
                     continue;
                 }
 
-                switch ($autocreate['scope']) {
-                    case Manager::AUTOCREATE_SCOPE_PROJECTS:
-                        $createWithParams = self::getCronsToCreateForProjectsScope($params);
-                        break;
-
-                    case Manager::AUTOCREATE_SCOPE_LANGUAGES:
-                        $createWithParams = self::getCronsToCreateForLanguagesScope($params);
-                        break;
-
-                    default:
-                        $createWithParams = [$params];
-                }
+                $createWithParams = match ($autocreate['scope']) {
+                    Manager::AUTOCREATE_SCOPE_PROJECTS => self::getCronsToCreateForProjectsScope($params),
+                    Manager::AUTOCREATE_SCOPE_LANGUAGES => self::getCronsToCreateForLanguagesScope($params),
+                    default => [$params],
+                };
 
                 // Create crons
                 foreach ($createWithParams as $createParams) {
@@ -283,14 +290,8 @@ class EventHandler
 
                 foreach ($projectCronParams as $k => $v) {
                     $projectCronParams[$k] = str_replace(
-                        [
-                            '[projectName]',
-                            '[projectLang]'
-                        ],
-                        [
-                            $projectName,
-                            $language
-                        ],
+                        ['[projectName]', '[projectLang]'],
+                        [$projectName, $language],
                         $v
                     );
                 }
