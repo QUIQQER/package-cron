@@ -1,5 +1,5 @@
-window.addEvent('quiqqerLoaded', function() {
-    require(['Ajax', 'Locale'], function(QUIAjax, QUILocale) {
+window.addEvent('quiqqerLoaded', function () {
+    require(['Ajax', 'Locale'], function (QUIAjax, QUILocale) {
 
         const RunningInfo = new Element('div', {
             html: '' +
@@ -24,7 +24,7 @@ window.addEvent('quiqqerLoaded', function() {
             }
         }).inject(document.body);
 
-        QUIAjax.post('package_quiqqer_cron_ajax_execute', function() {
+        QUIAjax.post('package_quiqqer_cron_ajax_execute', function () {
             moofx(RunningInfo).animate({
                 bottom: 10,
                 opacity: 0

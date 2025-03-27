@@ -12,6 +12,25 @@
     </cron>
 
     <!-- region Cleanup Temp-Folder -->
+    <cron exec="\QUI\Cron\QuiqqerCrons::cleanupCronHistory">
+        <title>
+            <locale group="quiqqer/cron" var="cron.cleanup.history.title"/>
+        </title>
+        <description>
+            <locale group="quiqqer/cron" var="cron.cleanup.history.description"/>
+        </description>
+        <params>
+            <param name="deleteAfterWeeks" type="int"/>
+        </params>
+
+        <autocreate>
+            <interval>0 0 * * *</interval>
+            <active>1</active>
+        </autocreate>
+    </cron>
+    <!-- endregion -->
+
+    <!-- region Cleanup Temp-Folder -->
     <cron exec="\QUI\Cron\QuiqqerCrons::clearTempFolder">
         <title>
             <locale group="quiqqer/cron" var="cron.cleanup.temp.title"/>
