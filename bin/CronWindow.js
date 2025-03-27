@@ -24,23 +24,23 @@ define('package/quiqqer/cron/bin/CronWindow', [
 
     return new Class({
 
-        Type   : 'package/quiqqer/cron/bin/CronWindow',
+        Type: 'package/quiqqer/cron/bin/CronWindow',
         Extends: QUIConfirm,
 
         options: {
-            title    : QUILocale.get('quiqqer/cron', 'cron.window.add.cron.title'),
-            icon     : 'fa fa-clock-o',
-            maxWidth : 750,
+            title: QUILocale.get('quiqqer/cron', 'cron.window.add.cron.title'),
+            icon: 'fa fa-clock-o',
+            maxWidth: 750,
             maxHeight: 500,
 
             cronId: null, // if you want to edit a cron
 
             cancel_button: {
-                text     : QUILocale.get('quiqqer/system', 'cancel'),
+                text: QUILocale.get('quiqqer/system', 'cancel'),
                 textimage: 'fa fa-remove'
             },
-            ok_button    : {
-                text     : QUILocale.get('quiqqer/system', 'ok'),
+            ok_button: {
+                text: QUILocale.get('quiqqer/system', 'ok'),
                 textimage: 'fa fa-check'
             }
         },
@@ -65,7 +65,7 @@ define('package/quiqqer/cron/bin/CronWindow', [
             this.parent();
             this.Loader.show();
 
-            var self    = this,
+            var self = this,
                 Content = this.getContent();
 
             Content.set('html', cronWindowTemplate);
@@ -83,7 +83,7 @@ define('package/quiqqer/cron/bin/CronWindow', [
             // data
             //this.$List   = Content.getElement('.control-cron-add-list');
             this.$List = new QUISelect({
-                showIcons : false,
+                showIcons: false,
                 searchable: true
             }).inject(
                 Content.getElement('.control-cron-add-list')
@@ -101,10 +101,10 @@ define('package/quiqqer/cron/bin/CronWindow', [
                 }
 
                 var i, len, p, plen;
-                var available     = self.$available,
+                var available = self.$available,
 
                     allowedParams = [],
-                    params        = [];
+                    params = [];
 
                 for (i = 0, len = available.length; i < len; i++) {
                     if (available[i].exec != val) {
@@ -164,7 +164,7 @@ define('package/quiqqer/cron/bin/CronWindow', [
                     self.Loader.hide();
                 }, {
                     'package': 'quiqqer/cron',
-                    cronId   : self.getAttribute('cronId')
+                    cronId: self.getAttribute('cronId')
                 });
 
             }, {
@@ -199,14 +199,14 @@ define('package/quiqqer/cron/bin/CronWindow', [
                     self.close();
                 }, {
                     'package': 'quiqqer/cron',
-                    cronId   : this.getAttribute('cronId'),
-                    cron     : this.$List.getValue(),
-                    min      : CronTime.minute,
-                    hour     : CronTime.hour,
-                    day      : CronTime.day,
-                    month    : CronTime.month,
+                    cronId: this.getAttribute('cronId'),
+                    cron: this.$List.getValue(),
+                    min: CronTime.minute,
+                    hour: CronTime.hour,
+                    day: CronTime.day,
+                    month: CronTime.month,
                     dayOfWeek: CronTime.dayOfWeek,
-                    params   : JSON.encode(this.$ParamsControl.getValue())
+                    params: JSON.encode(this.$ParamsControl.getValue())
                 });
 
                 return this;
@@ -217,13 +217,13 @@ define('package/quiqqer/cron/bin/CronWindow', [
                 self.close();
             }, {
                 'package': 'quiqqer/cron',
-                cron     : this.$List.getValue(),
-                min      : CronTime.minute,
-                hour     : CronTime.hour,
-                day      : CronTime.day,
-                month    : CronTime.month,
+                cron: this.$List.getValue(),
+                min: CronTime.minute,
+                hour: CronTime.hour,
+                day: CronTime.day,
+                month: CronTime.month,
                 dayOfWeek: CronTime.dayOfWeek,
-                params   : JSON.encode(this.$ParamsControl.getValue())
+                params: JSON.encode(this.$ParamsControl.getValue())
             });
 
             return this;

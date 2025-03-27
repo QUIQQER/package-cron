@@ -24,7 +24,7 @@ define('package/quiqqer/cron/bin/History', [
     return new Class({
 
         Extends: QUIPanel,
-        Type   : 'package/quiqqer/cron/bin/History',
+        Type: 'package/quiqqer/cron/bin/History',
 
         Binds: [
             '$onCreate',
@@ -33,7 +33,7 @@ define('package/quiqqer/cron/bin/History', [
 
         options: {
             title: 'Cron-History',
-            icon : 'fa fa-long-arrow-right'
+            icon: 'fa fa-long-arrow-right'
         },
 
         initialize: function (options) {
@@ -49,8 +49,8 @@ define('package/quiqqer/cron/bin/History', [
          * Load the History list
          */
         loadData: function () {
-            const self    = this,
-                  options = this.$Grid.options;
+            const self = this,
+                options = this.$Grid.options;
 
             this.Loader.show();
 
@@ -59,9 +59,9 @@ define('package/quiqqer/cron/bin/History', [
                 self.Loader.hide();
             }, {
                 'package': 'quiqqer/cron',
-                params   : JSON.encode({
+                params: JSON.encode({
                     perPage: options.perPage,
-                    page   : options.page
+                    page: options.page
                 })
             });
         },
@@ -70,58 +70,58 @@ define('package/quiqqer/cron/bin/History', [
          * event : on Create
          */
         $onCreate: function () {
-            const self      = this,
-                  Content   = this.getContent(),
+            const self = this,
+                Content = this.getContent(),
 
-                  Container = new Element('div', {
-                      'class': 'box',
-                      styles : {
-                          width : '100%',
-                          height: '100%'
-                      }
-                  }).inject(Content);
+                Container = new Element('div', {
+                    'class': 'box',
+                    styles: {
+                        width: '100%',
+                        height: '100%'
+                    }
+                }).inject(Content);
 
 
             this.$Grid = new Grid(Container, {
                 columnModel: [
                     {
-                        header   : QUILocale.get(lg, 'cron.start_date'),
+                        header: QUILocale.get(lg, 'cron.start_date'),
                         dataIndex: 'lastexec',
-                        dataType : 'date',
-                        width    : 150
+                        dataType: 'date',
+                        width: 150
                     },
                     {
-                        header   : QUILocale.get(lg, 'cron.finish_date'),
+                        header: QUILocale.get(lg, 'cron.finish_date'),
                         dataIndex: 'finish',
-                        dataType : 'date',
-                        width    : 150
+                        dataType: 'date',
+                        width: 150
                     },
                     {
-                        header   : QUILocale.get(lg, 'cron.id'),
+                        header: QUILocale.get(lg, 'cron.id'),
                         dataIndex: 'cronid',
-                        dataType : 'string',
-                        width    : 50
+                        dataType: 'string',
+                        width: 50
                     },
                     {
-                        header   : QUILocale.get(lg, 'cron.title'),
+                        header: QUILocale.get(lg, 'cron.title'),
                         dataIndex: 'cronTitle',
-                        dataType : 'string',
-                        width    : 200
+                        dataType: 'string',
+                        width: 200
                     },
                     {
-                        header   : QUILocale.get('quiqqer/system', 'user_id'),
+                        header: QUILocale.get('quiqqer/system', 'user_id'),
                         dataIndex: 'uid',
-                        dataType : 'string',
-                        width    : 100
+                        dataType: 'string',
+                        width: 100
                     },
                     {
-                        header   : QUILocale.get('quiqqer/system', 'username'),
+                        header: QUILocale.get('quiqqer/system', 'username'),
                         dataIndex: 'username',
-                        dataType : 'string',
-                        width    : 150
+                        dataType: 'string',
+                        width: 150
                     }
                 ],
-                pagination : true
+                pagination: true
             });
 
             this.$Grid.addEvents({
@@ -142,7 +142,7 @@ define('package/quiqqer/cron/bin/History', [
             }
 
             const Content = this.getContent(),
-                  size    = Content.getSize();
+                size = Content.getSize();
 
             this.$Grid.setHeight(size.y - 40);
             this.$Grid.setWidth(size.x - 40);

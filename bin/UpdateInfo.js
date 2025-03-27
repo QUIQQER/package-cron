@@ -23,16 +23,16 @@ define('package/quiqqer/cron/bin/UpdateInfo', [
             }
 
             const Message = new Element("div", {
-                class : "updates-are-available",
-                role  : 'alert',
-                html  : '<div class="updates-are-available-text">' +
-                        '    <div class="updates-are-available-icon">' +
-                        '        <span class="fa fa-exclamation"></span>' +
-                        '    </div>' +
-                        '    <div>' +
-                        '        ' + QUILocale.get('quiqqer/cron', 'message.updates.available') +
-                        '    </div>' +
-                        '</div>',
+                class: "updates-are-available",
+                role: 'alert',
+                html: '<div class="updates-are-available-text">' +
+                    '    <div class="updates-are-available-icon">' +
+                    '        <span class="fa fa-exclamation"></span>' +
+                    '    </div>' +
+                    '    <div>' +
+                    '        ' + QUILocale.get('quiqqer/cron', 'message.updates.available') +
+                    '    </div>' +
+                    '</div>',
                 styles: {
                     opacity: 0
                 }
@@ -40,11 +40,11 @@ define('package/quiqqer/cron/bin/UpdateInfo', [
 
             const closeMessage = function () {
                 anime({
-                    targets : Message,
+                    targets: Message,
                     duration: 150,
-                    opacity : 0,
-                    top     : 70,
-                    easing  : 'easeOutSine',
+                    opacity: 0,
+                    top: 70,
+                    easing: 'easeOutSine',
                     complete: function () {
                         Message.destroy();
                     }
@@ -52,7 +52,7 @@ define('package/quiqqer/cron/bin/UpdateInfo', [
             };
 
             new Element('button', {
-                html  : QUILocale.get('quiqqer/cron', 'message.updates.available.button'),
+                html: QUILocale.get('quiqqer/cron', 'message.updates.available.button'),
                 events: {
                     click: function () {
                         closeMessage();
@@ -70,12 +70,12 @@ define('package/quiqqer/cron/bin/UpdateInfo', [
             }).inject(Message);
 
             new Element('button', {
-                html   : QUILocale.get('quiqqer/cron', 'message.updates.available.cancel.button'),
+                html: QUILocale.get('quiqqer/cron', 'message.updates.available.cancel.button'),
                 'class': 'updates-are-available-cancel',
-                styles : {
+                styles: {
                     marginRight: 10
                 },
-                events : {
+                events: {
                     click: closeMessage
                 }
             }).inject(Message);
@@ -83,11 +83,11 @@ define('package/quiqqer/cron/bin/UpdateInfo', [
             Message.setStyle('top', 70);
 
             anime({
-                targets : Message,
+                targets: Message,
                 duration: 250,
-                opacity : 1,
-                top     : 60,
-                easing  : 'easeOutSine'
+                opacity: 1,
+                top: 60,
+                easing: 'easeOutSine'
             });
         }, {
             "package": "quiqqer/cron"

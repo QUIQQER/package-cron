@@ -26,7 +26,7 @@ define('package/quiqqer/cron/bin/controls/CronTime', [
     return new Class({
 
         Extends: QUIControl,
-        Type   : 'package/quiqqer/cron/bin/controls/CronTime',
+        Type: 'package/quiqqer/cron/bin/controls/CronTime',
 
         Binds: [
             '$loadIntervalOptions',
@@ -37,21 +37,21 @@ define('package/quiqqer/cron/bin/controls/CronTime', [
         initialize: function (options) {
             this.parent(options);
 
-            this.$CronTime       = null;
+            this.$CronTime = null;
             this.$IntervalSelect = null;
-            this.$OptionsElm     = null;
-            this.Loader          = new QUILoader();
+            this.$OptionsElm = null;
+            this.Loader = new QUILoader();
 
-            this.$SelectMinute    = null;
-            this.$SelectHour      = null;
-            this.$SelectDay       = null;
-            this.$SelectMonth     = null;
+            this.$SelectMinute = null;
+            this.$SelectHour = null;
+            this.$SelectDay = null;
+            this.$SelectMonth = null;
             this.$SelectDayOfWeek = null;
 
-            this.$minute    = '*';
-            this.$hour      = '*';
-            this.$day       = '*';
-            this.$month     = '*';
+            this.$minute = '*';
+            this.$hour = '*';
+            this.$day = '*';
+            this.$month = '*';
             this.$dayofweek = '*';
 
             this.$interval = false;
@@ -68,7 +68,7 @@ define('package/quiqqer/cron/bin/controls/CronTime', [
 
             this.$Elm = new Element('div', {
                 'class': 'quiqqer-cron-crontime',
-                html   : '<div class="quiqqer-cron-crontime-interval">' +
+                html: '<div class="quiqqer-cron-crontime-interval">' +
                     '</div>' +
                     '<div class="quiqqer-cron-crontime-options"></div>'
             });
@@ -76,9 +76,9 @@ define('package/quiqqer/cron/bin/controls/CronTime', [
             //QUILocale.get(lg, 'controls.crontime.label.interval')
 
             this.$IntervalSelect = new QUISelect({
-                'class'  : 'quiqqer-cron-crontime-interval-select',
+                'class': 'quiqqer-cron-crontime-interval-select',
                 showIcons: false,
-                events   : {
+                events: {
                     onChange: function (value) {
                         self.$interval = value;
                         self.$loadIntervalOptions();
@@ -107,7 +107,7 @@ define('package/quiqqer/cron/bin/controls/CronTime', [
             this.$IntervalSelect.setValue('everyminute');
 
             this.$SelectMinute = new QUISelect({
-                'class'  : 'quiqqer-cron-crontime-number-select',
+                'class': 'quiqqer-cron-crontime-number-select',
                 showIcons: false
             });
 
@@ -126,7 +126,7 @@ define('package/quiqqer/cron/bin/controls/CronTime', [
             }
 
             this.$SelectHour = new QUISelect({
-                'class'  : 'quiqqer-cron-crontime-number-select',
+                'class': 'quiqqer-cron-crontime-number-select',
                 showIcons: false
             });
 
@@ -145,7 +145,7 @@ define('package/quiqqer/cron/bin/controls/CronTime', [
             }
 
             this.$SelectDay = new QUISelect({
-                'class'  : 'quiqqer-cron-crontime-number-select',
+                'class': 'quiqqer-cron-crontime-number-select',
                 showIcons: false
             });
 
@@ -158,7 +158,7 @@ define('package/quiqqer/cron/bin/controls/CronTime', [
             }
 
             this.$SelectMonth = new QUISelect({
-                'class'  : 'quiqqer-cron-crontime-month-select',
+                'class': 'quiqqer-cron-crontime-month-select',
                 showIcons: false
             });
 
@@ -171,7 +171,7 @@ define('package/quiqqer/cron/bin/controls/CronTime', [
             }
 
             this.$SelectDayOfWeek = new QUISelect({
-                'class'  : 'quiqqer-cron-crontime-dayofweek-select',
+                'class': 'quiqqer-cron-crontime-dayofweek-select',
                 showIcons: false
             });
 
@@ -420,15 +420,15 @@ define('package/quiqqer/cron/bin/controls/CronTime', [
                     for (var i = 0, len = inputs.length; i < len; i++) {
                         var Label = new Element('label', {
                             'class': 'quiqqer-cron-crontime-cron-label',
-                            html   : '<span>' +
+                            html: '<span>' +
                                 QUILocale.get(lg, 'controls.crontime.label.' + inputs[i]) +
                                 '</span>'
                         }).inject(this.$OptionsElm);
 
                         var Input = new Element('input', {
-                            'class'    : 'quiqqer-cron-crontime-cron-input',
+                            'class': 'quiqqer-cron-crontime-cron-input',
                             'data-type': inputs[i],
-                            type       : 'text'
+                            type: 'text'
                         }).inject(Label, 'top');
 
                         switch (inputs[i]) {
@@ -482,10 +482,10 @@ define('package/quiqqer/cron/bin/controls/CronTime', [
          * @param dayofweek
          */
         setValue: function (minute, hour, day, month, dayofweek) {
-            this.$minute    = minute;
-            this.$hour      = hour;
-            this.$day       = day;
-            this.$month     = month;
+            this.$minute = minute;
+            this.$hour = hour;
+            this.$day = day;
+            this.$month = month;
             this.$dayofweek = dayofweek;
 
             if (minute.match(/[^\d\*]/gi) ||
@@ -572,9 +572,9 @@ define('package/quiqqer/cron/bin/controls/CronTime', [
          * Show cron style type input
          */
         $showCronStyleInput: function () {
-            var m  = this.$minute,
-                h  = this.$hour,
-                d  = this.$day,
+            var m = this.$minute,
+                h = this.$hour,
+                d = this.$day,
                 mo = this.$month,
                 dw = this.$dayofweek;
 
@@ -611,10 +611,10 @@ define('package/quiqqer/cron/bin/controls/CronTime', [
                 }
             }
 
-            this.$minute    = m;
-            this.$hour      = h;
-            this.$day       = d;
-            this.$month     = mo;
+            this.$minute = m;
+            this.$hour = h;
+            this.$day = d;
+            this.$month = mo;
             this.$dayofweek = dw;
         },
 
@@ -635,10 +635,10 @@ define('package/quiqqer/cron/bin/controls/CronTime', [
          */
         getValue: function () {
             var CronTime = {
-                minute   : '*',
-                hour     : '*',
-                day      : '*',
-                month    : '*',
+                minute: '*',
+                hour: '*',
+                day: '*',
+                month: '*',
                 dayOfWeek: '*'
             };
 
@@ -653,34 +653,34 @@ define('package/quiqqer/cron/bin/controls/CronTime', [
 
                 case 'daily':
                     CronTime.minute = this.$SelectMinute.getValue();
-                    CronTime.hour   = this.$SelectHour.getValue();
+                    CronTime.hour = this.$SelectHour.getValue();
                     break;
 
                 case 'weekly':
-                    CronTime.minute    = this.$SelectMinute.getValue();
-                    CronTime.hour      = this.$SelectHour.getValue();
+                    CronTime.minute = this.$SelectMinute.getValue();
+                    CronTime.hour = this.$SelectHour.getValue();
                     CronTime.dayOfWeek = this.$SelectDayOfWeek.getValue();
                     break;
 
                 case 'monthly':
                     CronTime.minute = this.$SelectMinute.getValue();
-                    CronTime.hour   = this.$SelectHour.getValue();
-                    CronTime.day    = this.$SelectDay.getValue();
+                    CronTime.hour = this.$SelectHour.getValue();
+                    CronTime.day = this.$SelectDay.getValue();
                     break;
 
                 case 'yearly':
                     CronTime.minute = this.$SelectMinute.getValue();
-                    CronTime.hour   = this.$SelectHour.getValue();
-                    CronTime.day    = this.$SelectDay.getValue();
-                    CronTime.month  = this.$SelectMonth.getValue();
+                    CronTime.hour = this.$SelectHour.getValue();
+                    CronTime.day = this.$SelectDay.getValue();
+                    CronTime.month = this.$SelectMonth.getValue();
                     break;
 
                 case 'cron':
                     CronTime = {
-                        minute   : this.$Elm.getElement('input.quiqqer-cron-crontime-cron-input[data-type="minute"]').value,
-                        hour     : this.$Elm.getElement('input.quiqqer-cron-crontime-cron-input[data-type="hour"]').value,
-                        day      : this.$Elm.getElement('input.quiqqer-cron-crontime-cron-input[data-type="day"]').value,
-                        month    : this.$Elm.getElement('input.quiqqer-cron-crontime-cron-input[data-type="month"]').value,
+                        minute: this.$Elm.getElement('input.quiqqer-cron-crontime-cron-input[data-type="minute"]').value,
+                        hour: this.$Elm.getElement('input.quiqqer-cron-crontime-cron-input[data-type="hour"]').value,
+                        day: this.$Elm.getElement('input.quiqqer-cron-crontime-cron-input[data-type="day"]').value,
+                        month: this.$Elm.getElement('input.quiqqer-cron-crontime-cron-input[data-type="month"]').value,
                         dayOfWeek: this.$Elm.getElement('input.quiqqer-cron-crontime-cron-input[data-type="dayofweek"]').value
                     };
                     break;
