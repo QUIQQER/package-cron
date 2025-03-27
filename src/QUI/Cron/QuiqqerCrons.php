@@ -10,7 +10,6 @@ use DateTime;
 use PDO;
 use QUI;
 use QUI\Database\Exception;
-
 use Throwable;
 
 use function date;
