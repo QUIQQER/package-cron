@@ -6,6 +6,7 @@
 
 namespace QUI\Cron;
 
+use DateTime;
 use QUI;
 use QUI\Exception;
 use QUI\System\Console\Tools\MigrationV2;
@@ -56,12 +57,13 @@ class EventHandler
             return;
         }
 
-        $Stmnt = QUI::getDataBase()->getPDO()->prepare("ALTER TABLE cron MODIFY `title` VARCHAR(1000)");
-        $Stmnt->execute();
+        $Statement = QUI::getDataBase()->getPDO()->prepare("ALTER TABLE cron MODIFY `title` VARCHAR(1000)");
+        $Statement->execute();
     }
 
     /**
      * event : on admin header loaded
+     * @throws \Doctrine\DBAL\Exception
      */
     public static function onAdminLoad(): void
     {
@@ -93,22 +95,26 @@ class EventHandler
         }
 
         // check last cron execution
-        $CronManager = new Manager();
-        $result = $CronManager->getHistoryList([
-            'page' => 1,
-            'perPage' => 1
+        $database = QUI::getDataBaseConnection();
+        $table = Manager::table();
+
+        // Zeitstempel 24 Stunden zurück
+        $thresholdDate = new DateTime('-24 hours');
+        $thresholdFormatted = $thresholdDate->format('Y-m-d H:i:s');
+
+        // Alle Crons mit lastexec NULL oder älter als 24h
+        $sql = "
+            SELECT id
+            FROM $table
+            WHERE lastexec >= :threshold
+            LIMIT 1
+        ";
+
+        $result = $database->fetchOne($sql, [
+            'threshold' => $thresholdFormatted
         ]);
 
-        if (!isset($result[0])) {
-            self::sendAdminInfoCronError();
-
-            return;
-        }
-
-        $date = strtotime($result[0]['lastexec']);
-
-        // in 24h no cron??
-        if (time() - 86400 > $date) {
+        if ($result === false) {
             self::sendAdminInfoCronError();
         }
     }
@@ -239,12 +245,8 @@ class EventHandler
                         if (!$autocreate['active']) {
                             QUI::getDataBase()->update(
                                 $CronManager::table(),
-                                [
-                                    'active' => 0
-                                ],
-                                [
-                                    'id' => $cronId
-                                ]
+                                ['active' => 0],
+                                ['id' => $cronId]
                             );
                         }
                     } catch (\Exception $Exception) {
@@ -315,12 +317,8 @@ class EventHandler
 
             foreach ($projectCronParams as $k => $v) {
                 $projectCronParams[$k] = str_replace(
-                    [
-                        '[lang]',
-                    ],
-                    [
-                        $language
-                    ],
+                    ['[lang]',],
+                    [$language],
                     $v
                 );
             }
@@ -331,6 +329,9 @@ class EventHandler
         return $createCrons;
     }
 
+    /**
+     * @throws QUI\Database\Exception
+     */
     public static function onQuiqqerMigrationV2(MigrationV2 $Console): void
     {
         $Console->writeLn('- Migrate cron history');
