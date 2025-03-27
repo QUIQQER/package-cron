@@ -161,6 +161,17 @@
         </locale>
         <!-- endregion -->
 
+        <!-- region Cleanup History -->
+        <locale name="cron.cleanup.history.title">
+            <de><![CDATA[Cron-Historie bereinigen]]></de>
+            <en><![CDATA[Clean up Cron History]]></en>
+        </locale>
+        <locale name="cron.cleanup.history.description">
+            <de><![CDATA[Löscht alte Einträge aus der Cron-Historie, die älter als eine definierte Anzahl von Wochen sind.]]></de>
+            <en><![CDATA[Deletes old entries from the cron history that are older than a defined number of weeks.]]></en>
+        </locale>
+        <!-- endregion -->
+
         <!-- region Cleanup Sessions -->
         <locale name="cron.cleanup.sessions.title">
             <de><![CDATA[System-Bereinigung: Sitzungen bereinigen]]></de>

@@ -6,9 +6,12 @@
 
 namespace QUI\Cron;
 
+use DateTime;
 use PDO;
 use QUI;
 use QUI\Database\Exception;
+
+use Throwable;
 
 use function date;
 use function date_create;
@@ -60,6 +63,44 @@ class QuiqqerCrons
     public static function clearAdminMediaCache(): void
     {
         QUI\Utils\System\File::unlink(VAR_DIR . 'cache/admin/media/');
+    }
+
+    public static function cleanupCronHistory(array $params, Manager $CronManager): void
+    {
+        $weeks = 8;
+        $table = Manager::tableHistory();
+        $database = QUI::getDataBaseConnection();
+
+        if (!empty($params['deleteAfterWeeks'])) {
+            $weeks = (int)$params['deleteAfterWeeks'];
+        }
+
+        try {
+            $thresholdDate = new DateTime();
+            $thresholdDate->modify("-{$weeks} weeks");
+            $thresholdFormatted = $thresholdDate->format('Y-m-d H:i:s');
+
+            $deleteSql = "
+                DELETE FROM $table
+                WHERE 
+                    lastexec < :threshold AND 
+                    id NOT IN (
+                        SELECT max_id FROM (
+                            SELECT MAX(id) AS max_id
+                            FROM $table
+                            GROUP BY cronid
+                        ) AS sub
+                    )
+            ";
+
+            $database->executeStatement($deleteSql, [
+                'threshold' => $thresholdFormatted
+            ]);
+        } catch (Throwable $exception) {
+            QUI\System\Log::addError($exception->getMessage(), [
+                'error' => 'at cron execution cleanupCronHistory'
+            ]);
+        }
     }
 
     /**
@@ -138,11 +179,11 @@ class QuiqqerCrons
     /**
      * alias -> because release was misspelled
      *
-     * @param $params
-     * @param $CronManager
+     * @param array $params
+     * @param Manager $CronManager
      * @throws QUI\Exception
      */
-    public static function realeaseDate($params, $CronManager): void
+    public static function realeaseDate(array $params, Manager $CronManager): void
     {
         self::releaseDate($params, $CronManager);
     }

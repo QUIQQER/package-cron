@@ -19,12 +19,16 @@
         </table>
 
         <table name="cron_history">
+            <field type="INT NOT NULL AUTO_INCREMENT PRIMARY KEY">id</field>
             <field type="INT(3) NOT NULL">cronid</field>
             <field type="VARCHAR(50) NOT NULL">uid</field>
             <field type="DATETIME NOT NULL">lastexec</field>
             <field type="DATETIME NULL DEFAULT NULl">finish</field>
 
+            <primary>id</primary>
             <index>cronid</index>
+            <index>lastexec</index>
+            <index>uid</index>
         </table>
 
         <table name="cron_cronservice">
