@@ -293,7 +293,7 @@ class Manager
 
         self::$runtime['startAll'] = $Start->format('Y-m-d H:i:s');
 
-        if ($force === true) {
+        if ($force === false) {
             try {
                 $Package = QUI::getPackage('quiqqer/cron');
 
@@ -405,7 +405,7 @@ class Manager
 
         Manager::log('Finish cron execution (all crons)');
 
-        if ($force === true) {
+        if ($force === false) {
             try {
                 QUI\Lock\Locker::unlock($Package, $lockKey);
             } catch (\Exception $Exception) {
