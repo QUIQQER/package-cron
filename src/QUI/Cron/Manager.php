@@ -275,51 +275,56 @@ class Manager
     }
 
     /**
-     * Execute all upcoming crons
+     * Execute all upcoming cron jobs
      *
+     * @param bool $force - force execution
      * @throws QUI\Permissions\Exception|Exception
      */
-    public function execute(): void
+    public function execute(bool $force = false): void
     {
         Manager::log('Start cron execution (all crons)');
 
         // locking
         $lockKey = 'cron-execution';
 
+        $Package = null;
         $Start = date_create();
+        $EndTime = clone $Start;
+
         self::$runtime['startAll'] = $Start->format('Y-m-d H:i:s');
 
-        try {
-            $Package = QUI::getPackage('quiqqer/cron');
+        if ($force === false) {
+            try {
+                $Package = QUI::getPackage('quiqqer/cron');
 
-            if (QUI\Lock\Locker::isLocked($Package, $lockKey, null, false)) {
-                $time = QUI\Lock\Locker::getLockTime($Package, $lockKey);
+                if (QUI\Lock\Locker::isLocked($Package, $lockKey, null, false)) {
+                    $time = QUI\Lock\Locker::getLockTime($Package, $lockKey);
 
-                if ($time < 0) {
-                    Manager::log(
-                        'Crons cannot be executed because another instance is already executing crons.'
-                    );
+                    if ($time < 0) {
+                        Manager::log(
+                            'Crons cannot be executed because another instance is already executing crons.'
+                        );
 
-                    return;
+                        return;
+                    }
                 }
+
+                $lockTime = self::getLockTime(); // lock time in seconds
+                $EndTime = $EndTime->add(date_interval_create_from_date_string($lockTime . ' seconds'));
+
+                self::$runtime['lockEnd'] = $EndTime->format('Y-m-d H:i:s');
+
+                QUI\Lock\Locker::lock($Package, $lockKey, $lockTime);
+            } catch (\Exception $Exception) {
+                Log::writeDebugException($Exception);
+                Log::writeRecursive($Exception->getMessage());
+
+                Manager::log(
+                    'Crons cannot be executed due to an error: ' . $Exception->getMessage()
+                );
+
+                return;
             }
-
-            $lockTime = self::getLockTime(); // lock time in seconds
-            $EndTime = clone $Start;
-            $EndTime = $EndTime->add(date_interval_create_from_date_string($lockTime . ' seconds'));
-
-            self::$runtime['lockEnd'] = $EndTime->format('Y-m-d H:i:s');
-
-            QUI\Lock\Locker::lock($Package, $lockKey, $lockTime);
-        } catch (\Exception $Exception) {
-            Log::writeDebugException($Exception);
-            Log::writeRecursive($Exception->getMessage());
-
-            Manager::log(
-                'Crons cannot be executed due to an error: ' . $Exception->getMessage()
-            );
-
-            return;
         }
 
         Permission::checkPermission('quiqqer.cron.execute');
@@ -334,11 +339,11 @@ class Manager
         self::$runtime['total'] = count($activeList);
 
         foreach ($activeList as $entry) {
-            $lastexec = $entry['lastexec'];
+            $lastExec = $entry['lastexec'];
 
-            if (empty($lastexec)) {
-                $lastexec = new DateTime();
-                $lastexec->setTimestamp(0);
+            if (empty($lastExec)) {
+                $lastExec = new DateTime();
+                $lastExec->setTimestamp(0);
             }
 
             $min = $entry['min'];
@@ -355,7 +360,7 @@ class Manager
 
             try {
                 $Cron = new CronExpression($cronExpression);
-                $next = $Cron->getNextRunDate($lastexec)->getTimestamp();
+                $next = $Cron->getNextRunDate($lastExec)->getTimestamp();
             } catch (\Exception $Exception) {
                 Log::addError(
                     'Could not evaluate cron expression "' . $cronExpression . '" for cron'
@@ -400,10 +405,12 @@ class Manager
 
         Manager::log('Finish cron execution (all crons)');
 
-        try {
-            QUI\Lock\Locker::unlock($Package, $lockKey);
-        } catch (\Exception $Exception) {
-            Log::writeDebugException($Exception);
+        if ($force === false) {
+            try {
+                QUI\Lock\Locker::unlock($Package, $lockKey);
+            } catch (\Exception $Exception) {
+                Log::writeDebugException($Exception);
+            }
         }
     }
 
