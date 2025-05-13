@@ -69,6 +69,7 @@ class ExecCrons extends QUI\System\Console\Tool
         $this->writeLn("- list\t\tlist all active crons");
         $this->writeLn("- list-all\tlist all crons");
         $this->writeLn("- cron\trun a specific cron");
+        $this->writeLn("- --force\tforce cron execution");
 
         $this->writeLn();
 
@@ -130,7 +131,11 @@ class ExecCrons extends QUI\System\Console\Tool
         $this->write('Execute all upcoming crons ...');
 
         try {
-            $Manager->execute();
+            if ($this->getArgument('--force')) {
+                $Manager->execute(true);
+            } else {
+                $Manager->execute();
+            }
         } catch (QUI\Database\Exception) {
         } catch (QUI\Permissions\Exception) {
         }
