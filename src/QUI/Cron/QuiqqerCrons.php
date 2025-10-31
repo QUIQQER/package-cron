@@ -470,11 +470,11 @@ class QuiqqerCrons
                 $file = $dir . $folder . '/' . $file;
                 $conf = $dir . $folder . '/' . $file . '.json';
 
-                if (!file_exists($file)) {
+                if (file_exists($file)) {
                     unlink($file);
                 }
 
-                if (!file_exists($conf)) {
+                if (file_exists($conf)) {
                     unlink($conf);
                 }
             }
