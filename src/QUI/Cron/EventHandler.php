@@ -7,7 +7,10 @@
 namespace QUI\Cron;
 
 use DateTime;
-use PDO;
+use Doctrine\DBAL\Schema\Column;
+use Doctrine\DBAL\Schema\ColumnDiff;
+use Doctrine\DBAL\Schema\TableDiff;
+use Doctrine\DBAL\Types\Type;
 use QUI;
 use QUI\Exception;
 use QUI\System\Console\Tools\MigrationV2;
@@ -52,31 +55,46 @@ class EventHandler
      */
     protected static function checkCronTable(): void
     {
-        $Tables = QUI::getDataBase()->table();
+        try {
+            self::ensureStringColumnLength(Manager::table(), 'title', 1000);
+            self::ensureStringColumnLength(Manager::tableHistory(), 'uid', 50);
+        } catch (\Doctrine\DBAL\Exception $Exception) {
+            QUI\System\Log::writeDebugException($Exception);
+        }
+    }
 
-        if (!$Tables) {
+
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
+    private static function ensureStringColumnLength(string $tableName, string $columnName, int $length): void
+    {
+        $SchemaManager = QUI::getSchemaManager();
+        $Table = $SchemaManager->introspectTable($tableName);
+
+        if (!$Table->hasColumn($columnName)) {
             return;
         }
 
-        $PDO = QUI::getDataBase()->getPDO();
+        $Column = $Table->getColumn($columnName);
 
-        if (!$PDO instanceof PDO) {
+        if ($Column->getType() instanceof \Doctrine\DBAL\Types\StringType && $Column->getLength() === $length) {
             return;
         }
 
-        $categoryColumn = $Tables->getColumn('cron', 'title');
-
-        if ($categoryColumn['Type'] !== 'varchar(1000)') {
-            $Statement = $PDO->prepare("ALTER TABLE cron MODIFY `title` VARCHAR(1000)");
-            $Statement->execute();
-        }
-
-        $cronHistoryUidColumn = $Tables->getColumn('cron_history', 'uid');
-
-        if ($cronHistoryUidColumn['Type'] !== 'varchar(50)') {
-            $Statement = $PDO->prepare("ALTER TABLE cron_history MODIFY `uid` VARCHAR(50)");
-            $Statement->execute();
-        }
+        $SchemaManager->alterTable(new TableDiff(
+            $Table,
+            changedColumns: [
+                $columnName => new ColumnDiff(
+                    $Column,
+                    new Column(
+                        $columnName,
+                        Type::getType('string'),
+                        ['length' => $length]
+                    )
+                )
+            ]
+        ));
     }
 
     /**
@@ -116,24 +134,18 @@ class EventHandler
         }
 
         // check last cron execution
-        $database = QUI::getDataBaseConnection();
-        $table = Manager::table();
-
-        // Zeitstempel 24 Stunden zurück
         $thresholdDate = new DateTime('-24 hours');
         $thresholdFormatted = $thresholdDate->format('Y-m-d H:i:s');
 
-        // Alle Crons mit lastexec NULL oder älter als 24h
-        $sql = "
-            SELECT id
-            FROM $table
-            WHERE lastexec >= :threshold
-            LIMIT 1
-        ";
-
-        $result = $database->fetchOne($sql, [
-            'threshold' => $thresholdFormatted
-        ]);
+        $QueryBuilder = QUI::getQueryBuilder();
+        $result = $QueryBuilder
+            ->select('id')
+            ->from(QUI\Utils\Doctrine::quoteIdentifier(Manager::table()))
+            ->where($QueryBuilder->expr()->gte('lastexec', ':threshold'))
+            ->setParameter('threshold', $thresholdFormatted)
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchOne();
 
         if ($result === false) {
             self::sendAdminInfoCronError();
@@ -270,17 +282,11 @@ class EventHandler
                     try {
                         $CronManager->add($title, $min, $hour, $day, $month, $dayOfWeek, $createParams);
 
-                        $PDO = QUI::getDataBase()->getPDO();
-
-                        if (!$PDO instanceof PDO) {
-                            continue;
-                        }
-
-                        $cronId = $PDO->lastInsertId('id');
+                        $cronId = QUI::getDataBaseConnection()->lastInsertId();
 
                         if (!$autocreate['active']) {
-                            QUI::getDataBase()->update(
-                                $CronManager::table(),
+                            QUI::getDataBaseConnection()->update(
+                                QUI\Utils\Doctrine::quoteIdentifier($CronManager::table()),
                                 ['active' => 0],
                                 ['id' => (int)$cronId]
                             );
