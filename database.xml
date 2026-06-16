@@ -3,39 +3,36 @@
 
     <global>
         <table name="cron">
-            <field type="INT(3) NOT NULL AUTO_INCREMENT PRIMARY KEY">id</field>
-            <field type="TINYINT(1)">active</field>
-            <field type="VARCHAR(1000) NOT NULL">title</field>
-            <field type="VARCHAR(128) NOT NULL">min</field>
-            <field type="VARCHAR(128) NOT NULL">hour</field>
-            <field type="VARCHAR(128) NOT NULL">day</field>
-            <field type="VARCHAR(128) NOT NULL">month</field>
-            <field type="VARCHAR(128) NOT NULL">dayOfWeek</field>
-            <field type="TEXT NOT NULL">exec</field>
-            <field type="TEXT NOT NULL">params</field>
-            <field type="DATETIME NULL DEFAULT NULL">lastexec</field>
-            <field type="DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP">createDate</field>
-
-            <primary>id</primary>
+            <field type="integer" autoincrement="true" primary="true">id</field>
+            <field type="smallint" nullable="true">active</field>
+            <field type="string" length="1000">title</field>
+            <field type="string" length="128">min</field>
+            <field type="string" length="128">hour</field>
+            <field type="string" length="128">day</field>
+            <field type="string" length="128">month</field>
+            <field type="string" length="128">dayOfWeek</field>
+            <field type="text">exec</field>
+            <field type="text">params</field>
+            <field type="datetime" nullable="true" default="null">lastexec</field>
+            <field type="datetime" default="CURRENT_TIMESTAMP">createDate</field>
         </table>
 
         <table name="cron_history">
-            <field type="INT NOT NULL AUTO_INCREMENT PRIMARY KEY">id</field>
-            <field type="INT(3) NOT NULL">cronid</field>
-            <field type="VARCHAR(50) NOT NULL">uid</field> <!-- Column definition must be changed in \QUI\Cron\EventHandler::checkCronTable() -->
-            <field type="DATETIME NOT NULL">lastexec</field>
-            <field type="DATETIME NULL DEFAULT NULl">finish</field>
+            <field type="integer" autoincrement="true" primary="true">id</field>
+            <field type="integer">cronid</field>
+            <field type="string" length="50">uid</field>
+            <field type="datetime">lastexec</field>
+            <field type="datetime" nullable="true" default="null">finish</field>
 
-            <primary>id</primary>
             <index>cronid</index>
             <index>lastexec</index>
             <index>uid</index>
         </table>
 
         <table name="cron_cronservice">
-            <field type="INT(3) NOT NULL">cronid</field>
-            <field type="VARCHAR(50) NOT NULL">uid</field>
-            <field type="DATETIME NOT NULL">lastexec</field>
+            <field type="integer">cronid</field>
+            <field type="string" length="50">uid</field>
+            <field type="datetime">lastexec</field>
 
             <index>cronid</index>
         </table>

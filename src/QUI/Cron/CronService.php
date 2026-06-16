@@ -6,7 +6,6 @@ use QUI;
 use QUI\Exception;
 use QUI\System\Log;
 
-use function curl_close;
 use function curl_exec;
 use function curl_init;
 use function curl_setopt;
@@ -280,7 +279,6 @@ class CronService
         $response = curl_exec($curl);
 
         if (!is_string($response)) {
-            curl_close($curl);
             throw new Exception("Could not contact cron service.");
         }
 
@@ -317,8 +315,6 @@ class CronService
         $revokeCode = $data['revokeCode'];
         $this->saveRevokeToken($revokeCode);
 
-        curl_close($curl);
-
         $Config = QUI::getPackage("quiqqer/cron")->getConfig();
 
         if ($Config) {
@@ -354,8 +350,6 @@ class CronService
         ]);
 
         $response = curl_exec($curl);
-
-        curl_close($curl);
 
         if (!is_string($response)) {
             throw new Exception('Could not contact cron service.');

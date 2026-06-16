@@ -143,7 +143,7 @@ class Manager
             unset($params['exec']);
         }
 
-        QUI::getDataBase()->insert($this->table(), [
+        QUI::getDataBaseConnection()->insert(QUI\Utils\Doctrine::quoteIdentifier($this->table()), [
             'active' => 1,
             'exec' => $cronData['exec'],
             'title' => $cronData['title'],
@@ -212,7 +212,7 @@ class Manager
             throw new QUI\Exception($Exception->getMessage());
         }
 
-        QUI::getDataBase()->update($this->table(), [
+        QUI::getDataBaseConnection()->update(QUI\Utils\Doctrine::quoteIdentifier($this->table()), [
             'exec' => $cronData['exec'],
             'title' => $cronData['title'],
             'min' => $min,
@@ -244,8 +244,8 @@ class Manager
     {
         Permission::checkPermission('quiqqer.cron.deactivate');
 
-        QUI::getDataBase()->update(
-            $this->table(),
+        QUI::getDataBaseConnection()->update(
+            QUI\Utils\Doctrine::quoteIdentifier($this->table()),
             ['active' => 1],
             ['id' => $cronId]
         );
@@ -261,8 +261,8 @@ class Manager
     {
         Permission::checkPermission('quiqqer.cron.activate');
 
-        QUI::getDataBase()->update(
-            $this->table(),
+        QUI::getDataBaseConnection()->update(
+            QUI\Utils\Doctrine::quoteIdentifier($this->table()),
             ['active' => 0],
             ['id' => $cronId]
         );
@@ -279,8 +279,6 @@ class Manager
         Permission::checkPermission('quiqqer.cron.delete');
 
 
-        $DataBase = QUI::getDataBase();
-
         foreach ($ids as $id) {
             $id = (int)$id;
 
@@ -288,7 +286,7 @@ class Manager
                 return;
             }
 
-            $DataBase->delete($this->table(), [
+            QUI::getDataBaseConnection()->delete(QUI\Utils\Doctrine::quoteIdentifier($this->table()), [
                 'id' => $id
             ]);
         }
@@ -531,7 +529,7 @@ class Manager
             )
         );
 
-        QUI::getDataBase()->insert(self::tableHistory(), [
+        QUI::getDataBaseConnection()->insert(QUI\Utils\Doctrine::quoteIdentifier(self::tableHistory()), [
             'cronid' => $cronId,
             'lastexec' => date('Y-m-d H:i:s', $starTime),
             'finish' => date('Y-m-d H:i:s'),
@@ -539,8 +537,8 @@ class Manager
         ]);
 
 
-        QUI::getDataBase()->update(
-            self::table(),
+        QUI::getDataBaseConnection()->update(
+            QUI\Utils\Doctrine::quoteIdentifier(self::table()),
             ['lastexec' => date('Y-m-d H:i:s')],
             ['id' => $cronId]
         );
@@ -587,19 +585,21 @@ class Manager
      */
     public function getCronById(int $cronId): bool | array
     {
-        $result = QUI::getDataBase()->fetch([
-            'from' => $this->table(),
-            'where' => [
-                'id' => $cronId
-            ],
-            'limit' => 1
-        ]);
+        $QueryBuilder = QUI::getQueryBuilder();
+        $result = $QueryBuilder
+            ->select('*')
+            ->from(QUI\Utils\Doctrine::quoteIdentifier($this->table()))
+            ->where($QueryBuilder->expr()->eq('id', ':id'))
+            ->setParameter('id', $cronId)
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchAssociative();
 
-        if (!isset($result[0])) {
+        if (!is_array($result)) {
             return false;
         }
 
-        return $result[0];
+        return $result;
     }
 
     /**
@@ -652,23 +652,30 @@ class Manager
      */
     public function getHistoryList(array $params = []): array
     {
-        $limit = '0,20';
-        $order = 'lastexec DESC';
+        $firstResult = 0;
+        $maxResults = 20;
 
         if (isset($params['perPage']) && isset($params['page'])) {
-            $start = (int)$params['page'] - 1;
-            $limit = $start . ',' . (int)$params['perPage'];
+            $firstResult = (int)$params['page'] - 1;
+            $maxResults = (int)$params['perPage'];
         }
 
-        $data = QUI::getDataBase()->fetch([
-            'from' => self::tableHistory(),
-            'limit' => $limit,
-            'order' => $order
-        ]);
+        $QueryBuilder = QUI::getQueryBuilder();
+        $data = $QueryBuilder
+            ->select('*')
+            ->from(QUI\Utils\Doctrine::quoteIdentifier(self::tableHistory()))
+            ->orderBy('lastexec', 'DESC')
+            ->setFirstResult($firstResult)
+            ->setMaxResults($maxResults)
+            ->executeQuery()
+            ->fetchAllAssociative();
 
-        $dataOfCron = QUI::getDataBase()->fetch([
-            'from' => $this->table()
-        ]);
+        $QueryBuilder = QUI::getQueryBuilder();
+        $dataOfCron = $QueryBuilder
+            ->select('*')
+            ->from(QUI\Utils\Doctrine::quoteIdentifier($this->table()))
+            ->executeQuery()
+            ->fetchAllAssociative();
 
         $Users = QUI::getUsers();
         $crons = [];
@@ -715,12 +722,13 @@ class Manager
      */
     public function getHistoryCount(): int
     {
-        $result = QUI::getDataBase()->fetch([
-            'from' => self::tableHistory(),
-            'count' => 'id'
-        ]);
+        $QueryBuilder = QUI::getQueryBuilder();
 
-        return $result[0]['id'];
+        return (int)$QueryBuilder
+            ->select('COUNT(id)')
+            ->from(QUI\Utils\Doctrine::quoteIdentifier(self::tableHistory()))
+            ->executeQuery()
+            ->fetchOne();
     }
 
     /**
@@ -731,9 +739,13 @@ class Manager
      */
     public function getList(): array
     {
-        return QUI::getDataBase()->fetch([
-            'from' => self::table()
-        ]);
+        $QueryBuilder = QUI::getQueryBuilder();
+
+        return $QueryBuilder
+            ->select('*')
+            ->from(QUI\Utils\Doctrine::quoteIdentifier(self::table()))
+            ->executeQuery()
+            ->fetchAllAssociative();
     }
 
     /**
@@ -780,13 +792,14 @@ class Manager
      */
     public function cronWithExecAndParamsExists(string $exec, array $params = []): bool
     {
-        $result = QUI::getDataBase()->fetch([
-            'select' => ['params'],
-            'from' => self::table(),
-            'where' => [
-                'exec' => $exec
-            ]
-        ]);
+        $QueryBuilder = QUI::getQueryBuilder();
+        $result = $QueryBuilder
+            ->select('params')
+            ->from(QUI\Utils\Doctrine::quoteIdentifier(self::table()))
+            ->where($QueryBuilder->expr()->eq('exec', ':exec'))
+            ->setParameter('exec', $exec)
+            ->executeQuery()
+            ->fetchAllAssociative();
 
         if (empty($result)) {
             return false;
