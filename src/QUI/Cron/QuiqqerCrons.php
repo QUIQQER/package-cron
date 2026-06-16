@@ -7,8 +7,6 @@
 namespace QUI\Cron;
 
 use DateTime;
-use PDO;
-use PDOStatement;
 use QUI;
 use QUI\Database\Exception;
 use Throwable;
@@ -168,12 +166,12 @@ class QuiqqerCrons
             $table = QUI::getDBTableName('sessions');
             $maxLifetime = time() - $maxTime;
 
-            QUI::getDataBase()->delete($table, [
-                'session_time' => [
-                    'type' => '<',
-                    'value' => $maxLifetime
-                ]
-            ]);
+            $QueryBuilder = QUI::getQueryBuilder();
+            $QueryBuilder
+                ->delete(QUI\Utils\Doctrine::quoteIdentifier($table))
+                ->where($QueryBuilder->expr()->lt('session_time', ':maxLifetime'))
+                ->setParameter('maxLifetime', $maxLifetime)
+                ->executeStatement();
         }
     }
 
@@ -205,17 +203,6 @@ class QuiqqerCrons
             $now = date('Y-m-d H:i:s');
 
             // search sites with release dates
-            $PDO = QUI::getDataBase()->getPDO();
-
-            if (!$PDO instanceof PDO) {
-                QUI\System\Log::addError('No PDO connection available for releaseDate cron.', [
-                    'project' => $Project->getName(),
-                    'lang' => $Project->getLang(),
-                ]);
-
-                return;
-            }
-
             $deactivate = [];
             $activate = [];
 
@@ -223,31 +210,25 @@ class QuiqqerCrons
             /**
              * deactivate sites
              */
-            $Statement = $PDO->prepare(
-                "
-                SELECT id
-                FROM {$Project->table()}
-                WHERE active = 1 AND
-                        release_to IS NOT null AND
-                        release_to < :date AND 
-                        auto_release = 1
-                ;
-            "
-            );
-
-            if (!$Statement instanceof PDOStatement) {
-                QUI\System\Log::addError('Failed to prepare deactivation query for releaseDate cron.', [
-                    'project' => $Project->getName(),
-                    'lang' => $Project->getLang(),
-                ]);
+            try {
+                $QueryBuilder = QUI::getQueryBuilder();
+                $result = $QueryBuilder
+                    ->select('id')
+                    ->from(QUI\Utils\Doctrine::quoteIdentifier($Project->table()))
+                    ->where($QueryBuilder->expr()->eq('active', ':active'))
+                    ->andWhere($QueryBuilder->expr()->isNotNull('release_to'))
+                    ->andWhere($QueryBuilder->expr()->lt('release_to', ':date'))
+                    ->andWhere($QueryBuilder->expr()->eq('auto_release', ':autoRelease'))
+                    ->setParameter('active', 1)
+                    ->setParameter('date', $now)
+                    ->setParameter('autoRelease', 1)
+                    ->executeQuery()
+                    ->fetchAllAssociative();
+            } catch (QUI\Exception | \Doctrine\DBAL\Exception $Exception) {
+                QUI\System\Log::writeException($Exception);
 
                 return;
             }
-
-            $Statement->bindValue(':date', $now);
-            $Statement->execute();
-
-            $result = $Statement->fetchAll(PDO::FETCH_ASSOC);
 
             foreach ($result as $entry) {
                 try {
@@ -267,32 +248,25 @@ class QuiqqerCrons
             /**
              * activate sites
              */
-            $Statement = $PDO->prepare(
-                "
-                SELECT id, release_to
-                FROM {$Project->table()}
-                WHERE active = 0 AND
-                        release_from IS NOT null AND
-                        release_from <= :date AND 
-                        auto_release = 1
-                ;
-            "
-            );
-
-            if (!$Statement instanceof PDOStatement) {
-                QUI\System\Log::addError('Failed to prepare activation query for releaseDate cron.', [
-                    'project' => $Project->getName(),
-                    'lang' => $Project->getLang(),
-                ]);
+            try {
+                $QueryBuilder = QUI::getQueryBuilder();
+                $result = $QueryBuilder
+                    ->select('id', 'release_to')
+                    ->from(QUI\Utils\Doctrine::quoteIdentifier($Project->table()))
+                    ->where($QueryBuilder->expr()->eq('active', ':active'))
+                    ->andWhere($QueryBuilder->expr()->isNotNull('release_from'))
+                    ->andWhere($QueryBuilder->expr()->lte('release_from', ':date'))
+                    ->andWhere($QueryBuilder->expr()->eq('auto_release', ':autoRelease'))
+                    ->setParameter('active', 0)
+                    ->setParameter('date', $now)
+                    ->setParameter('autoRelease', 1)
+                    ->executeQuery()
+                    ->fetchAllAssociative();
+            } catch (QUI\Exception | \Doctrine\DBAL\Exception $Exception) {
+                QUI\System\Log::writeException($Exception);
 
                 return;
             }
-
-            $Statement->bindValue(':date', $now);
-            //$Statement->bindValue(':empty', '0000-00-00 00:00:00', \PDO::PARAM_STR);
-            $Statement->execute();
-
-            $result = $Statement->fetchAll(PDO::FETCH_ASSOC);
             $Now = date_create();
 
             foreach ($result as $entry) {
