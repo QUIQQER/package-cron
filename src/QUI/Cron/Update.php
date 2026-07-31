@@ -122,10 +122,11 @@ class Update
     /**
      * execute an update, if auto update is active
      *
+     * @param array<string, mixed> $params
      * @return void
      * @throws QUI\Exception|\PHPMailer\PHPMailer\Exception
      */
-    public static function update(): void
+    public static function update(array $params = [], ?Manager $Manager = null): void
     {
         try {
             $Package = QUI::getPackage('quiqqer/cron');
@@ -142,7 +143,7 @@ class Update
             return;
         }
 
-        self::updateExecute();
+        self::updateExecute($Manager);
     }
 
     /**
@@ -151,7 +152,7 @@ class Update
      * @return void
      * @throws QUI\Exception|\PHPMailer\PHPMailer\Exception
      */
-    public static function updateExecute(): void
+    public static function updateExecute(?Manager $Manager = null): void
     {
         $Config = QUI::getConfig('etc/conf.ini.php');
         $Config->set('globals', 'maintenance', 1);
@@ -181,6 +182,7 @@ class Update
 
         $updateString .= '<ul>';
 
+        $Manager?->stopAfterCurrentCron();
 
         try {
             $Packages->update();
