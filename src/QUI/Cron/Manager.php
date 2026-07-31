@@ -34,6 +34,8 @@ use function round;
 use function time;
 use function trim;
 
+use const VAR_DIR;
+
 /**
  * Cron Manager
  *
@@ -80,6 +82,8 @@ class Manager
      * @var bool
      */
     protected static bool $lockTimeoutNotificationSent = false;
+
+    protected bool $stopExecutionAfterCurrentCron = false;
 
     /**
      * Determines whether the Quiqqer installer has been executed or not.
@@ -302,6 +306,13 @@ class Manager
     {
         Manager::log('Start cron execution (all crons)');
 
+        $this->stopExecutionAfterCurrentCron = false;
+
+        if ($this->isSystemUpdateRunning()) {
+            Manager::log('Crons cannot be executed because a system update is running.');
+            return;
+        }
+
         // locking
         $lockKey = self::EXECUTION_LOCK_KEY;
 
@@ -356,17 +367,42 @@ class Manager
             }
         }
 
-        Permission::checkPermission('quiqqer.cron.execute');
+        try {
+            Permission::checkPermission('quiqqer.cron.execute');
 
-        $list = $this->getList();
+            $list = $this->getList();
 
-        $activeList = array_filter($list, function ($entry) {
-            return $entry['active'] == 1;
-        });
+            $activeList = array_filter($list, function ($entry) {
+                return $entry['active'] == 1;
+            });
 
-        self::$runtime['total'] = count($activeList);
+            self::$runtime['total'] = count($activeList);
 
+            $this->executeCronList($activeList, $EndTime);
+
+            Manager::log('Finish cron execution (all crons)');
+        } finally {
+            if (!$force) {
+                try {
+                    self::unlockExecutionLock();
+                } catch (\Exception $Exception) {
+                    Log::writeDebugException($Exception);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $activeList
+     */
+    protected function executeCronList(array $activeList, DateTimeInterface $EndTime): void
+    {
         foreach ($activeList as $entry) {
+            if ($this->shouldStopExecution()) {
+                Manager::log('Remaining crons are skipped because a system update is running or was started.');
+                break;
+            }
+
             $cronExpression = $this->getCronExpression($entry);
 
             try {
@@ -412,16 +448,38 @@ class Manager
                 #self::log($message);
                 QUI::getMessagesHandler()->addError($message);
             }
+
+            if ($this->stopExecutionAfterCurrentCron) {
+                Manager::log('Remaining crons are skipped because the current cron started a system update.');
+                break;
+            }
+        }
+    }
+
+    public function stopAfterCurrentCron(): void
+    {
+        $this->stopExecutionAfterCurrentCron = true;
+    }
+
+    protected function shouldStopExecution(): bool
+    {
+        if ($this->stopExecutionAfterCurrentCron) {
+            return true;
         }
 
-        Manager::log('Finish cron execution (all crons)');
+        return $this->isSystemUpdateRunning();
+    }
 
-        if ($force === false) {
-            try {
-                self::unlockExecutionLock();
-            } catch (\Exception $Exception) {
-                Log::writeDebugException($Exception);
-            }
+    protected function isSystemUpdateRunning(): bool
+    {
+        try {
+            $Repository = new QUI\System\Update\RunRepository(VAR_DIR . 'update/runs/');
+            $runs = $Repository->cleanupAndFindActive(time(), 86400);
+
+            return count($runs['active']) > 0;
+        } catch (\Throwable $Throwable) {
+            Log::writeDebugException($Throwable);
+            return false;
         }
     }
 

@@ -15,7 +15,8 @@
     "email": "support@pcsg.de"
   },
   "require": {
-    "quiqqer/core": "^2",
+    "php": "^8.2",
+    "quiqqer/core": "^2.23",
     "quiqqer/qui": "^1",
     "quiqqer/utils": "^2.4",
     "quiqqer/requirements": "^3.2",
