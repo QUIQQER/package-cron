@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<crons>
+    <cron exec="\Vendor\Cron::detailed" required="true" cliOnly="true">
+        <title>Detailed cron</title>
+        <description>Detailed description</description>
+        <params>
+            <param name="limit" type="int">Maximum items</param>
+        </params>
+        <autocreate>
+            <scope>projects</scope>
+            <interval>0 1 * * *</interval>
+            <active>1</active>
+            <params>
+                <param name="project">[projectName]</param>
+            </params>
+        </autocreate>
+    </cron>
+    <cron exec="\Vendor\Cron::invalid-interval" required="false" cliOnly="false">
+        <title>Invalid interval</title>
+        <autocreate>
+            <interval>99 99 * * *</interval>
+        </autocreate>
+    </cron>
+</crons>

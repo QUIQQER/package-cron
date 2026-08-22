@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<crons>
+    <cron exec="\Vendor\Package\Cron::default">
+        <title>Default</title>
+    </cron>
+    <cron exec="\Vendor\Package\Cron::true" cliOnly="true">
+        <title>True</title>
+    </cron>
+    <cron exec="\Vendor\Package\Cron::one" cliOnly="1">
+        <title>One</title>
+    </cron>
+    <cron exec="\Vendor\Package\Cron::false" cliOnly="false">
+        <title>False</title>
+    </cron>
+</crons>

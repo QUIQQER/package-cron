@@ -29,6 +29,7 @@ use function explode;
 use function is_callable;
 use function is_null;
 use function json_decode;
+use function max;
 use function microtime;
 use function round;
 use function time;
@@ -47,6 +48,8 @@ class Manager
     const AUTOCREATE_SCOPE_PROJECTS = 'projects';
     const AUTOCREATE_SCOPE_LANGUAGES = 'languages';
     const EXECUTION_LOCK_KEY = 'cron-execution';
+    public const CRON_TYPE_SYSTEM = 'system';
+    public const CRON_TYPE_CUSTOM = 'custom';
 
     /**
      * Flag that indicates if a cron.log is written
@@ -84,6 +87,11 @@ class Manager
     protected static bool $lockTimeoutNotificationSent = false;
 
     protected bool $stopExecutionAfterCurrentCron = false;
+
+    /**
+     * @var array<string, bool>|null
+     */
+    protected ?array $cliOnlyExecutables = null;
 
     /**
      * Determines whether the Quiqqer installer has been executed or not.
@@ -403,6 +411,14 @@ class Manager
                 break;
             }
 
+            if (!$this->canExecuteCron($entry)) {
+                self::$runtime['finished']++;
+                Manager::log(
+                    'SKIP CLI-only cron "' . $entry['title'] . '" (ID: ' . $entry['id'] . ')'
+                );
+                continue;
+            }
+
             $cronExpression = $this->getCronExpression($entry);
 
             try {
@@ -556,6 +572,13 @@ class Manager
             throw new QUI\Exception('Cron ID not exist');
         }
 
+        if (!$this->canExecuteCron($cronData)) {
+            throw new QUI\Exception([
+                'quiqqer/cron',
+                'message.cron.cli_only'
+            ]);
+        }
+
         if (isset($cronData['params'])) {
             $cronDataParams = json_decode($cronData['params'], true);
 
@@ -631,6 +654,87 @@ class Manager
         }
 
         return $result;
+    }
+
+    /**
+     * Determine the type of a cron from its cron.xml definition.
+     *
+     * Required and automatically created crons are managed by the system.
+     * Definitions without these properties are considered user-defined.
+     *
+     * @param array<string, mixed> $cron
+     */
+    public static function getCronType(array $cron): string
+    {
+        if (!empty($cron['required']) || !empty($cron['autocreate'])) {
+            return self::CRON_TYPE_SYSTEM;
+        }
+
+        return self::CRON_TYPE_CUSTOM;
+    }
+
+    /**
+     * Check whether a cron definition is restricted to CLI execution.
+     *
+     * Definitions without the cliOnly flag are available in every execution context.
+     *
+     * @param array<string, mixed> $cron
+     */
+    public static function isCliOnlyDefinition(array $cron): bool
+    {
+        $cliOnly = $cron['cliOnly'] ?? false;
+
+        return $cliOnly === true || $cliOnly === 1 || $cliOnly === '1' || $cliOnly === 'true';
+    }
+
+    /**
+     * Check whether the cron can be executed in the current environment.
+     *
+     * @param array<string, mixed> $cron
+     */
+    protected function canExecuteCron(array $cron): bool
+    {
+        return $this->isCliExecution() || !$this->isCliOnlyCron($cron);
+    }
+
+    /**
+     * Check whether the current request is executed via CLI.
+     */
+    protected function isCliExecution(): bool
+    {
+        return PHP_SAPI === 'cli';
+    }
+
+    /**
+     * Check whether a stored cron references a CLI-only definition.
+     *
+     * @param array<string, mixed> $cron
+     */
+    protected function isCliOnlyCron(array $cron): bool
+    {
+        $exec = (string)($cron['exec'] ?? '');
+
+        if ($exec === '') {
+            return false;
+        }
+
+        if ($this->cliOnlyExecutables === null) {
+            $this->cliOnlyExecutables = [];
+
+            foreach ($this->getAvailableCrons() as $availableCron) {
+                if (!self::isCliOnlyDefinition($availableCron)) {
+                    continue;
+                }
+
+                $availableExec = (string)($availableCron['exec'] ?? '');
+
+                if ($availableExec !== '') {
+                    $this->cliOnlyExecutables[$availableExec] = true;
+                }
+            }
+        }
+
+        return isset($this->cliOnlyExecutables[$exec]);
     }
 
     /**
@@ -714,8 +818,9 @@ class Manager
         $maxResults = 20;
 
         if (isset($params['perPage']) && isset($params['page'])) {
-            $firstResult = (int)$params['page'] - 1;
-            $maxResults = (int)$params['perPage'];
+            $page = max(1, (int)$params['page']);
+            $maxResults = max(1, (int)$params['perPage']);
+            $firstResult = ($page - 1) * $maxResults;
         }
 
         $QueryBuilder = QUI::getQueryBuilder();
@@ -865,16 +970,12 @@ class Manager
 
         foreach ($result as $row) {
             $cronParams = json_decode($row['params'], true);
-            $identical = true;
 
-            foreach ($cronParams as $k => $v) {
-                if (!array_key_exists($k, $params) || $params[$k] !== $v) {
-                    $identical = false;
-                    break;
-                }
+            if (!is_array($cronParams)) {
+                continue;
             }
 
-            if ($identical) {
+            if ($cronParams === $params) {
                 return true;
             }
         }
@@ -949,6 +1050,9 @@ class Manager
             $title = '';
             $desc = '';
             $required = false;
+            $cliOnly = self::isCliOnlyDefinition([
+                'cliOnly' => $Cron->getAttribute('cliOnly')
+            ]);
             $params = [];
 
             $Title = $Cron->getElementsByTagName('title');
@@ -1105,6 +1209,7 @@ class Manager
                 'title' => $title,
                 'description' => $desc,
                 'required' => $required,
+                'cliOnly' => $cliOnly,
                 'exec' => $Cron->getAttribute('exec'),
                 'params' => $params,
                 'autocreate' => $autocreate

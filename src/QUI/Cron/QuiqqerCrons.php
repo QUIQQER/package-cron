@@ -13,10 +13,15 @@ use Throwable;
 
 use function date;
 use function date_create;
+use function basename;
 use function file_exists;
+use function file_get_contents;
 use function filemtime;
+use function is_array;
 use function is_dir;
+use function json_decode;
 use function rename;
+use function str_ends_with;
 use function time;
 use function unlink;
 
@@ -449,7 +454,14 @@ class QuiqqerCrons
     public static function cleanupUploads(): void
     {
         $Upload = new QUI\Upload\Manager();
-        $dir = $Upload->getDir();
+        self::cleanupUploadDirectory($Upload->getDir());
+    }
+
+    /**
+     * Remove expired upload files and their metadata from an upload directory.
+     */
+    protected static function cleanupUploadDirectory(string $dir): void
+    {
         $folders = QUI\Utils\System\File::readDir($dir);
 
         $now = time();
@@ -459,27 +471,30 @@ class QuiqqerCrons
             $files = QUI\Utils\System\File::readDir($dir . $folder);
 
             foreach ($files as $file) {
-                if (!str_contains($file, '.json')) {
+                if (!str_ends_with($file, '.json')) {
                     continue;
                 }
 
-                $fileTime = filemtime($dir . $folder . '/' . $file);
+                $configFile = $dir . $folder . '/' . $file;
+                $fileTime = filemtime($configFile);
 
                 if ($now - $fileTime < $maxTime) {
                     continue;
                 }
 
-                // older than a day, delete
-                $file = $dir . $folder . '/' . $file;
-                $conf = $dir . $folder . '/' . $file . '.json';
+                $config = json_decode((string)file_get_contents($configFile), true);
 
-                if (file_exists($file)) {
-                    unlink($file);
+                if (!is_array($config) || empty($config['file'])) {
+                    continue;
                 }
 
-                if (file_exists($conf)) {
-                    unlink($conf);
+                $uploadFile = $dir . $folder . '/' . basename((string)$config['file']);
+
+                if (file_exists($uploadFile)) {
+                    unlink($uploadFile);
                 }
+
+                unlink($configFile);
             }
         }
     }

@@ -92,7 +92,7 @@ class Update
                 $updateString .= '<li>' . $packageName . ': ' . $from . ' -> ' . $to . '</li>';
             }
 
-            $updateString .= '<ul>';
+            $updateString .= '</ul>';
 
 
             QUI::getMailManager()->send(
@@ -155,63 +155,67 @@ class Update
     public static function updateExecute(?Manager $Manager = null): void
     {
         $Config = QUI::getConfig('etc/conf.ini.php');
+        $previousMaintenanceMode = (int)$Config->get('globals', 'maintenance');
+
         $Config->set('globals', 'maintenance', 1);
         $Config->save();
 
         try {
-            $Packages = QUI::getPackageManager();
-            $packages = $Packages->getOutdated(true);
-        } catch (\Exception $Exception) {
-            QUI\System\Log::writeException($Exception);
-            return;
-        }
+            try {
+                $Packages = QUI::getPackageManager();
+                $packages = $Packages->getOutdated(true);
+            } catch (\Exception $Exception) {
+                QUI\System\Log::writeException($Exception);
+                return;
+            }
 
-        if (!count($packages)) {
-            return;
-        }
+            if (!count($packages)) {
+                return;
+            }
 
-        $updateString = '<ul>';
+            $updateString = '<ul>';
 
-        foreach ($packages as $package) {
-            $packageName = $package['package'];
-            $from = $package['oldVersion'];
-            $to = $package['version'];
+            foreach ($packages as $package) {
+                $packageName = $package['package'];
+                $from = $package['oldVersion'];
+                $to = $package['version'];
 
-            $updateString .= '<li>' . $packageName . ': ' . $from . ' -> ' . $to . '</li>';
-        }
+                $updateString .= '<li>' . $packageName . ': ' . $from . ' -> ' . $to . '</li>';
+            }
 
-        $updateString .= '<ul>';
+            $updateString .= '</ul>';
 
-        $Manager?->stopAfterCurrentCron();
+            $Manager?->stopAfterCurrentCron();
 
-        try {
-            $Packages->update();
-        } catch (\Exception) {
+            try {
+                $Packages->update();
+            } catch (\Exception) {
+                QUI::getMailManager()->send(
+                    QUI::conf('mail', 'admin_mail'),
+                    QUI::getLocale()->get('quiqqer/cron', 'update.mail.error.subject'),
+                    QUI::getLocale()->get('quiqqer/cron', 'update.mail.error.body', [
+                        'packages' => $updateString,
+                        'host' => HOST,
+                        'ip' => QUI\Utils\System::getClientIP()
+                    ])
+                );
+
+                return;
+            }
+
             QUI::getMailManager()->send(
                 QUI::conf('mail', 'admin_mail'),
-                QUI::getLocale()->get('quiqqer/cron', 'update.mail.error.subject'),
-                QUI::getLocale()->get('quiqqer/cron', 'update.mail.error.body', [
+                QUI::getLocale()->get('quiqqer/cron', 'update.mail.success.subject'),
+                QUI::getLocale()->get('quiqqer/cron', 'update.mail.success.body', [
                     'packages' => $updateString,
                     'host' => HOST,
                     'ip' => QUI\Utils\System::getClientIP()
                 ])
             );
-
-            return;
+        } finally {
+            $Config->set('globals', 'maintenance', $previousMaintenanceMode);
+            $Config->save();
         }
-
-        QUI::getMailManager()->send(
-            QUI::conf('mail', 'admin_mail'),
-            QUI::getLocale()->get('quiqqer/cron', 'update.mail.success.subject'),
-            QUI::getLocale()->get('quiqqer/cron', 'update.mail.success.body', [
-                'packages' => $updateString,
-                'host' => HOST,
-                'ip' => QUI\Utils\System::getClientIP()
-            ])
-        );
-
-        $Config->set('globals', 'maintenance', 0);
-        $Config->save();
     }
 
     //endregion
