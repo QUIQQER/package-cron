@@ -56,6 +56,17 @@ class CronServiceTest extends TestCase
             rmdir($tokenDirectory);
         }
 
+        $ajaxFile = $this->temporaryDirectory . '/admin/ajax.php';
+        $ajaxDirectory = dirname($ajaxFile);
+
+        if (file_exists($ajaxFile)) {
+            unlink($ajaxFile);
+        }
+
+        if (is_dir($ajaxDirectory)) {
+            rmdir($ajaxDirectory);
+        }
+
         if (is_dir($this->temporaryDirectory)) {
             rmdir($this->temporaryDirectory);
         }
@@ -157,11 +168,219 @@ class CronServiceTest extends TestCase
         $this->invokePrivate($Service, 'readRevokeToken');
     }
 
-    private function replacePackageDirectory(string $directory): void
+    #[Test]
+    public function localAjaxResponseReturnsItsResult(): void
+    {
+        $function = 'package_pcsg_cronservice_ajax_fixture';
+        $this->writeAjaxResponse([
+            $function => [
+                'result' => ['status' => 1]
+            ]
+        ]);
+        $Service = $this->createServiceWithoutConstructor('example.test', '/packages/');
+
+        self::assertSame(
+            ['status' => 1],
+            $this->invokePrivate($Service, 'makeServerAjaxCall', [$function, ['domain' => 'example.test']])
+        );
+    }
+
+    #[Test]
+    public function localAjaxExceptionIsForwarded(): void
+    {
+        $function = 'package_pcsg_cronservice_ajax_fixture';
+        $this->writeAjaxResponse([
+            $function => [
+                'Exception' => ['message' => 'Remote fixture error']
+            ]
+        ]);
+        $Service = $this->createServiceWithoutConstructor('example.test', '/packages/');
+
+        $this->expectException(QUI\Exception::class);
+        $this->expectExceptionMessage('Remote fixture error');
+
+        $this->invokePrivate($Service, 'makeServerAjaxCall', [$function, []]);
+    }
+
+    #[Test]
+    public function invalidLocalAjaxResponseIsRejected(): void
+    {
+        $this->writeRawAjaxResponse('not-json');
+        $Service = $this->createServiceWithoutConstructor('example.test', '/packages/');
+
+        $this->expectException(QUI\Exception::class);
+        $this->expectExceptionMessage('Invalid cron service response.');
+
+        $this->invokePrivate($Service, 'makeServerAjaxCall', [
+            'package_pcsg_cronservice_ajax_fixture',
+            []
+        ]);
+    }
+
+    #[Test]
+    public function unavailableLocalAjaxEndpointIsRejected(): void
+    {
+        $Service = $this->createServiceWithoutConstructor('example.test', '/packages/');
+
+        $this->expectException(QUI\Exception::class);
+        $this->expectExceptionMessage('Could not contact cron service.');
+
+        $this->invokePrivate($Service, 'makeServerAjaxCall', [
+            'package_pcsg_cronservice_ajax_fixture',
+            []
+        ]);
+    }
+
+    #[Test]
+    public function registrationCanUseLocalResponseAndStoresRevokeToken(): void
+    {
+        $function = 'package_pcsg_cronservice_ajax_register';
+        $this->writeAjaxResponse([
+            $function => [
+                'result' => [
+                    'status' => 1,
+                    'revokeCode' => 'local-revoke-token'
+                ]
+            ]
+        ]);
+        $this->replacePackageDirectory($this->temporaryDirectory);
+        $Service = $this->createServiceWithoutConstructor('example.test', '/packages/');
+
+        $Service->register('admin@example.test');
+
+        self::assertSame(
+            'local-revoke-token',
+            file_get_contents($this->temporaryDirectory . '/cronservice/.revoketoken')
+        );
+    }
+
+    /**
+     * @return array<string, array{response: array<string, mixed>, message: string}>
+     */
+    public static function invalidRegistrationResponseProvider(): array
+    {
+        $function = 'package_pcsg_cronservice_ajax_register';
+
+        return [
+            'missing result' => [
+                'response' => [],
+                'message' => 'Something went wrong!'
+            ],
+            'remote rejection' => [
+                'response' => [
+                    $function => [
+                        'result' => [
+                            'status' => 0,
+                            'message' => 'Registration rejected'
+                        ]
+                    ]
+                ],
+                'message' => 'Registration rejected'
+            ],
+            'missing revoke code' => [
+                'response' => [
+                    $function => [
+                        'result' => ['status' => 1]
+                    ]
+                ],
+                'message' => 'Missing revoke code.'
+            ]
+        ];
+    }
+
+    /**
+     * @param array<string, mixed> $response
+     */
+    #[DataProvider('invalidRegistrationResponseProvider')]
+    #[Test]
+    public function registrationRejectsInvalidServerResults(array $response, string $message): void
+    {
+        $this->writeAjaxResponse($response);
+        $Service = $this->createServiceWithoutConstructor('example.test', '/packages/');
+
+        $this->expectException(QUI\Exception::class);
+        $this->expectExceptionMessage($message);
+
+        $Service->register('admin@example.test');
+    }
+
+    #[Test]
+    public function registrationRejectsInvalidJsonResponse(): void
+    {
+        $this->writeRawAjaxResponse('not-json');
+        $Service = $this->createServiceWithoutConstructor('example.test', '/packages/');
+
+        $this->expectException(QUI\Exception::class);
+
+        $Service->register('admin@example.test');
+    }
+
+    #[Test]
+    public function statusCombinesRemoteAndLocalExecutionInformation(): void
+    {
+        $function = 'package_pcsg_cronservice_ajax_getStatus';
+        $this->writeAjaxResponse([
+            $function => [
+                'result' => [
+                    'status' => 1,
+                    'last_execution' => ''
+                ]
+            ]
+        ]);
+        $Service = $this->createServiceWithoutConstructor('example.test', '/packages/');
+
+        $status = $Service->getStatus();
+
+        self::assertIsArray($status);
+        self::assertSame(1, $status['status']);
+        self::assertNotSame('', $status['last_execution']);
+        self::assertArrayHasKey('last_local_execution', $status);
+    }
+
+    #[Test]
+    public function registrationLifecycleCanUseLocalEndpoint(): void
+    {
+        $Config = $this->createMock(Config::class);
+        $Config->expects(self::exactly(2))
+            ->method('set')
+            ->with('settings', 'executeOnAdminLogin', 1)
+            ->willReturn(true);
+        $Config->expects(self::exactly(2))
+            ->method('save');
+
+        $this->replacePackageDirectory($this->temporaryDirectory, $Config);
+        $Service = $this->createServiceWithoutConstructor('example.test', '/packages/');
+        $this->invokePrivate($Service, 'saveRevokeToken', ['local-token']);
+
+        $this->writeAjaxResponse([
+            'package_pcsg_cronservice_ajax_revokeRegistration' => [
+                'result' => true
+            ]
+        ]);
+        $Service->revokeRegistration();
+
+        $this->writeAjaxResponse([
+            'package_pcsg_cronservice_ajax_resendActivationMail' => [
+                'result' => true
+            ]
+        ]);
+        $Service->resendActivationMail();
+
+        $this->writeAjaxResponse([
+            'package_pcsg_cronservice_ajax_cancelRegistration' => [
+                'result' => true
+            ]
+        ]);
+        $Service->cancelRegistration();
+    }
+
+    private function replacePackageDirectory(string $directory, ?Config $Config = null): void
     {
         $Package = $this->createMock(Package::class);
         $Package->method('getVarDir')
             ->willReturn($directory);
+        $Package->method('getConfig')
+            ->willReturn($Config);
 
         $PackageManager = $this->createMock(PackageManager::class);
         $PackageManager->method('getInstalledPackage')
@@ -179,7 +398,10 @@ class CronServiceTest extends TestCase
         (new ReflectionProperty(CronService::class, 'domain'))->setValue($Service, $domain);
         (new ReflectionProperty(CronService::class, 'https'))->setValue($Service, false);
         (new ReflectionProperty(CronService::class, 'packageDir'))->setValue($Service, $packageDir);
-        (new ReflectionProperty(CronService::class, 'baseUrl'))->setValue($Service, 'https://cron.example.test');
+        (new ReflectionProperty(CronService::class, 'baseUrl'))->setValue(
+            $Service,
+            'file://' . $this->temporaryDirectory
+        );
 
         return $Service;
     }
@@ -197,5 +419,27 @@ class CronServiceTest extends TestCase
         $Method = new ReflectionMethod(CronService::class, $method);
 
         return $Method->invokeArgs($Service, $arguments);
+    }
+
+    /**
+     * @param array<string, mixed> $response
+     */
+    private function writeAjaxResponse(array $response): void
+    {
+        $this->writeRawAjaxResponse((string)json_encode($response));
+    }
+
+    private function writeRawAjaxResponse(string $response): void
+    {
+        $ajaxDirectory = $this->temporaryDirectory . '/admin';
+
+        if (!is_dir($ajaxDirectory)) {
+            mkdir($ajaxDirectory, 0700, true);
+        }
+
+        file_put_contents(
+            $ajaxDirectory . '/ajax.php',
+            str_repeat('x', 9) . $response . str_repeat('x', 10)
+        );
     }
 }
