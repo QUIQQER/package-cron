@@ -9,10 +9,14 @@ use QUI\Cron\Manager;
 use QUI\Interfaces\Users\User;
 use ReflectionProperty;
 use QUITests\Integration\Cron\Fixtures\DatabaseManager;
+use QUITests\Integration\Cron\Fixtures\DisappearingDefinitionManager;
 use QUITests\Integration\Cron\Fixtures\ExecutableCron;
+use QUITests\Integration\Cron\Fixtures\ExecutionManager;
 
 require_once __DIR__ . '/Fixtures/DatabaseManager.php';
+require_once __DIR__ . '/Fixtures/DisappearingDefinitionManager.php';
 require_once __DIR__ . '/Fixtures/ExecutableCron.php';
+require_once __DIR__ . '/Fixtures/ExecutionManager.php';
 
 class ManagerDatabaseTest extends TestCase
 {
@@ -248,6 +252,67 @@ class ManagerDatabaseTest extends TestCase
 
         $this->expectException(QUI\Exception::class);
         $Manager->executeCron(PHP_INT_MAX);
+    }
+
+    #[Test]
+    public function forcedExecutionPassesOnlyActiveCronsToExecutionList(): void
+    {
+        $activeEntry = ['id' => 1, 'active' => 1, 'title' => 'Active'];
+        $inactiveEntry = ['id' => 2, 'active' => 0, 'title' => 'Inactive'];
+        $Manager = new ExecutionManager([$activeEntry, $inactiveEntry]);
+
+        $Manager->execute(true);
+
+        self::assertSame(1, $Manager->getListCalls);
+        self::assertSame([$activeEntry], array_values($Manager->receivedEntries));
+    }
+
+    #[Test]
+    public function executionDoesNotReadCronListDuringSystemUpdate(): void
+    {
+        $Manager = new ExecutionManager([], true);
+
+        $Manager->execute(true);
+
+        self::assertSame(0, $Manager->getListCalls);
+        self::assertSame([], $Manager->receivedEntries);
+    }
+
+    #[Test]
+    public function historyResolvesKnownUserName(): void
+    {
+        $SystemUser = QUI::getUsers()->getSystemUser();
+        QUI::getDataBaseConnection()->update(
+            QUI\Utils\Doctrine::quoteIdentifier(Manager::tableHistory()),
+            ['uid' => $SystemUser->getUUID()],
+            ['id' => $this->historyIds[4]]
+        );
+
+        $history = (new Manager())->getHistoryList(['page' => 1, 'perPage' => 1]);
+
+        self::assertSame($SystemUser->getName(), $history[0]['username']);
+    }
+
+    #[Test]
+    public function addRejectsDefinitionThatDisappearsAfterExistenceCheck(): void
+    {
+        $Manager = new DisappearingDefinitionManager();
+
+        $this->expectException(QUI\Exception::class);
+        $this->expectExceptionCode(1001);
+
+        $Manager->add('disappearing-add-fixture', '0', '0', '*', '*', '*');
+    }
+
+    #[Test]
+    public function editRejectsDefinitionThatDisappearsAfterExistenceCheck(): void
+    {
+        $Manager = new DisappearingDefinitionManager();
+
+        $this->expectException(QUI\Exception::class);
+        $this->expectExceptionCode(1002);
+
+        $Manager->edit($this->cronId, 'disappearing-edit-fixture', '0', '0', '*', '*', '*');
     }
 
     #[Test]

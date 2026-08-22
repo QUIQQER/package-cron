@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<crons>
+    <cron exec="\Vendor\Cron::missingInterval">
+        <title>Missing interval cron</title>
+        <autocreate>
+            <active>1</active>
+        </autocreate>
+    </cron>
+</crons>

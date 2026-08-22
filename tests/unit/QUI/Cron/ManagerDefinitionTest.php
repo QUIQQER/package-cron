@@ -153,4 +153,25 @@ class ManagerDefinitionTest extends TestCase
         self::assertSame([], Manager::getCronsFromFile(__DIR__ . '/Fixtures/no-crons.xml'));
         self::assertSame([], Manager::getCronsFromFile(__DIR__ . '/Fixtures/empty-crons.xml'));
     }
+
+    #[Test]
+    public function environmentStateHelpersReturnRuntimeValues(): void
+    {
+        $Manager = new AccessibleManager();
+
+        self::assertIsBool($Manager->readSystemUpdateState());
+        self::assertInstanceOf(\DateTimeImmutable::class, $Manager->readCurrentDateTime());
+        self::assertIsBool(Manager::isQuiqqerInstallerExecuted());
+    }
+
+    #[Test]
+    public function autocreateEntryWithoutIntervalIsIgnored(): void
+    {
+        $definitions = Manager::getCronsFromFile(
+            __DIR__ . '/Fixtures/invalid-autocreate-crons.xml'
+        );
+
+        self::assertCount(1, $definitions);
+        self::assertSame([], $definitions[0]['autocreate']);
+    }
 }

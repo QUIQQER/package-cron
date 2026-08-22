@@ -57,6 +57,16 @@ class AccessibleManager extends Manager
         return $this->shouldStopExecution();
     }
 
+    public function readSystemUpdateState(): bool
+    {
+        return parent::isSystemUpdateRunning();
+    }
+
+    public function readCurrentDateTime(): \DateTimeImmutable
+    {
+        return parent::getCurrentDateTime();
+    }
+
     protected function isCliExecution(): bool
     {
         return $this->cliExecution;
