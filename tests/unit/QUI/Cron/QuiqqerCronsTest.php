@@ -4,6 +4,11 @@ namespace QUITests\Unit\Cron;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use QUI;
+use QUI\Config;
+use QUI\Cron\Manager;
+use QUI\Cron\QuiqqerCrons;
+use QUI\Package\Manager as PackageManager;
 use QUITests\Unit\Cron\Fixtures\AccessibleQuiqqerCrons;
 
 require_once __DIR__ . '/Fixtures/AccessibleQuiqqerCrons.php';
@@ -12,10 +17,22 @@ class QuiqqerCronsTest extends TestCase
 {
     private string $uploadDirectory;
 
+    private ?PackageManager $previousPackageManager;
+
+    private bool $projectConfigExisted;
+
+    private ?Config $previousProjectConfig = null;
+
     protected function setUp(): void
     {
         parent::setUp();
 
+        $this->previousPackageManager = QUI::$PackageManager;
+        $this->projectConfigExisted = isset(QUI::$Configs['etc/projects.ini']);
+
+        if ($this->projectConfigExisted) {
+            $this->previousProjectConfig = QUI::$Configs['etc/projects.ini'];
+        }
         $this->uploadDirectory = sys_get_temp_dir()
             . '/quiqqer-cron-upload-cleanup-'
             . bin2hex(random_bytes(8))
@@ -26,6 +43,14 @@ class QuiqqerCronsTest extends TestCase
 
     protected function tearDown(): void
     {
+        QUI::$PackageManager = $this->previousPackageManager;
+
+        if ($this->projectConfigExisted && $this->previousProjectConfig !== null) {
+            QUI::$Configs['etc/projects.ini'] = $this->previousProjectConfig;
+        } else {
+            unset(QUI::$Configs['etc/projects.ini']);
+        }
+
         $fixtureDirectory = $this->uploadDirectory . 'fixture/';
 
         if (is_dir($fixtureDirectory)) {
@@ -103,5 +128,32 @@ class QuiqqerCronsTest extends TestCase
         self::assertFileExists($recentUpload);
         self::assertFileExists($recentConfig);
         self::assertFileExists($invalidConfig);
+    }
+
+    #[Test]
+    public function packageFolderSizeIsRecalculated(): void
+    {
+        $PackageManager = $this->createMock(PackageManager::class);
+        $PackageManager->expects(self::once())
+            ->method('getPackageFolderSize')
+            ->with(true)
+            ->willReturn(123);
+        QUI::$PackageManager = $PackageManager;
+
+        QuiqqerCrons::calculatePackageFolderSize([], new Manager());
+    }
+
+    #[Test]
+    public function projectCalculationsHandleEmptyProjectConfiguration(): void
+    {
+        $Config = $this->createMock(Config::class);
+        $Config->method('toArray')
+            ->willReturn([]);
+        QUI::$Configs['etc/projects.ini'] = $Config;
+
+        QuiqqerCrons::calculateMediaFolderSizes([], new Manager());
+        QuiqqerCrons::updateExternalImages();
+
+        self::assertTrue(true);
     }
 }
