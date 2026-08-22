@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<crons>
+    <cron exec="\QUITests\Integration\Cron\Fixtures\ExecutableCron::execute" required="1">
+        <title>phpunit-autocreate-cron</title>
+        <description>PHPUnit autocreate fixture</description>
+        <autocreate>
+            <interval>7 8 * * 2</interval>
+            <active>0</active>
+            <params>
+                <param name="limit">12</param>
+            </params>
+        </autocreate>
+    </cron>
+</crons>
