@@ -134,6 +134,87 @@ class UpdateTest extends TestCase
     }
 
     #[Test]
+    public function automaticCheckIgnoresDevelopmentVersions(): void
+    {
+        file_put_contents($this->updatesFile, 'stale update data');
+
+        $Config = $this->createMock(Config::class);
+        $Config->expects(self::once())
+            ->method('get')
+            ->with('update', 'auto_check')
+            ->willReturn(true);
+
+        $Package = $this->createMock(Package::class);
+        $Package->method('getConfig')
+            ->willReturn($Config);
+        $Package->method('getVarDir')
+            ->willReturn(dirname($this->updatesFile) . '/');
+
+        $PackageManager = $this->createMock(PackageManager::class);
+        $PackageManager->expects(self::exactly(2))
+            ->method('getInstalledPackage')
+            ->with('quiqqer/cron')
+            ->willReturn($Package);
+        $PackageManager->expects(self::once())
+            ->method('getOutdated')
+            ->with(true)
+            ->willReturn([[
+                'package' => 'vendor/development-package',
+                'oldVersion' => 'dev-main',
+                'version' => 'dev-feature'
+            ]]);
+
+        QUI::$PackageManager = $PackageManager;
+
+        Update::check();
+
+        self::assertFileDoesNotExist($this->updatesFile);
+    }
+
+    #[Test]
+    public function enabledAutomaticUpdateReturnsCleanlyWithoutOutdatedPackages(): void
+    {
+        $GlobalConfig = $this->createMock(Config::class);
+        $GlobalConfig->expects(self::once())
+            ->method('get')
+            ->with('globals', 'maintenance')
+            ->willReturn(0);
+        $GlobalConfig->expects(self::exactly(2))
+            ->method('set')
+            ->willReturnMap([
+                ['globals', 'maintenance', 1, true],
+                ['globals', 'maintenance', 0, true]
+            ]);
+        $GlobalConfig->expects(self::exactly(2))
+            ->method('save');
+
+        $PackageConfig = $this->createMock(Config::class);
+        $PackageConfig->expects(self::once())
+            ->method('get')
+            ->with('update', 'auto_update')
+            ->willReturn(true);
+
+        $Package = $this->createMock(Package::class);
+        $Package->expects(self::once())
+            ->method('getConfig')
+            ->willReturn($PackageConfig);
+
+        $PackageManager = $this->createMock(PackageManager::class);
+        $PackageManager->expects(self::once())
+            ->method('getInstalledPackage')
+            ->with('quiqqer/cron')
+            ->willReturn($Package);
+        $PackageManager->expects(self::once())
+            ->method('getOutdated')
+            ->with(true)
+            ->willReturn([]);
+
+        $this->replaceQuiServices($GlobalConfig, $PackageManager);
+
+        Update::update();
+    }
+
+    #[Test]
     public function failedUpdateLookupStillRestoresMaintenanceMode(): void
     {
         $maintenanceModeWasRead = false;
