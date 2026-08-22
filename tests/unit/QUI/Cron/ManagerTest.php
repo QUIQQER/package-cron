@@ -1,6 +1,6 @@
 <?php
 
-namespace QUITests\Cron;
+namespace QUITests\Unit\Cron;
 
 use DateTimeImmutable;
 use DateTimeInterface;
@@ -273,7 +273,7 @@ class ManagerTest extends TestCase
     #[Test]
     public function cliOnlyFlagIsReadFromCronXmlAndDefaultsToFalse(): void
     {
-        $crons = Manager::getCronsFromFile(__DIR__ . '/fixtures/cli-only-crons.xml');
+        $crons = Manager::getCronsFromFile(__DIR__ . '/Fixtures/cli-only-crons.xml');
 
         $this->assertFalse($crons[0]['cliOnly']);
         $this->assertTrue($crons[1]['cliOnly']);

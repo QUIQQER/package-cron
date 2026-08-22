@@ -1,6 +1,6 @@
 <?php
 
-namespace QUITests\Cron\Console;
+namespace QUITests\Unit\Cron\Console;
 
 use PHPUnit\Framework\TestCase;
 use QUI\Cron\Console\ExecCrons;
