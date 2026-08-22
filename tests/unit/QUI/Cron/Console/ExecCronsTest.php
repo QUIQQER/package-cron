@@ -3,73 +3,16 @@
 namespace QUITests\Unit\Cron\Console;
 
 use PHPUnit\Framework\TestCase;
-use QUI\Cron\Console\ExecCrons;
 use RuntimeException;
+use QUITests\Unit\Cron\Console\Fixtures\ControllableExecCrons;
+
+require_once __DIR__ . '/Fixtures/ControllableExecCrons.php';
 
 class ExecCronsTest extends TestCase
 {
-    private function createTool(): ExecCrons
+    private function createTool(): ControllableExecCrons
     {
-        return new class () extends ExecCrons {
-            public int $unlockCalls = 0;
-            public int $runCalls = 0;
-            public int $listCalls = 0;
-            public int $listAllCalls = 0;
-            public bool $throwOnRead = false;
-            public bool $stopAfterUnlock = false;
-
-            /** @var array<int, string> */
-            public array $inputs = [];
-
-            /** @var array<int, string> */
-            public array $output = [];
-
-            public function run(): void
-            {
-                $this->runCalls++;
-            }
-
-            public function listCrons(): void
-            {
-                $this->listCalls++;
-            }
-
-            public function listAllCrons(): void
-            {
-                $this->listAllCalls++;
-            }
-
-            public function unlock(): void
-            {
-                $this->unlockCalls++;
-
-                if ($this->stopAfterUnlock) {
-                    throw new RuntimeException('stop-unlock');
-                }
-            }
-
-            public function writeLn(string $msg = '', bool|string $color = false, bool|string $bg = false): void
-            {
-                $this->output[] = $msg;
-            }
-
-            public function readInput(): string
-            {
-                if ($this->throwOnRead) {
-                    throw new RuntimeException('stop-read');
-                }
-
-                if (!count($this->inputs)) {
-                    throw new RuntimeException('missing-input');
-                }
-
-                return array_shift($this->inputs);
-            }
-
-            public function resetColor(): void
-            {
-            }
-        };
+        return new ControllableExecCrons();
     }
 
     public function testExecuteWithUnlockArgumentCallsUnlock(): void
@@ -124,5 +67,83 @@ class ExecCronsTest extends TestCase
         }
 
         $this->assertSame(1, $Tool->unlockCalls);
+    }
+
+    public function testExecuteDispatchesRunListListAllAndSpecificCron(): void
+    {
+        $RunTool = $this->createTool();
+        $RunTool->setArgument('--run', true);
+        $RunTool->execute();
+
+        $ListTool = $this->createTool();
+        $ListTool->setArgument('--list', true);
+        $ListTool->execute();
+
+        $ListAllTool = $this->createTool();
+        $ListAllTool->setArgument('--list-all', true);
+        $ListAllTool->execute();
+
+        $CronTool = $this->createTool();
+        $CronTool->setArgument('--cron', 42);
+        $CronTool->execute();
+
+        $this->assertSame(1, $RunTool->runCalls);
+        $this->assertSame(1, $ListTool->listCalls);
+        $this->assertSame(1, $ListAllTool->listAllCalls);
+        $this->assertSame([42], $CronTool->runCronCalls);
+    }
+
+    public function testExecuteWithoutArgumentsShowsInteractivePrompt(): void
+    {
+        $Tool = $this->createTool();
+        $Tool->throwOnRead = true;
+
+        try {
+            $Tool->execute();
+            $this->fail('Expected interactive input to stop the test tool.');
+        } catch (RuntimeException $Exception) {
+            $this->assertSame('stop-read', $Exception->getMessage());
+        }
+
+        $this->assertContains('Welcome to the Cron Manager', $Tool->output);
+    }
+
+    public function testCommandReadDispatchesInteractiveCommands(): void
+    {
+        $RunTool = $this->createTool();
+        $RunTool->inputs = ['run'];
+        $this->runUntilInputIsExhausted($RunTool);
+
+        $ListTool = $this->createTool();
+        $ListTool->inputs = ['list'];
+        $this->runUntilInputIsExhausted($ListTool);
+
+        $ListAllTool = $this->createTool();
+        $ListAllTool->inputs = ['list-all'];
+        $this->runUntilInputIsExhausted($ListAllTool);
+
+        $CronTool = $this->createTool();
+        $CronTool->inputs = ['cron', '23'];
+        $this->runUntilInputIsExhausted($CronTool);
+
+        $UnknownTool = $this->createTool();
+        $UnknownTool->inputs = ['unknown'];
+        $this->runUntilInputIsExhausted($UnknownTool);
+
+        $this->assertSame(1, $RunTool->runCalls);
+        $this->assertSame(1, $ListTool->listCalls);
+        $this->assertSame(1, $ListAllTool->listAllCalls);
+        $this->assertSame([23], $CronTool->runCronCalls);
+        $this->assertContains('Command not found, please type another command', $UnknownTool->output);
+    }
+
+    private function runUntilInputIsExhausted(ControllableExecCrons $Tool): void
+    {
+        try {
+            $Tool->commandRead();
+            $this->fail('Expected recursive command input to be exhausted.');
+        } catch (RuntimeException $Exception) {
+            $this->assertSame('missing-input', $Exception->getMessage());
+        }
     }
 }
