@@ -47,6 +47,8 @@ class Manager
     const AUTOCREATE_SCOPE_PROJECTS = 'projects';
     const AUTOCREATE_SCOPE_LANGUAGES = 'languages';
     const EXECUTION_LOCK_KEY = 'cron-execution';
+    public const CRON_TYPE_SYSTEM = 'system';
+    public const CRON_TYPE_CUSTOM = 'custom';
 
     /**
      * Flag that indicates if a cron.log is written
@@ -631,6 +633,23 @@ class Manager
         }
 
         return $result;
+    }
+
+    /**
+     * Determine the type of a cron from its cron.xml definition.
+     *
+     * Required and automatically created crons are managed by the system.
+     * Definitions without these properties are considered user-defined.
+     *
+     * @param array<string, mixed> $cron
+     */
+    public static function getCronType(array $cron): string
+    {
+        if (!empty($cron['required']) || !empty($cron['autocreate'])) {
+            return self::CRON_TYPE_SYSTEM;
+        }
+
+        return self::CRON_TYPE_CUSTOM;
     }
 
     /**

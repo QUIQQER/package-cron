@@ -35,6 +35,10 @@ define('package/quiqqer/cron/bin/Manager', [
         initialize: function (options) {
             this.parent(options);
 
+            this.$cronData = [];
+            this.$cronTypeFilter = 'all';
+            this.$TypeFilterButton = null;
+
             this.addEvents({
                 onCreate: this.$onCreate,
                 onResize: this.$onResize
@@ -67,6 +71,8 @@ define('package/quiqqer/cron/bin/Manager', [
                 };
 
                 for (let i = 0, len = result.length; i < len; i++) {
+                    result[i].cronTypeBadge = self.$createCronTypeBadge(result[i].cronType);
+
                     result[i].status = {
                         title: QUILocale.get(lg, 'cron.panel.manager.btn.toggle'),
                         icon: parseInt(result[i].active) === 1 ? 'fa fa-check' : 'fa fa-remove',
@@ -87,9 +93,8 @@ define('package/quiqqer/cron/bin/Manager', [
                     };
                 }
 
-                self.$Grid.setData({
-                    data: result
-                });
+                self.$cronData = result;
+                self.$applyCronTypeFilter();
 
             }, {
                 'package': 'quiqqer/cron'
@@ -103,19 +108,26 @@ define('package/quiqqer/cron/bin/Manager', [
          */
         $onCreate: function () {
             const self = this;
-
-            this.addButton(
-                new QUIButton({
-                    name: 'add',
-                    text: QUILocale.get(lg, 'cron.panel.manager.btn.add'),
-                    textimage: 'fa fa-plus',
-                    events: {
-                        onClick: function () {
-                            self.openAddCronWindow();
-                        }
-                    }
-                })
+            const addButtonTitle = QUILocale.get(lg, 'cron.panel.manager.btn.add');
+            const cronserviceButtonTitle = QUILocale.get(
+                lg,
+                'cron.panel.manager.btn.cronservice.register'
             );
+            const deleteButtonTitle = QUILocale.get(lg, 'cron.panel.manager.btn.delete');
+            const filterButtonTitle = QUILocale.get(lg, 'cron.panel.manager.btn.filter');
+            const AddButton = new QUIButton({
+                name: 'add',
+                title: addButtonTitle,
+                icon: 'fa fa-plus',
+                events: {
+                    onClick: function () {
+                        self.openAddCronWindow();
+                    }
+                }
+            });
+
+            this.addButton(AddButton);
+            AddButton.getElm().setAttribute('aria-label', addButtonTitle);
 
             this.addButton(new QUIButtonSeparator());
 
@@ -132,26 +144,13 @@ define('package/quiqqer/cron/bin/Manager', [
                 })
             );
 
-            this.addButton(
-                new QUIButton({
-                    name: 'delete',
-                    text: QUILocale.get(lg, 'cron.panel.manager.btn.delete'),
-                    textimage: 'fa fa-trash',
-                    events: {
-                        onClick: function () {
-                            self.deleteMarkedCrons();
-                        }
-                    }
-                })
-            );
-
             this.addButton(new QUIButtonSeparator());
 
             this.addButton(
                 new QUIButton({
                     name: 'history',
                     text: QUILocale.get(lg, 'cron.panel.manager.btn.history'),
-                    textimage: 'fa fa-long-arrow-right',
+                    textimage: 'fa fa-history',
                     events: {
                         onClick: function () {
                             self.showHistory();
@@ -160,23 +159,101 @@ define('package/quiqqer/cron/bin/Manager', [
                 })
             );
 
+            const DeleteButton = new QUIButton({
+                name: 'delete',
+                title: deleteButtonTitle,
+                icon: 'fa fa-trash',
+                styles: {
+                    'float': 'right'
+                },
+                events: {
+                    onClick: function () {
+                        self.deleteMarkedCrons();
+                    }
+                }
+            });
+
+            this.addButton(DeleteButton);
+            DeleteButton.getElm().setAttribute('aria-label', deleteButtonTitle);
+
+            this.addButton(new QUIButtonSeparator({
+                styles: {
+                    'float': 'right'
+                }
+            }));
+
+            this.$TypeFilterButton = new QUIButton({
+                name: 'filter',
+                title: filterButtonTitle,
+                icon: 'fa fa-filter',
+                menuCorner: 'topRight',
+                styles: {
+                    'float': 'right'
+                },
+                events: {
+                    onChange: function (Button, Item) {
+                        self.$setCronTypeFilter(Button, Item);
+                    }
+                }
+            });
+
+            this.addButton(this.$TypeFilterButton);
+            this.$TypeFilterButton.getElm().setAttribute('aria-label', filterButtonTitle);
+
+            [
+                {
+                    type: 'all',
+                    locale: 'cron.panel.manager.filter.type.all'
+                },
+                {
+                    type: 'system',
+                    locale: 'cron.panel.manager.filter.type.system'
+                },
+                {
+                    type: 'custom',
+                    locale: 'cron.panel.manager.filter.type.custom'
+                }
+            ].forEach(function (filter) {
+                self.$TypeFilterButton.appendChild({
+                    name: 'filter-' + filter.type,
+                    text: QUILocale.get(lg, filter.locale),
+                    cronType: filter.type,
+                    checkable: true,
+                    events: {
+                        onInject: function (Item) {
+                            if (filter.type === self.$cronTypeFilter) {
+                                Item.check();
+                            }
+                        }
+                    }
+                });
+            });
+
             this.getButtons('edit').disable();
             this.getButtons('delete').disable();
 
+            this.addButton(new QUIButtonSeparator({
+                styles: {
+                    'float': 'right'
+                }
+            }));
 
-            this.addButton(new QUIButtonSeparator());
-            this.addButton(
-                new QUIButton({
-                    name: 'cronservice',
-                    text: QUILocale.get(lg, 'cron.panel.manager.btn.cronservice.register'),
-                    textimage: 'fa fa-cloud',
-                    events: {
-                        onClick: function () {
-                            self.registerCronservice();
-                        }
+            const CronserviceButton = new QUIButton({
+                name: 'cronservice',
+                title: cronserviceButtonTitle,
+                icon: 'fa fa-cloud',
+                styles: {
+                    'float': 'right'
+                },
+                events: {
+                    onClick: function () {
+                        self.registerCronservice();
                     }
-                })
-            );
+                }
+            });
+
+            this.addButton(CronserviceButton);
+            CronserviceButton.getElm().setAttribute('aria-label', cronserviceButtonTitle);
 
             const Content = this.getContent(),
                 Container = new Element('div', {
@@ -214,6 +291,12 @@ define('package/quiqqer/cron/bin/Manager', [
                         dataIndex: 'title',
                         dataType: 'string',
                         width: 150
+                    },
+                    {
+                        header: QUILocale.get(lg, 'cron.type'),
+                        dataIndex: 'cronTypeBadge',
+                        dataType: 'node',
+                        width: 80
                     },
                     {
                         header: QUILocale.get(lg, 'cron.min'),
@@ -304,6 +387,91 @@ define('package/quiqqer/cron/bin/Manager', [
             });
 
             this.loadCrons();
+        },
+
+        /**
+         * Create a badge for the cron type grid column.
+         *
+         * @param {String} cronType
+         * @return {HTMLElement}
+         */
+        $createCronTypeBadge: function (cronType) {
+            const Badge = document.createElement('span');
+            const isSystemCron = cronType === 'system';
+
+            Badge.classList.add(
+                'badge',
+                'badge-pill',
+                isSystemCron ? 'badge-info' : 'badge-success'
+            );
+            Badge.textContent = QUILocale.get(
+                lg,
+                isSystemCron
+                    ? 'cron.panel.manager.filter.type.system'
+                    : 'cron.panel.manager.filter.type.custom'
+            );
+
+            return Badge;
+        },
+
+        /**
+         * Apply the selected cron type filter to the grid data.
+         *
+         * @return {self}
+         */
+        $applyCronTypeFilter: function () {
+            if (!this.$Grid) {
+                return this;
+            }
+
+            let data = this.$cronData.slice();
+
+            if (this.$cronTypeFilter !== 'all') {
+                data = data.filter(function (cron) {
+                    return cron.cronType === this.$cronTypeFilter;
+                }.bind(this));
+            }
+
+            this.$Grid.setData({
+                data: data
+            });
+
+            this.getButtons('edit').disable();
+            this.getButtons('delete').disable();
+
+            return this;
+        },
+
+        /**
+         * Select a cron type filter from the filter button menu.
+         *
+         * @param {Object} Button
+         * @param {Object} Item
+         * @return {self}
+         */
+        $setCronTypeFilter: function (Button, Item) {
+            const cronType = Item.getAttribute('cronType');
+
+            if (!['all', 'system', 'custom'].includes(cronType)) {
+                return this;
+            }
+
+            this.$cronTypeFilter = cronType;
+
+            Button.getChildren().forEach(function (FilterItem) {
+                if (FilterItem.getAttribute('cronType') === cronType) {
+                    FilterItem.check();
+                    return;
+                }
+
+                FilterItem.uncheck();
+            });
+
+            Button.getContextMenu(function (Menu) {
+                Menu.hide();
+            });
+
+            return this.$applyCronTypeFilter();
         },
 
         /**

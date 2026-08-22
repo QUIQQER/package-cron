@@ -234,4 +234,21 @@ class ManagerTest extends TestCase
 
         $this->assertSame([], $Manager->executedCronIds);
     }
+
+    #[Test]
+    public function cronTypeIsDeterminedFromDefinitionMetadata(): void
+    {
+        $this->assertSame(
+            Manager::CRON_TYPE_SYSTEM,
+            Manager::getCronType(['required' => true, 'autocreate' => []])
+        );
+        $this->assertSame(
+            Manager::CRON_TYPE_SYSTEM,
+            Manager::getCronType(['required' => false, 'autocreate' => [['interval' => '0 0 * * *']]])
+        );
+        $this->assertSame(
+            Manager::CRON_TYPE_CUSTOM,
+            Manager::getCronType(['required' => false, 'autocreate' => []])
+        );
+    }
 }

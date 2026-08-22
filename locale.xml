@@ -496,6 +496,10 @@
             <de><![CDATA[Aufgabentitel]]></de>
             <en><![CDATA[Cron title]]></en>
         </locale>
+        <locale name="cron.type">
+            <de><![CDATA[Typ]]></de>
+            <en><![CDATA[Type]]></en>
+        </locale>
         <locale name="cron.start_date">
             <de><![CDATA[Start]]></de>
             <en><![CDATA[Start]]></en>
@@ -581,6 +585,22 @@
         <locale name="cron.panel.manager.btn.delete">
             <de><![CDATA[Markierte Aufgabe(n) löschen]]></de>
             <en><![CDATA[Delete marked crons]]></en>
+        </locale>
+        <locale name="cron.panel.manager.btn.filter">
+            <de><![CDATA[Cron-Typ filtern]]></de>
+            <en><![CDATA[Filter cron type]]></en>
+        </locale>
+        <locale name="cron.panel.manager.filter.type.all">
+            <de><![CDATA[Alle]]></de>
+            <en><![CDATA[All]]></en>
+        </locale>
+        <locale name="cron.panel.manager.filter.type.system">
+            <de><![CDATA[System]]></de>
+            <en><![CDATA[System]]></en>
+        </locale>
+        <locale name="cron.panel.manager.filter.type.custom">
+            <de><![CDATA[Benutzerdefiniert]]></de>
+            <en><![CDATA[Custom]]></en>
         </locale>
         <locale name="cron.panel.manager.btn.history">
             <de><![CDATA[Aufgabenverlauf]]></de>
