@@ -302,8 +302,8 @@ class EventHandler
     /**
      * Get all crons to create for autocreate scope "projects".
      *
-     * @param array<string, string> $params
-     * @return array<int, array<string, string>>
+     * @param array<int, array{name: string, value: string}> $params
+     * @return array<int, array<int, array{name: string, value: string}>>
      */
     protected static function getCronsToCreateForProjectsScope(array $params): array
     {
@@ -323,11 +323,11 @@ class EventHandler
             foreach ($Project->getLanguages() as $language) {
                 $projectCronParams = $params;
 
-                foreach ($projectCronParams as $k => $v) {
-                    $projectCronParams[$k] = str_replace(
+                foreach ($projectCronParams as $key => $param) {
+                    $projectCronParams[$key]['value'] = str_replace(
                         ['[projectName]', '[projectLang]'],
                         [$projectName, $language],
-                        $v
+                        $param['value']
                     );
                 }
 
@@ -341,8 +341,8 @@ class EventHandler
     /**
      * Get all crons to create for autocreate scope "languages".
      *
-     * @param array<string, string> $params
-     * @return array<int, array<string, string>>
+     * @param array<int, array{name: string, value: string}> $params
+     * @return array<int, array<int, array{name: string, value: string}>>
      */
     protected static function getCronsToCreateForLanguagesScope(array $params): array
     {
@@ -351,11 +351,11 @@ class EventHandler
         foreach (QUI::availableLanguages() as $language) {
             $projectCronParams = $params;
 
-            foreach ($projectCronParams as $k => $v) {
-                $projectCronParams[$k] = str_replace(
+            foreach ($projectCronParams as $key => $param) {
+                $projectCronParams[$key]['value'] = str_replace(
                     ['[lang]',],
                     [$language],
-                    $v
+                    $param['value']
                 );
             }
 

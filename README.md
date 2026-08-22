@@ -28,6 +28,21 @@ composer require "quiqqer/cron" "dev-master"
 ```
 
 
+CLI-only crons
+--------------
+
+Long-running crons can be restricted to command-line execution in `cron.xml`:
+
+```xml
+<cron exec="\Vendor\Package\Cron::execute" cliOnly="true">
+    <!-- title and description -->
+</cron>
+```
+
+If `cliOnly` is omitted or set to `false`, the cron remains available through
+both CLI and web execution.
+
+
 Contribute
 ----------
 

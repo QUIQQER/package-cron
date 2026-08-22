@@ -1,38 +1,22 @@
 <?php
 
-namespace QUITests\Cron;
+namespace QUITests\Unit\Cron;
 
 use DateTimeImmutable;
-use DateTimeInterface;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use QUI\Cron\Manager;
+use QUITests\Unit\Cron\Fixtures\RecordingExecutionManager;
+use QUITests\Unit\Cron\Fixtures\TimedManager;
+
+require_once __DIR__ . '/Fixtures/RecordingExecutionManager.php';
+require_once __DIR__ . '/Fixtures/TimedManager.php';
 
 class ManagerTest extends TestCase
 {
     private function createManager(DateTimeImmutable $currentTime): Manager
     {
-        return new class ($currentTime) extends Manager {
-            protected DateTimeImmutable $currentTime;
-
-            public function __construct(DateTimeImmutable $currentTime)
-            {
-                $this->currentTime = $currentTime;
-            }
-
-            protected function getCurrentDateTime(): DateTimeImmutable
-            {
-                return $this->currentTime;
-            }
-
-            /**
-             * @param array<string, mixed> $entry
-             */
-            public function isCronDue(array $entry, DateTimeImmutable $lastExecutionDate): bool
-            {
-                return $this->shouldExecuteCron($entry, $lastExecutionDate);
-            }
-        };
+        return new TimedManager($currentTime);
     }
 
     /**
@@ -43,6 +27,7 @@ class ManagerTest extends TestCase
         return [
             'id' => 60,
             'title' => 'Daily cron',
+            'exec' => '\\Vendor\\Package\\Cron::execute',
             'min' => '0',
             'hour' => '22',
             'day' => '*',
@@ -55,58 +40,24 @@ class ManagerTest extends TestCase
 
     /**
      * @param array<int, bool> $updateStates
+     * @param array<int, array<string, mixed>> $availableCrons
      */
     private function createExecutionManager(
         array $updateStates = [],
-        ?int $stopAfterCronId = null
-    ): Manager {
-        return new class ($updateStates, $stopAfterCronId) extends Manager {
-            /** @var array<int, int> */
-            public array $executedCronIds = [];
-
-            /**
-             * @param array<int, bool> $updateStates
-             */
-            public function __construct(
-                private array $updateStates,
-                private readonly ?int $stopAfterCronId
-            ) {
-            }
-
-            protected function isSystemUpdateRunning(): bool
-            {
-                return array_shift($this->updateStates) ?? false;
-            }
-
-            /**
-             * @param array<string, mixed> $entry
-             */
-            protected function shouldExecuteCron(
-                array $entry,
-                DateTimeInterface $lastExecutionDate
-            ): bool {
-                return true;
-            }
-
-            public function executeCron(int $cronId): static
-            {
-                $this->executedCronIds[] = $cronId;
-
-                if ($cronId === $this->stopAfterCronId) {
-                    $this->stopAfterCurrentCron();
-                }
-
-                return $this;
-            }
-
-            /**
-             * @param array<int, array<string, mixed>> $entries
-             */
-            public function executeEntries(array $entries): void
-            {
-                $this->executeCronList($entries, new DateTimeImmutable('+1 hour'));
-            }
-        };
+        ?int $stopAfterCronId = null,
+        bool $cliExecution = true,
+        array $availableCrons = [],
+        bool $cronDue = true,
+        array $failingCronIds = []
+    ): RecordingExecutionManager {
+        return new RecordingExecutionManager(
+            $updateStates,
+            $stopAfterCronId,
+            $cliExecution,
+            $availableCrons,
+            $cronDue,
+            $failingCronIds
+        );
     }
 
     /**
@@ -117,10 +68,12 @@ class ManagerTest extends TestCase
         $firstEntry = $this->createEntry();
         $firstEntry['id'] = 1;
         $firstEntry['title'] = 'Automatic update';
+        $firstEntry['exec'] = '\\Vendor\\Package\\Cron::cliOnly';
 
         $secondEntry = $this->createEntry();
         $secondEntry['id'] = 2;
         $secondEntry['title'] = 'Cron after update';
+        $secondEntry['exec'] = '\\Vendor\\Package\\Cron::regular';
 
         return [$firstEntry, $secondEntry];
     }
@@ -231,6 +184,107 @@ class ManagerTest extends TestCase
         $Manager = $this->createExecutionManager([true]);
 
         $Manager->executeEntries($this->createExecutionEntries());
+
+        $this->assertSame([], $Manager->executedCronIds);
+    }
+
+    #[Test]
+    public function cronTypeIsDeterminedFromDefinitionMetadata(): void
+    {
+        $this->assertSame(
+            Manager::CRON_TYPE_SYSTEM,
+            Manager::getCronType(['required' => true, 'autocreate' => []])
+        );
+        $this->assertSame(
+            Manager::CRON_TYPE_SYSTEM,
+            Manager::getCronType(['required' => false, 'autocreate' => [['interval' => '0 0 * * *']]])
+        );
+        $this->assertSame(
+            Manager::CRON_TYPE_CUSTOM,
+            Manager::getCronType(['required' => false, 'autocreate' => []])
+        );
+    }
+
+    #[Test]
+    public function cliOnlyFlagIsReadFromCronXmlAndDefaultsToFalse(): void
+    {
+        $crons = Manager::getCronsFromFile(__DIR__ . '/Fixtures/cli-only-crons.xml');
+
+        $this->assertFalse($crons[0]['cliOnly']);
+        $this->assertTrue($crons[1]['cliOnly']);
+        $this->assertTrue($crons[2]['cliOnly']);
+        $this->assertFalse($crons[3]['cliOnly']);
+    }
+
+    #[Test]
+    public function webExecutionSkipsCliOnlyCrons(): void
+    {
+        $Manager = $this->createExecutionManager(
+            cliExecution: false,
+            availableCrons: [[
+                'exec' => '\\Vendor\\Package\\Cron::cliOnly',
+                'cliOnly' => true
+            ]]
+        );
+
+        $Manager->executeEntries($this->createExecutionEntries());
+
+        $this->assertSame([2], $Manager->executedCronIds);
+    }
+
+    #[Test]
+    public function webExecutionAllowsCronsWithoutCliOnlyFlag(): void
+    {
+        $Manager = $this->createExecutionManager(cliExecution: false);
+
+        $Manager->executeEntries($this->createExecutionEntries());
+
+        $this->assertSame([1, 2], $Manager->executedCronIds);
+    }
+
+    #[Test]
+    public function cliExecutionAllowsCliOnlyCrons(): void
+    {
+        $Manager = $this->createExecutionManager(
+            availableCrons: [[
+                'exec' => '\\Vendor\\Package\\Cron::cliOnly',
+                'cliOnly' => true
+            ]]
+        );
+
+        $Manager->executeEntries($this->createExecutionEntries());
+
+        $this->assertSame([1, 2], $Manager->executedCronIds);
+    }
+
+    #[Test]
+    public function executionListSkipsCronThatIsNotDue(): void
+    {
+        $Manager = $this->createExecutionManager(cronDue: false);
+
+        $Manager->executeEntries($this->createExecutionEntries());
+
+        $this->assertSame([], $Manager->executedCronIds);
+    }
+
+    #[Test]
+    public function executionListContinuesAfterCronFailure(): void
+    {
+        $Manager = $this->createExecutionManager(failingCronIds: [1]);
+
+        $Manager->executeEntries($this->createExecutionEntries());
+
+        $this->assertSame([2], $Manager->executedCronIds);
+    }
+
+    #[Test]
+    public function executionListSkipsEntryWithInvalidLastExecutionDate(): void
+    {
+        $Manager = $this->createExecutionManager();
+        $entries = $this->createExecutionEntries();
+        $entries[0]['lastexec'] = 'invalid date fixture';
+
+        $Manager->executeEntries([$entries[0]]);
 
         $this->assertSame([], $Manager->executedCronIds);
     }
