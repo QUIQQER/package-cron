@@ -300,6 +300,50 @@ class UpdateTest extends TestCase
     }
 
     #[Test]
+    public function failedPackageUpdateSendsErrorMailAndRestoresMaintenanceMode(): void
+    {
+        $sentBody = '';
+        $GlobalConfig = $this->createGlobalConfigMock();
+        $GlobalConfig->expects(self::exactly(2))
+            ->method('set')
+            ->willReturnMap([
+                ['globals', 'maintenance', 1, true],
+                ['globals', 'maintenance', 0, true]
+            ]);
+        $GlobalConfig->expects(self::exactly(2))
+            ->method('save');
+
+        $PackageManager = $this->createMock(PackageManager::class);
+        $PackageManager->expects(self::once())
+            ->method('getOutdated')
+            ->with(true)
+            ->willReturn([$this->createOutdatedPackage()]);
+        $PackageManager->expects(self::once())
+            ->method('update')
+            ->willThrowException(new \RuntimeException('Update fixture failed'));
+
+        $MailManager = $this->createMock(MailManager::class);
+        $MailManager->expects(self::once())
+            ->method('send')
+            ->willReturnCallback(static function (string $to, string $subject, string $body) use (&$sentBody): void {
+                $sentBody = $body;
+            });
+
+        $Manager = $this->createMock(Manager::class);
+        $Manager->expects(self::once())
+            ->method('stopAfterCurrentCron');
+
+        QUI::$Conf = $GlobalConfig;
+        QUI::$PackageManager = $PackageManager;
+        QUI::$MailManager = $MailManager;
+
+        Update::updateExecute($Manager);
+
+        self::assertStringContainsString('<li>vendor/package: 1.0.0 -> 1.1.0</li>', $sentBody);
+        self::assertStringContainsString('</ul>', $sentBody);
+    }
+
+    #[Test]
     public function failedUpdateLookupStillRestoresMaintenanceMode(): void
     {
         $maintenanceModeWasRead = false;
