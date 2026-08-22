@@ -29,6 +29,7 @@ use function explode;
 use function is_callable;
 use function is_null;
 use function json_decode;
+use function max;
 use function microtime;
 use function round;
 use function time;
@@ -817,8 +818,9 @@ class Manager
         $maxResults = 20;
 
         if (isset($params['perPage']) && isset($params['page'])) {
-            $firstResult = (int)$params['page'] - 1;
-            $maxResults = (int)$params['perPage'];
+            $page = max(1, (int)$params['page']);
+            $maxResults = max(1, (int)$params['perPage']);
+            $firstResult = ($page - 1) * $maxResults;
         }
 
         $QueryBuilder = QUI::getQueryBuilder();
