@@ -92,7 +92,7 @@ class Update
                 $updateString .= '<li>' . $packageName . ': ' . $from . ' -> ' . $to . '</li>';
             }
 
-            $updateString .= '<ul>';
+            $updateString .= '</ul>';
 
 
             QUI::getMailManager()->send(
@@ -183,7 +183,7 @@ class Update
                 $updateString .= '<li>' . $packageName . ': ' . $from . ' -> ' . $to . '</li>';
             }
 
-            $updateString .= '<ul>';
+            $updateString .= '</ul>';
 
             $Manager?->stopAfterCurrentCron();
 

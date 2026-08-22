@@ -8,6 +8,8 @@ use PHPUnit\Framework\TestCase;
 use QUI;
 use QUI\Config;
 use QUI\Cron\Update;
+use QUI\Cron\Manager;
+use QUI\Mail\Manager as MailManager;
 use QUI\Package\Manager as PackageManager;
 use QUI\Package\Package;
 
@@ -16,6 +18,8 @@ class UpdateTest extends TestCase
     private ?Config $previousConfig = null;
 
     private ?PackageManager $previousPackageManager = null;
+
+    private ?MailManager $previousMailManager = null;
 
     private string $updatesFile;
 
@@ -29,6 +33,7 @@ class UpdateTest extends TestCase
 
         $this->previousConfig = QUI::$Conf;
         $this->previousPackageManager = QUI::$PackageManager;
+        $this->previousMailManager = QUI::$MailManager;
         $this->updatesFile = QUI::getPackage('quiqqer/cron')->getVarDir() . 'updates';
         $this->updatesFileExisted = file_exists($this->updatesFile);
 
@@ -41,6 +46,7 @@ class UpdateTest extends TestCase
     {
         QUI::$Conf = $this->previousConfig;
         QUI::$PackageManager = $this->previousPackageManager;
+        QUI::$MailManager = $this->previousMailManager;
 
         if ($this->updatesFileExisted && $this->previousUpdatesFileContent !== false) {
             file_put_contents($this->updatesFile, $this->previousUpdatesFileContent);
@@ -215,6 +221,85 @@ class UpdateTest extends TestCase
     }
 
     #[Test]
+    public function updateCheckMailContainsClosedPackageList(): void
+    {
+        $sentBody = '';
+        $GlobalConfig = $this->createGlobalConfigMock();
+        $Package = $this->createMock(Package::class);
+        $Package->method('getVarDir')
+            ->willReturn(dirname($this->updatesFile) . '/');
+
+        $PackageManager = $this->createMock(PackageManager::class);
+        $PackageManager->expects(self::once())
+            ->method('getOutdated')
+            ->with(true)
+            ->willReturn([$this->createOutdatedPackage()]);
+        $PackageManager->expects(self::once())
+            ->method('getInstalledPackage')
+            ->with('quiqqer/cron')
+            ->willReturn($Package);
+
+        $MailManager = $this->createMock(MailManager::class);
+        $MailManager->expects(self::once())
+            ->method('send')
+            ->willReturnCallback(static function (string $to, string $subject, string $body) use (&$sentBody): void {
+                $sentBody = $body;
+            });
+
+        QUI::$Conf = $GlobalConfig;
+        QUI::$PackageManager = $PackageManager;
+        QUI::$MailManager = $MailManager;
+
+        Update::checkExecute();
+
+        self::assertStringContainsString('<ul>', $sentBody);
+        self::assertStringContainsString('</ul>', $sentBody);
+    }
+
+    #[Test]
+    public function updateSuccessMailContainsClosedPackageList(): void
+    {
+        $sentBody = '';
+        $GlobalConfig = $this->createGlobalConfigMock();
+        $GlobalConfig->expects(self::exactly(2))
+            ->method('set')
+            ->willReturnMap([
+                ['globals', 'maintenance', 1, true],
+                ['globals', 'maintenance', 0, true]
+            ]);
+        $GlobalConfig->expects(self::exactly(2))
+            ->method('save');
+
+        $PackageManager = $this->createMock(PackageManager::class);
+        $PackageManager->expects(self::once())
+            ->method('getOutdated')
+            ->with(true)
+            ->willReturn([$this->createOutdatedPackage()]);
+        $PackageManager->expects(self::once())
+            ->method('update');
+
+        $MailManager = $this->createMock(MailManager::class);
+        $MailManager->expects(self::once())
+            ->method('send')
+            ->willReturnCallback(static function (string $to, string $subject, string $body) use (&$sentBody): void {
+                $sentBody = $body;
+            });
+
+        $Manager = $this->createMock(Manager::class);
+        $Manager->expects(self::once())
+            ->method('stopAfterCurrentCron');
+
+        QUI::$Conf = $GlobalConfig;
+        QUI::$PackageManager = $PackageManager;
+        QUI::$MailManager = $MailManager;
+
+        Update::updateExecute($Manager);
+
+        self::assertStringContainsString('<ul>', $sentBody);
+        self::assertStringContainsString('</ul>', $sentBody);
+    }
+
+    #[Test]
     public function failedUpdateLookupStillRestoresMaintenanceMode(): void
     {
         $maintenanceModeWasRead = false;
@@ -290,5 +375,33 @@ class UpdateTest extends TestCase
     ): void {
         QUI::$Conf = $Config;
         QUI::$PackageManager = $PackageManager;
+    }
+
+    private function createGlobalConfigMock(): Config & MockObject
+    {
+        $Config = $this->createMock(Config::class);
+        $Config->method('get')
+            ->willReturnCallback(static function (string $section, ?string $key): string | int {
+                return match ([$section, $key]) {
+                    ['globals', 'maintenance'] => 0,
+                    ['globals', 'host'] => 'example.test',
+                    ['mail', 'admin_mail'] => 'admin@example.test',
+                    default => ''
+                };
+            });
+
+        return $Config;
+    }
+
+    /**
+     * @return array{package: string, oldVersion: string, version: string}
+     */
+    private function createOutdatedPackage(): array
+    {
+        return [
+            'package' => 'vendor/package',
+            'oldVersion' => '1.0.0',
+            'version' => '1.1.0'
+        ];
     }
 }
