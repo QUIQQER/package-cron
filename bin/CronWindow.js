@@ -43,11 +43,19 @@ define('package/quiqqer/cron/bin/CronWindow', [
         },
 
         initialize: function (options) {
+            options = options || {};
+
+            if (options.cronId && !options.title) {
+                options.title = QUILocale.get(lg, 'cron.window.edit.cron.title');
+            }
+
             this.parent(options);
 
             this.$available = [];
 
             this.$List = null;
+            this.$Description = null;
+            this.$DescriptionText = null;
             this.$CronTimeControl = null;
 
             this.$ParamsControl = null;
@@ -66,6 +74,9 @@ define('package/quiqqer/cron/bin/CronWindow', [
                 Content = this.getContent();
 
             Content.set('html', cronWindowTemplate);
+
+            this.$Description = Content.querySelector('[data-name="description"]');
+            this.$DescriptionText = Content.querySelector('[data-name="description-text"]');
 
             // locale
             Content.getElement(
@@ -89,31 +100,22 @@ define('package/quiqqer/cron/bin/CronWindow', [
             this.$Params = Content.getElement('[name="params"]');
 
             this.$List.addEvent('change', function (val) {
-                if (!self.$available) {
-                    return;
-                }
+                const selectedCrons = self.$available.filter(function (cron) {
+                    return cron.exec === val;
+                });
+                const selectedCron = selectedCrons[0];
+                const description = selectedCron?.description ?? '';
+
+                self.$Description.hidden = description === '';
+                self.$DescriptionText.textContent = description;
 
                 if (!self.$ParamsControl) {
                     return;
                 }
 
-                var i, len, p, plen;
-                var available = self.$available,
-
-                    allowedParams = [],
-                    params = [];
-
-                for (i = 0, len = available.length; i < len; i++) {
-                    if (available[i].exec != val) {
-                        continue;
-                    }
-
-                    params = available[i].params;
-
-                    for (p = 0, plen = params.length; p < plen; p++) {
-                        allowedParams.push(params[p]);
-                    }
-                }
+                const allowedParams = selectedCrons.reduce(function (params, cron) {
+                    return params.concat(cron.params);
+                }, []);
 
                 self.$ParamsControl.setAttribute('allowedParams', allowedParams);
             });

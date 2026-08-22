@@ -558,6 +558,10 @@
             <de><![CDATA[Aufgabe hinzufügen]]></de>
             <en><![CDATA[Add Cron]]></en>
         </locale>
+        <locale name="cron.window.edit.cron.title">
+            <de><![CDATA[Aufgabe bearbeiten]]></de>
+            <en><![CDATA[Edit cron]]></en>
+        </locale>
         <locale name="cron.panel.manager.btn.toggle">
             <de><![CDATA[Aufgabe aktivieren / deaktivieren]]></de>
             <en><![CDATA[De/Activate cron]]></en>
