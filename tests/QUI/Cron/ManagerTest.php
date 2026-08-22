@@ -43,6 +43,7 @@ class ManagerTest extends TestCase
         return [
             'id' => 60,
             'title' => 'Daily cron',
+            'exec' => '\\Vendor\\Package\\Cron::execute',
             'min' => '0',
             'hour' => '22',
             'day' => '*',
@@ -55,12 +56,15 @@ class ManagerTest extends TestCase
 
     /**
      * @param array<int, bool> $updateStates
+     * @param array<int, array<string, mixed>> $availableCrons
      */
     private function createExecutionManager(
         array $updateStates = [],
-        ?int $stopAfterCronId = null
+        ?int $stopAfterCronId = null,
+        bool $cliExecution = true,
+        array $availableCrons = []
     ): Manager {
-        return new class ($updateStates, $stopAfterCronId) extends Manager {
+        return new class ($updateStates, $stopAfterCronId, $cliExecution, $availableCrons) extends Manager {
             /** @var array<int, int> */
             public array $executedCronIds = [];
 
@@ -69,8 +73,20 @@ class ManagerTest extends TestCase
              */
             public function __construct(
                 private array $updateStates,
-                private readonly ?int $stopAfterCronId
+                private readonly ?int $stopAfterCronId,
+                private readonly bool $cliExecution,
+                private readonly array $availableCrons
             ) {
+            }
+
+            public function getAvailableCrons(): array
+            {
+                return $this->availableCrons;
+            }
+
+            protected function isCliExecution(): bool
+            {
+                return $this->cliExecution;
             }
 
             protected function isSystemUpdateRunning(): bool
@@ -117,10 +133,12 @@ class ManagerTest extends TestCase
         $firstEntry = $this->createEntry();
         $firstEntry['id'] = 1;
         $firstEntry['title'] = 'Automatic update';
+        $firstEntry['exec'] = '\\Vendor\\Package\\Cron::cliOnly';
 
         $secondEntry = $this->createEntry();
         $secondEntry['id'] = 2;
         $secondEntry['title'] = 'Cron after update';
+        $secondEntry['exec'] = '\\Vendor\\Package\\Cron::regular';
 
         return [$firstEntry, $secondEntry];
     }
@@ -250,5 +268,57 @@ class ManagerTest extends TestCase
             Manager::CRON_TYPE_CUSTOM,
             Manager::getCronType(['required' => false, 'autocreate' => []])
         );
+    }
+
+    #[Test]
+    public function cliOnlyFlagIsReadFromCronXmlAndDefaultsToFalse(): void
+    {
+        $crons = Manager::getCronsFromFile(__DIR__ . '/fixtures/cli-only-crons.xml');
+
+        $this->assertFalse($crons[0]['cliOnly']);
+        $this->assertTrue($crons[1]['cliOnly']);
+        $this->assertTrue($crons[2]['cliOnly']);
+        $this->assertFalse($crons[3]['cliOnly']);
+    }
+
+    #[Test]
+    public function webExecutionSkipsCliOnlyCrons(): void
+    {
+        $Manager = $this->createExecutionManager(
+            cliExecution: false,
+            availableCrons: [[
+                'exec' => '\\Vendor\\Package\\Cron::cliOnly',
+                'cliOnly' => true
+            ]]
+        );
+
+        $Manager->executeEntries($this->createExecutionEntries());
+
+        $this->assertSame([2], $Manager->executedCronIds);
+    }
+
+    #[Test]
+    public function webExecutionAllowsCronsWithoutCliOnlyFlag(): void
+    {
+        $Manager = $this->createExecutionManager(cliExecution: false);
+
+        $Manager->executeEntries($this->createExecutionEntries());
+
+        $this->assertSame([1, 2], $Manager->executedCronIds);
+    }
+
+    #[Test]
+    public function cliExecutionAllowsCliOnlyCrons(): void
+    {
+        $Manager = $this->createExecutionManager(
+            availableCrons: [[
+                'exec' => '\\Vendor\\Package\\Cron::cliOnly',
+                'cliOnly' => true
+            ]]
+        );
+
+        $Manager->executeEntries($this->createExecutionEntries());
+
+        $this->assertSame([1, 2], $Manager->executedCronIds);
     }
 }

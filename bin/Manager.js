@@ -71,6 +71,8 @@ define('package/quiqqer/cron/bin/Manager', [
                 };
 
                 for (let i = 0, len = result.length; i < len; i++) {
+                    const cliOnly = result[i].cliOnly === true;
+
                     result[i].cronTypeBadge = self.$createCronTypeBadge(result[i].cronType);
 
                     result[i].status = {
@@ -84,8 +86,14 @@ define('package/quiqqer/cron/bin/Manager', [
 
                     result[i].play = {
                         name: 'cron-play-button-' + result[i].id,
-                        title: QUILocale.get(lg, 'cron.panel.manager.btn.execute'),
-                        icon: 'fa fa-play',
+                        title: QUILocale.get(
+                            lg,
+                            cliOnly
+                                ? 'message.cron.cli_only'
+                                : 'cron.panel.manager.btn.execute'
+                        ),
+                        icon: cliOnly ? 'fa fa-terminal' : 'fa fa-play',
+                        disabled: cliOnly,
                         cronId: result[i].id,
                         events: {
                             onClick: execCron

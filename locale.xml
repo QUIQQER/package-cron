@@ -36,6 +36,10 @@
             <de><![CDATA[Verstanden]]></de>
             <en><![CDATA[Understood]]></en>
         </locale>
+        <locale name="message.cron.cli_only">
+            <de><![CDATA[Diese Aufgabe kann ausschließlich über die Kommandozeile ausgeführt werden.]]></de>
+            <en><![CDATA[This cron can only be executed from the command line.]]></en>
+        </locale>
     </groups>
     <groups name="quiqqer/cron" datatype="php">
         <locale name="message.ajax.cronservice.general_error">
