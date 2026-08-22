@@ -10,6 +10,7 @@ use QUI\Cron\Manager;
 class ManagerDatabaseTest extends TestCase
 {
     private const FIXTURE_TITLE = 'phpunit-cron-manager-pagination';
+    private const FIXTURE_EXEC = '\\QUITests\\Integration\\Cron\\FixtureCron::execute';
 
     private int $cronId;
 
@@ -25,7 +26,7 @@ class ManagerDatabaseTest extends TestCase
         $Connection = QUI::getDataBaseConnection();
         $Connection->insert(QUI\Utils\Doctrine::quoteIdentifier(Manager::table()), [
             'active' => 0,
-            'exec' => '\\QUITests\\Integration\\Cron\\FixtureCron::execute',
+            'exec' => self::FIXTURE_EXEC,
             'title' => self::FIXTURE_TITLE,
             'min' => 0,
             'hour' => 0,
@@ -92,6 +93,60 @@ class ManagerDatabaseTest extends TestCase
                 static fn(array $entry): int => (int)$entry['id'],
                 $secondPage
             )
+        );
+    }
+
+    #[Test]
+    public function cronWithExecAndParamsExistsMatchesIdenticalParameters(): void
+    {
+        $this->updateFixtureParams('{"project":"example","language":"de"}');
+
+        $Manager = new Manager();
+
+        self::assertTrue($Manager->cronWithExecAndParamsExists(self::FIXTURE_EXEC, [
+            'project' => 'example',
+            'language' => 'de'
+        ]));
+    }
+
+    #[Test]
+    public function cronWithExecAndParamsExistsRejectsAdditionalParameters(): void
+    {
+        $Manager = new Manager();
+
+        self::assertFalse($Manager->cronWithExecAndParamsExists(self::FIXTURE_EXEC, [
+            'project' => 'example'
+        ]));
+    }
+
+    #[Test]
+    public function cronWithExecAndParamsExistsRejectsChangedValues(): void
+    {
+        $this->updateFixtureParams('{"project":"example"}');
+
+        $Manager = new Manager();
+
+        self::assertFalse($Manager->cronWithExecAndParamsExists(self::FIXTURE_EXEC, [
+            'project' => 'other'
+        ]));
+    }
+
+    #[Test]
+    public function cronWithExecAndParamsExistsIgnoresInvalidStoredJson(): void
+    {
+        $this->updateFixtureParams('{invalid');
+
+        $Manager = new Manager();
+
+        self::assertFalse($Manager->cronWithExecAndParamsExists(self::FIXTURE_EXEC));
+    }
+
+    private function updateFixtureParams(string $params): void
+    {
+        QUI::getDataBaseConnection()->update(
+            QUI\Utils\Doctrine::quoteIdentifier(Manager::table()),
+            ['params' => $params],
+            ['id' => $this->cronId]
         );
     }
 

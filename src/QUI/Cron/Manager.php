@@ -970,16 +970,12 @@ class Manager
 
         foreach ($result as $row) {
             $cronParams = json_decode($row['params'], true);
-            $identical = true;
 
-            foreach ($cronParams as $k => $v) {
-                if (!array_key_exists($k, $params) || $params[$k] !== $v) {
-                    $identical = false;
-                    break;
-                }
+            if (!is_array($cronParams)) {
+                continue;
             }
 
-            if ($identical) {
+            if ($cronParams === $params) {
                 return true;
             }
         }
