@@ -4,6 +4,7 @@ namespace QUI\Cron;
 
 use QUI;
 use QUI\Exception;
+use QUI\Projects\Project;
 use QUI\System\Log;
 
 use function curl_exec;
@@ -53,7 +54,7 @@ class CronService
         }
 
         // VHost Domain
-        $vhost = QUI::getProjectManager()->getStandard()->getVHost(true, true);
+        $vhost = $this->getVHost(QUI::getProjectManager()->getStandard());
 
         // Check if https should be used.
         if (str_starts_with($vhost, 'https://')) {
@@ -94,6 +95,11 @@ class CronService
         }
 
         $this->baseUrl = !empty($baseUrl) ? rtrim($baseUrl, '/') : 'https://cron.quiqqer.com';
+    }
+
+    private function getVHost(?Project $Project): string
+    {
+        return $Project?->getVHost(true, true) ?? '';
     }
 
     /**
