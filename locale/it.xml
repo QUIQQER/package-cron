@@ -1,0 +1,656 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<locales>
+    <groups name="quiqqer/cron" datatype="php,js">
+        <locale name="package.title">
+<it><![CDATA[QUIQQER - Cron]]></it>
+        </locale>
+        <locale name="package.description" html="true">
+<it><![CDATA[Questo modulo permette di pianificare, gestire ed eseguire facilmente attività ricorrenti, come la manutenzione o la pubblicazione di determinate pagine in un secondo momento.]]></it>
+        </locale>
+
+        <locale name="message.cron.admin.info.24h" html="true">
+<it><![CDATA[<p>Nelle ultime 24 ore non è stata eseguita alcuna attività cron.</p><p>Le attività cron potrebbero non essere configurate correttamente.</p><br/><p>Questo può impedire l’esecuzione di importanti attività di sistema e causare errori di funzionamento.</p><br/><p><b>Contatta un amministratore e comunicagli questo messaggio di errore.</b></p>]]></it>
+        </locale>
+        <locale name="message.cron.admin.info.24h.title">
+<it><![CDATA[Attenzione!]]></it>
+        </locale>
+        <locale name="message.cron.admin.info.24h.text">
+<it><![CDATA[Le attività cron non sono state eseguite correttamente.]]></it>
+        </locale>
+        <locale name="message.cron.admin.info.24h.btn.submit">
+<it><![CDATA[Ho capito]]></it>
+        </locale>
+        <locale name="message.cron.cli_only">
+<it><![CDATA[Questa attività può essere eseguita solo dalla riga di comando.]]></it>
+        </locale>
+    </groups>
+    <groups name="quiqqer/cron" datatype="php">
+        <locale name="message.ajax.cronservice.general_error">
+<it><![CDATA[L’operazione non è riuscita. Riprova o contatta support@pcsg.de.]]></it>
+        </locale>
+        <locale name="message.cron.succesful.executed">
+<it><![CDATA[L’attività è stata eseguita correttamente]]></it>
+        </locale>
+        <locale name="message.cron.succesful.added">
+<it><![CDATA[L’attività è stata aggiunta correttamente]]></it>
+        </locale>
+        <locale name="message.cron.succesful.edit">
+<it><![CDATA[L’attività è stata modificata correttamente]]></it>
+        </locale>
+        <locale name="exception.cron.1001">
+<it><![CDATA[Impossibile aggiungere l’attività: non esiste.]]></it>
+        </locale>
+        <locale name="exception.cron.1002">
+<it><![CDATA[Impossibile modificare l’attività: il comando non esiste.]]></it>
+        </locale>
+
+        <locale name="settings.title">
+<it><![CDATA[Cron / Attività ricorrenti]]></it>
+        </locale>
+        <locale name="settings.cron.title">
+<it><![CDATA[Impostazioni generali]]></it>
+        </locale>
+        <locale name="settings.cron.executeOnAdminLogin">
+<it><![CDATA[Esegui le attività cron all’accesso all’amministrazione]]></it>
+        </locale>
+        <locale name="settings.cron.executeOnAdminLogin.description">
+<it><![CDATA[Trovi maggiori informazioni sull’esecuzione automatica delle attività cron nella wiki:<br /><a href="https://dev.quiqqer.com/quiqqer/package-cron/wikis/administration" target="_blank">https://dev.quiqqer.com/quiqqer/package-cron/wikis/administration</a>]]></it>
+        </locale>
+        <locale name="settings.cron.showAdminMessageIfCronNotRun">
+<it><![CDATA[Mostra gli avvisi cron quando un amministratore accede]]></it>
+        </locale>
+        <locale name="settings.cron.showAdminMessageIfCronNotRun.description">
+<it><![CDATA[L’amministratore riceve un messaggio se nelle ultime 24 ore non sono state eseguite attività cron.]]></it>
+        </locale>
+        <locale name="settings.cron.writeCronLog">
+<it><![CDATA[Registra l’esecuzione delle attività cron]]></it>
+        </locale>
+        <locale name="settings.cron.writeCronLog.description" html="true">
+<it><![CDATA[Registra l’ora e la durata di esecuzione di ogni attività cron in un file giornaliero <b>cron.log</b>]]></it>
+        </locale>
+        <locale name="settings.execution.title">
+<it><![CDATA[Esecuzione delle attività cron]]></it>
+        </locale>
+        <locale name="settings.cron_lock_time.title">
+<it><![CDATA[Durata del blocco di esecuzione (secondi)]]></it>
+        </locale>
+        <locale name="settings.cron_lock_time.description">
+<it><![CDATA[Definisce per quanti secondi l’esecuzione centrale di cron di QUIQQER (controllo ed esecuzione di tutte le attività cron) viene bloccata al suo avvio. Questo evita che le attività cron vengano eseguite in parallelo. Il blocco dura per il tempo indicato o fino al termine dell’esecuzione centrale di cron di QUIQQER.]]></it>
+        </locale>
+        <locale name="settings.cron_lock_timeout_notification.title">
+<it><![CDATA[Notifica il superamento della durata del blocco di esecuzione]]></it>
+        </locale>
+        <locale name="settings.cron_lock_timeout_notification.description">
+<it><![CDATA[Invia una notifica via e-mail all’amministratore di sistema se l’esecuzione centrale di cron di QUIQQER supera la durata del blocco di esecuzione.]]></it>
+        </locale>
+
+        <locale name="exception.registration.empty.domain">
+<it><![CDATA[Devi specificare un dominio]]></it>
+        </locale>
+        <locale name="exception.registration.empty.email">
+<it><![CDATA[Devi specificare un indirizzo e-mail.]]></it>
+        </locale>
+        <locale name="exception.registration.empty.packageDir">
+<it><![CDATA[Impossibile leggere il percorso della cartella "package".]]></it>
+        </locale>
+        <locale name="cron.window.cronservice.status.text.last_execution.never">
+<it><![CDATA[Mai]]></it>
+        </locale>
+
+<!-- region Cleanup-Crons -->
+        <locale name="cron.cleanupUploads.title">
+<it><![CDATA[Pulisci la cartella dei caricamenti]]></it>
+        </locale>
+        <locale name="cron.cron.cleanupUploads.description">
+<it><![CDATA[Elimina dalla cartella dei caricamenti i file più vecchi di un giorno.]]></it>
+        </locale>
+
+<!-- region Cleanup Temp-Folder -->
+        <locale name="cron.cleanup.temp.title">
+<it><![CDATA[Pulizia del sistema: elimina i dati temporanei]]></it>
+        </locale>
+        <locale name="cron.cleanup.temp.description">
+<it><![CDATA[Svuota la cartella dei dati temporanei.]]></it>
+        </locale>
+<!-- endregion -->
+
+<!-- region Cleanup History -->
+        <locale name="cron.cleanup.history.title">
+<it><![CDATA[Pulisci la cronologia delle attività cron]]></it>
+        </locale>
+        <locale name="cron.cleanup.history.description">
+<it><![CDATA[Elimina dalla cronologia delle attività cron le voci più vecchie del numero di settimane definito.]]></it>
+        </locale>
+<!-- endregion -->
+
+<!-- region Cleanup Sessions -->
+        <locale name="cron.cleanup.sessions.title">
+<it><![CDATA[Pulizia del sistema: pulisci le sessioni]]></it>
+        </locale>
+        <locale name="cron.cleanup.sessions.description">
+<it><![CDATA[Elimina i file di sessione non necessari o scaduti.]]></it>
+        </locale>
+<!-- endregion -->
+
+<!-- region Clear Cache -->
+        <locale name="cron.cleanup.cache.clear.title">
+<it><![CDATA[Pulizia del sistema: svuota la cache]]></it>
+        </locale>
+        <locale name="cron.cleanup.cache.clear.description">
+<it><![CDATA[Svuota l’intera cache.]]></it>
+        </locale>
+<!-- endregion -->
+
+<!-- region Clear Admin Media Cache -->
+        <locale name="cron.cleanup.cache.admin.media.clear.title">
+<it><![CDATA[Pulizia del sistema: svuota la cache multimediale dell’amministrazione]]></it>
+        </locale>
+        <locale name="cron.cleanup.cache.admin.media.clear.description">
+<it><![CDATA[Svuota la cache delle immagini dell’amministrazione, ad esempio le miniature. La cache multimediale pubblica non viene svuotata.]]></it>
+        </locale>
+<!-- endregion -->
+
+<!-- region Purge Cache -->
+        <locale name="cron.cleanup.cache.purge.title">
+<it><![CDATA[Pulizia del sistema: pulisci la cache]]></it>
+        </locale>
+        <locale name="cron.cleanup.cache.purge.description">
+<it><![CDATA[Rimuove i dati obsoleti dalla cache, mantenendo intatti quelli attuali.]]></it>
+        </locale>
+<!-- endregion -->
+<!-- endregion -->
+
+
+<!-- region System-Info-Crons -->
+<!-- region Media Folder Sizes -->
+        <locale name="cron.calculateMediaFolderSizes.title">
+<it><![CDATA[Informazioni di sistema: calcola le dimensioni delle cartelle multimediali]]></it>
+        </locale>
+        <locale name="cron.calculateMediaFolderSizes.description">
+<it><![CDATA[Calcola le dimensioni delle cartelle multimediali.]]></it>
+        </locale>
+<!-- endregion -->
+
+<!-- region Calculate Package Folder Size -->
+        <locale name="cron.calculatePackageFolderSize.title">
+<it><![CDATA[Informazioni di sistema: calcola e memorizza nella cache le dimensioni della cartella dei pacchetti]]></it>
+        </locale>
+        <locale name="cron.calculatePackageFolderSize.description">
+<it><![CDATA[Calcola le dimensioni della cartella dei pacchetti e le memorizza nella cache. Questo valore viene usato da alcune funzioni di sistema.]]></it>
+        </locale>
+<!-- endregion -->
+
+<!-- region Calculate Cache Folder Size -->
+        <locale name="cron.calculateCacheFolderSize.title">
+<it><![CDATA[Informazioni di sistema: calcola e memorizza nella cache le dimensioni della cartella della cache]]></it>
+        </locale>
+        <locale name="cron.calculateCacheFolderSize.description">
+<it><![CDATA[Calcola le dimensioni della cartella della cache e le memorizza nella cache. Questo valore viene usato da alcune funzioni di sistema.]]></it>
+        </locale>
+<!-- endregion -->
+
+<!-- region Calculate Whole Installation Folder Size -->
+        <locale name="cron.calculateWholeInstallationFolderSize.title">
+<it><![CDATA[Informazioni di sistema: calcola e memorizza nella cache le dimensioni della cartella di installazione di QUIQQER]]></it>
+        </locale>
+        <locale name="cron.calculateWholeInstallationFolderSize.description">
+<it><![CDATA[Calcola le dimensioni dell’intera cartella di installazione di QUIQQER e le memorizza nella cache. Questo valore viene usato da alcune funzioni di sistema.]]></it>
+        </locale>
+<!-- endregion -->
+
+<!-- region Count All Files In Installation -->
+        <locale name="cron.countAllFilesInInstallation.title">
+<it><![CDATA[Informazioni di sistema: conta i file nella cartella di installazione di QUIQQER e memorizza il risultato nella cache]]></it>
+        </locale>
+        <locale name="cron.countAllFilesInInstallation.description">
+<it><![CDATA[Conta i file nella cartella di installazione di QUIQQER e memorizza il risultato nella cache. Questo valore viene usato da alcune funzioni di sistema.]]></it>
+        </locale>
+<!-- endregion -->
+
+<!-- region Calculate Var Folder Size -->
+        <locale name="cron.calculateVarFolderSize.title">
+<it><![CDATA[Informazioni di sistema: calcola e memorizza nella cache le dimensioni della cartella VAR]]></it>
+        </locale>
+        <locale name="cron.calculateVarFolderSize.description">
+<it><![CDATA[Calcola le dimensioni della cartella VAR e le memorizza nella cache. Questo valore viene usato da alcune funzioni di sistema.]]></it>
+        </locale>
+<!-- endregion -->
+<!-- endregion -->
+
+<!-- region Release-Date-Cron -->
+        <locale name="cron.release.date.title">
+<it><![CDATA[Sistema: pubblicazione delle pagine]]></it>
+        </locale>
+        <locale name="cron.release.date.description">
+<it><![CDATA[Esamina il progetto e attiva o disattiva le pagine in base alla data di pubblicazione.]]></it>
+        </locale>
+        <locale name="cron.release.date.log.message.deactivate">
+<it><![CDATA[Sono state disattivate le seguenti pagine: [list]]]></it>
+        </locale>
+        <locale name="cron.release.date.log.message.activate">
+<it><![CDATA[Sono state attivate le seguenti pagine: [list]]]></it>
+        </locale>
+<!-- endregion -->
+
+<!-- region Mail-Queue-Cron -->
+        <locale name="cron.mail.queue.title">
+<it><![CDATA[Sistema: elabora la coda delle e-mail]]></it>
+        </locale>
+        <locale name="cron.mail.queue.description">
+<it><![CDATA[Invia le e-mail presenti nella coda.]]></it>
+        </locale>
+<!-- endregion -->
+
+        <locale name="notification.lock_timeout.subject">
+<it><![CDATA[Avviso di sistema: l’esecuzione di cron ha superato il limite di tempo]]></it>
+        </locale>
+        <locale name="notification.lock_timeout.body" html="true">
+<it><![CDATA[<ul><li>Inizio dell’esecuzione di cron: [startAll]</li><li>Fine del blocco di esecuzione: [lockEnd]</li><li>Tempo eccedente: [diff]</li><li>Attività attuale: [currentCronTitle] (#[currentCronId])</li><li>Inizio dell’attività attuale: [startCurrent]</li><li>Attività elaborate: [finished] / [total]</li></ul>]]></it>
+        </locale>
+
+        <locale name="cron.updateCheck.title">
+<it><![CDATA[Verifica aggiornamenti]]></it>
+        </locale>
+        <locale name="cron.updateCheck.description">
+<it><![CDATA[Verifica se sono disponibili aggiornamenti per QUIQQER.]]></it>
+        </locale>
+        <locale name="cron.updateExecute.title">
+<it><![CDATA[Aggiornamento automatico]]></it>
+        </locale>
+        <locale name="cron.updateExecute..description">
+<it><![CDATA[Esegue gli aggiornamenti di QUIQQER quando sono disponibili.]]></it>
+        </locale>
+
+        <locale name="update.mail.error.subject">
+<it><![CDATA[Errore di aggiornamento di QUIQQER]]></it>
+        </locale>
+        <locale name="update.mail.error.body">
+<it><![CDATA[È stato eseguito un aggiornamento automatico sul sistema [system] ([ip]).<br />Si sono verificati errori durante l’aggiornamento automatico di QUIQQER. Controlla urgentemente il registro degli errori.<br />Sarebbero stati aggiornati i seguenti pacchetti:<pre>[packages]</pre>]]></it>
+        </locale>
+
+        <locale name="update.mail.success.subject">
+<it><![CDATA[Aggiornamento automatico di QUIQQER eseguito]]></it>
+        </locale>
+        <locale name="update.mail.success.body" html="1">
+<it><![CDATA[È stato eseguito un aggiornamento automatico sul sistema [system] ([ip]).<br />L’aggiornamento è stato completato correttamente. Sono stati aggiornati i seguenti pacchetti:<pre>[packages]</pre>Per disattivare l’aggiornamento automatico, accedi a [system]/admin e disattiva «Aggiornamento automatico» nelle impostazioni di cron.]]></it>
+        </locale>
+
+        <locale name="update.mail.updateCheck.subject">
+<it><![CDATA[Sono disponibili aggiornamenti per il tuo sistema QUIQQER - [system]]]></it>
+        </locale>
+        <locale name="update.mail.updateCheck.description">
+<it><![CDATA[Sono disponibili aggiornamenti per il tuo sistema QUIQQER.<br />Aggiorna il sistema per mantenerlo aggiornato.<br /><br />Sono disponibili aggiornamenti per i seguenti pacchetti:<pre>[packages]</pre>]]></it>
+        </locale>
+
+        <locale name="settings.update.category.title">
+<it><![CDATA[Aggiornamento]]></it>
+        </locale>
+
+        <locale name="settings.cron.auto_check">
+<it><![CDATA[Verifica automatica degli aggiornamenti]]></it>
+        </locale>
+        <locale name="settings.cron.auto_check.description">
+<it><![CDATA[Ricevi un’e-mail e un messaggio quando sono disponibili aggiornamenti per il tuo sistema QUIQQER.]]></it>
+        </locale>
+
+        <locale name="settings.cron.auto_update">
+<it><![CDATA[Aggiornamento automatico]]></it>
+        </locale>
+        <locale name="settings.cron.auto_update.description">
+<it><![CDATA[Il tuo sistema QUIQQER verrà aggiornato automaticamente non appena saranno disponibili nuovi aggiornamenti.]]></it>
+        </locale>
+
+        <locale name="cron.securityUpdateCron.title">
+<it><![CDATA[Aggiornamento di sicurezza automatico]]></it>
+        </locale>
+        <locale name="cron.securityUpdateCron.description">
+<it><![CDATA[Esegue un aggiornamento di sicurezza automatico.]]></it>
+        </locale>
+
+    </groups>
+    <groups name="quiqqer/cron" datatype="js">
+        <locale name="cron.id">
+<it><![CDATA[ID dell’attività]]></it>
+        </locale>
+        <locale name="cron.title">
+<it><![CDATA[Titolo dell’attività]]></it>
+        </locale>
+        <locale name="cron.type">
+<it><![CDATA[Tipo]]></it>
+        </locale>
+        <locale name="cron.start_date">
+<it><![CDATA[Inizio]]></it>
+        </locale>
+        <locale name="cron.finish_date">
+<it><![CDATA[Fine]]></it>
+        </locale>
+        <locale name="cron.desc">
+<it><![CDATA[Descrizione dell’attività]]></it>
+        </locale>
+        <locale name="cron.min">
+<it><![CDATA[min]]></it>
+        </locale>
+        <locale name="cron.hour">
+<it><![CDATA[h]]></it>
+        </locale>
+        <locale name="cron.day">
+<it><![CDATA[Giorno]]></it>
+        </locale>
+        <locale name="cron.month">
+<it><![CDATA[Mese]]></it>
+        </locale>
+        <locale name="cron.dayOfWeek">
+<it><![CDATA[Giorno della settimana]]></it>
+        </locale>
+        <locale name="cron.execute">
+<it><![CDATA[Exec]]></it>
+        </locale>
+        <locale name="cron.params">
+<it><![CDATA[Parametri]]></it>
+        </locale>
+        <locale name="cron.interval">
+<it><![CDATA[Intervallo]]></it>
+        </locale>
+        <locale name="cron.window.delete.cron.title">
+<it><![CDATA[Elimina attività]]></it>
+        </locale>
+        <locale name="cron.window.delete.cron.text">
+<it><![CDATA[<p>Vuoi davvero eliminare le seguenti attività?</p>]]></it>
+        </locale>
+        <locale name="cron.window.delete.cron.information">
+<it><![CDATA[<p>Attività da eliminare: <b>[ids]</b></p><p>Tieni presente che le attività non potranno essere ripristinate.</p>]]></it>
+        </locale>
+        <locale name="cron.window.add.cron.title">
+<it><![CDATA[Aggiungi attività]]></it>
+        </locale>
+        <locale name="cron.window.edit.cron.title">
+<it><![CDATA[Modifica attività]]></it>
+        </locale>
+        <locale name="cron.panel.manager.btn.toggle">
+<it><![CDATA[Attiva / disattiva attività]]></it>
+        </locale>
+        <locale name="cron.panel.manager.btn.execute">
+<it><![CDATA[Esegui attività]]></it>
+        </locale>
+        <locale name="cron.panel.manager.btn.add">
+<it><![CDATA[Aggiungi attività]]></it>
+        </locale>
+        <locale name="cron.panel.manager.btn.edit">
+<it><![CDATA[Modifica l’attività selezionata]]></it>
+        </locale>
+        <locale name="cron.panel.manager.btn.delete">
+<it><![CDATA[Elimina le attività selezionate]]></it>
+        </locale>
+        <locale name="cron.panel.manager.btn.filter">
+<it><![CDATA[Filtra per tipo di attività]]></it>
+        </locale>
+        <locale name="cron.panel.manager.filter.type.all">
+<it><![CDATA[Tutti]]></it>
+        </locale>
+        <locale name="cron.panel.manager.filter.type.system">
+<it><![CDATA[Sistema]]></it>
+        </locale>
+        <locale name="cron.panel.manager.filter.type.custom">
+<it><![CDATA[Personalizzato]]></it>
+        </locale>
+        <locale name="cron.panel.manager.btn.history">
+<it><![CDATA[Cronologia delle attività]]></it>
+        </locale>
+
+
+        <locale name="permission.quiqqer.cron._header">
+<it><![CDATA[Attività]]></it>
+        </locale>
+        <locale name="permission.quiqqer.cron.execute">
+<it><![CDATA[Può eseguire attività.]]></it>
+        </locale>
+        <locale name="permission.quiqqer.cron.add">
+<it><![CDATA[Può aggiungere attività.]]></it>
+        </locale>
+        <locale name="permission.quiqqer.cron.edit">
+<it><![CDATA[Può modificare attività.]]></it>
+        </locale>
+        <locale name="permission.quiqqer.cron.delete">
+<it><![CDATA[Può eliminare attività.]]></it>
+        </locale>
+        <locale name="permission.quiqqer.cron.activate">
+<it><![CDATA[Può attivare attività.]]></it>
+        </locale>
+        <locale name="permission.quiqqer.cron.deactivate">
+<it><![CDATA[Può disattivare attività.]]></it>
+        </locale>
+
+        <locale name="controls.crontime.label.on">
+<it><![CDATA[Giorno:]]></it>
+        </locale>
+        <locale name="controls.crontime.intervalselect.option.everyminute">
+<it><![CDATA[Ogni minuto]]></it>
+        </locale>
+        <locale name="controls.crontime.intervalselect.option.hourly">
+<it><![CDATA[Ogni ora]]></it>
+        </locale>
+        <locale name="controls.crontime.intervalselect.option.daily">
+<it><![CDATA[Ogni giorno]]></it>
+        </locale>
+        <locale name="controls.crontime.intervalselect.option.weekly">
+<it><![CDATA[Ogni settimana]]></it>
+        </locale>
+        <locale name="controls.crontime.intervalselect.option.monthly">
+<it><![CDATA[Ogni mese]]></it>
+        </locale>
+        <locale name="controls.crontime.intervalselect.option.yearly">
+<it><![CDATA[Ogni anno]]></it>
+        </locale>
+        <locale name="controls.crontime.intervalselect.option.cron">
+<it><![CDATA[Formato cron]]></it>
+        </locale>
+        <locale name="controls.crontime.dayofweek.su">
+<it><![CDATA[Domenica]]></it>
+        </locale>
+        <locale name="controls.crontime.dayofweek.mo">
+<it><![CDATA[Lunedì]]></it>
+        </locale>
+        <locale name="controls.crontime.dayofweek.tu">
+<it><![CDATA[Martedì]]></it>
+        </locale>
+        <locale name="controls.crontime.dayofweek.we">
+<it><![CDATA[Mercoledì]]></it>
+        </locale>
+        <locale name="controls.crontime.dayofweek.th">
+<it><![CDATA[Giovedì]]></it>
+        </locale>
+        <locale name="controls.crontime.dayofweek.fr">
+<it><![CDATA[Venerdì]]></it>
+        </locale>
+        <locale name="controls.crontime.dayofweek.sa">
+<it><![CDATA[Sabato]]></it>
+        </locale>
+        <locale name="controls.crontime.month.1">
+<it><![CDATA[gennaio]]></it>
+        </locale>
+        <locale name="controls.crontime.month.2">
+<it><![CDATA[febbraio]]></it>
+        </locale>
+        <locale name="controls.crontime.month.3">
+<it><![CDATA[marzo]]></it>
+        </locale>
+        <locale name="controls.crontime.month.4">
+<it><![CDATA[aprile]]></it>
+        </locale>
+        <locale name="controls.crontime.month.5">
+<it><![CDATA[maggio]]></it>
+        </locale>
+        <locale name="controls.crontime.month.6">
+<it><![CDATA[giugno]]></it>
+        </locale>
+        <locale name="controls.crontime.month.7">
+<it><![CDATA[luglio]]></it>
+        </locale>
+        <locale name="controls.crontime.month.8">
+<it><![CDATA[agosto]]></it>
+        </locale>
+        <locale name="controls.crontime.month.9">
+<it><![CDATA[settembre]]></it>
+        </locale>
+        <locale name="controls.crontime.month.10">
+<it><![CDATA[ottobre]]></it>
+        </locale>
+        <locale name="controls.crontime.month.11">
+<it><![CDATA[novembre]]></it>
+        </locale>
+        <locale name="controls.crontime.month.12">
+<it><![CDATA[dicembre]]></it>
+        </locale>
+        <locale name="controls.crontime.label.minute">
+<it><![CDATA[Minuto]]></it>
+        </locale>
+        <locale name="controls.crontime.label.hour">
+<it><![CDATA[Ora]]></it>
+        </locale>
+        <locale name="controls.crontime.label.day">
+<it><![CDATA[Giorno]]></it>
+        </locale>
+        <locale name="controls.crontime.label.month">
+<it><![CDATA[Mese]]></it>
+        </locale>
+        <locale name="controls.crontime.label.dayofweek">
+<it><![CDATA[Giorno della settimana]]></it>
+        </locale>
+        <locale name="controls.crontime.label.at">
+<it><![CDATA[Ora:]]></it>
+        </locale>
+        <locale name="controls.crontime.label.on">
+<it><![CDATA[Giorno:]]></it>
+        </locale>
+        <locale name="controls.crontime.label.interval">
+<it><![CDATA[Intervallo]]></it>
+        </locale>
+
+<!-- Cronservice -->
+        <locale name="cron.panel.manager.btn.cronservice.register">
+<it><![CDATA[Servizio cron]]></it>
+        </locale>
+
+        <locale name="cron.window.cronservice.title">
+<it><![CDATA[Servizio cron]]></it>
+        </locale>
+        <locale name="cron.window.cronservice.btn.cancel">
+<it><![CDATA[Annulla]]></it>
+        </locale>
+        <locale name="cron.window.cronservice.btn.register">
+<it><![CDATA[Registrati]]></it>
+        </locale>
+        <locale name="cron.window.cronservice.content.title">
+<it><![CDATA[Servizio cron]]></it>
+        </locale>
+        <locale name="cron.window.cronservice.content.about.title">
+<it><![CDATA[Informazioni sul servizio]]></it>
+        </locale>
+        <locale name="cron.window.cronservice.content.about.text">
+<it><![CDATA[Il servizio cron di QUIQQER permette di eseguire attività cron su sistemi che non offrono questa funzionalità nativamente. Utilizza un server esterno al quale i sistemi QUIQQER possono registrarsi. Questo server avvia regolarmente le attività cron dei sistemi registrati. Il servizio è particolarmente utile nell’hosting condiviso.]]></it>
+        </locale>
+        <locale name="cron.window.cronservice.content.status.title">
+<it><![CDATA[Stato]]></it>
+        </locale>
+        <locale name="cron.window.cronservice.content.status.text">
+<it><![CDATA[Qui puoi controllare lo stato della tua registrazione:]]></it>
+        </locale>
+        <locale name="cron.window.cronservice.content.btn.register">
+<it><![CDATA[Registrati]]></it>
+        </locale>
+        <locale name="cron.window.cronservice.content.register.title">
+<it><![CDATA[Registrati]]></it>
+        </locale>
+        <locale name="cron.window.cronservice.content.register.placeholder.email">
+<it><![CDATA[E-mail]]></it>
+        </locale>
+        <locale name="cron.window.cronservice.registration.title">
+<it><![CDATA[Registrazione]]></it>
+        </locale>
+        <locale name="cron.window.cronservice.content.register.txt.email.title">
+<it><![CDATA[E-mail]]></it>
+        </locale>
+        <locale name="cron.window.cronservice.content.register.btn.register">
+<it><![CDATA[Registrati]]></it>
+        </locale>
+        <locale name="cron.window.cronservice.content.register.btn.unregister">
+<it><![CDATA[Annulla la registrazione]]></it>
+        </locale>
+        <locale name="cron.window.cronservice.status.text.inactive">
+<it><![CDATA[Inattivo]]></it>
+        </locale>
+        <locale name="cron.window.cronservice.status.text.registered">
+<it><![CDATA[Attivo]]></it>
+        </locale>
+        <locale name="cron.window.cronservice.status.text.unregistered">
+<it><![CDATA[Non registrato]]></it>
+        </locale>
+        <locale name="cron.window.cronservice.content.register.lbl.stats.status">
+<it><![CDATA[Stato: ]]></it>
+        </locale>
+        <locale name="cron.window.cronservice.content.register.lbl.stats.errors">
+<it><![CDATA[Numero di errori: ]]></it>
+        </locale>
+        <locale name="cron.window.cronservice.content.register.lbl.stats.lastExecution">
+<it><![CDATA[Ultima chiamata: ]]></it>
+        </locale>
+
+        <locale name="cron.window.cronservice.content.register.lbl.stats.lastLocalExecution">
+<it><![CDATA[Ultima esecuzione di cron: ]]></it>
+        </locale>
+        <locale name="cron.window.cronservice.content.btn.unregister.confirm">
+<it><![CDATA[Vuoi davvero continuare?]]></it>
+        </locale>
+        <locale name="cron.window.cronservice.content.btn.unregister">
+<it><![CDATA[Rimuovi la registrazione]]></it>
+        </locale>
+        <locale name="cron.window.cronservice.registration.success.title">
+<it><![CDATA[Registrazione completata]]></it>
+        </locale>
+        <locale name="cron.window.cronservice.registration.success.text" html="true">
+<it><![CDATA[La registrazione è stata completata correttamente. Controlla la casella di posta dell’indirizzo indicato e conferma la registrazione.<br />Tieni presente che il messaggio potrebbe essere nella cartella spam.]]></it>
+        </locale>
+        <locale name="cron.window.cronservice.content.btn.resend.activation.mail">
+<it><![CDATA[Invia di nuovo l’e-mail di attivazione]]></it>
+        </locale>
+        <locale name="cron.window.cronservice.registration.success.btn.confirm.text">
+<it><![CDATA[Ho capito]]></it>
+        </locale>
+        <locale name="cron.window.cronservice.registration.button.text.cancel">
+<it><![CDATA[Annulla la registrazione]]></it>
+        </locale>
+        <locale name="cron.window.cronservice.content.status.unavailable">
+<it><![CDATA[Il servizio cron non è al momento disponibile.]]></it>
+        </locale>
+        <locale name="cron.window.cronservice.content.button.message.sent.success">
+<it><![CDATA[Messaggio inviato.]]></it>
+        </locale>
+
+        <locale name="last.exec.time">
+<it><![CDATA[Ultima esecuzione]]></it>
+        </locale>
+
+        <locale name="controls.Params.add">
+<it><![CDATA[Aggiungi parametro]]></it>
+        </locale>
+        <locale name="controls.Params.add.title">
+<it><![CDATA[Aggiungi parametro]]></it>
+        </locale>
+        <locale name="controls.Params.add.text">
+<it><![CDATA[Imposta il nome e il valore del parametro.]]></it>
+        </locale>
+
+        <locale name="message.updates.available">
+<it><![CDATA[<h1>Aggiornamenti disponibili</h1><p>Sono disponibili aggiornamenti per il tuo sistema QUIQQER. Aggiorna il sistema.</p>]]></it>
+        </locale>
+        <locale name="message.updates.available.button">
+<it><![CDATA[Vai all’aggiornamento]]></it>
+        </locale>
+        <locale name="message.updates.available.cancel.button">
+<it><![CDATA[Non ora]]></it>
+        </locale>
+        <locale name="message.admin.cron.execution">
+<it><![CDATA[È in corso l’esecuzione di un’attività di sistema pianificata (attività cron). Altre azioni, come le richieste o il caricamento di file, potrebbero quindi essere un po’ più lente. Attendi un momento. Grazie per la comprensione.]]></it>
+        </locale>
+    </groups>
+</locales>
