@@ -33,11 +33,11 @@ define('package/quiqqer/cron/bin/CronWindow', [
             cronId: null, // if you want to edit a cron
 
             cancel_button: {
-                text: QUILocale.get('quiqqer/system', 'cancel'),
+                text: QUILocale.get('quiqqer/core', 'cancel'),
                 textimage: 'fa fa-remove'
             },
             ok_button: {
-                text: QUILocale.get('quiqqer/system', 'ok'),
+                text: QUILocale.get('quiqqer/core', 'ok'),
                 textimage: 'fa fa-check'
             }
         },

@@ -106,13 +106,13 @@ define('package/quiqqer/cron/bin/History', [
                         width: 200
                     },
                     {
-                        header: QUILocale.get('quiqqer/system', 'user_id'),
+                        header: QUILocale.get('quiqqer/core', 'user_id'),
                         dataIndex: 'uid',
                         dataType: 'string',
                         width: 100
                     },
                     {
-                        header: QUILocale.get('quiqqer/system', 'username'),
+                        header: QUILocale.get('quiqqer/core', 'username'),
                         dataIndex: 'username',
                         dataType: 'string',
                         width: 150

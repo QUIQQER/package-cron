@@ -277,7 +277,7 @@ define('package/quiqqer/cron/bin/Manager', [
                 storageKey: 'quiqqer-cron-manager',
                 columnModel: [
                     {
-                        header: QUILocale.get('quiqqer/system', 'status'),
+                        header: QUILocale.get('quiqqer/core', 'status'),
                         dataIndex: 'status',
                         dataType: 'button',
                         width: 60
@@ -289,7 +289,7 @@ define('package/quiqqer/cron/bin/Manager', [
                         width: 60
                     },
                     {
-                        header: QUILocale.get('quiqqer/system', 'id'),
+                        header: QUILocale.get('quiqqer/core', 'id'),
                         dataIndex: 'id',
                         dataType: 'string',
                         width: 50
